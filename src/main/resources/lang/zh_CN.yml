@@ -1,0 +1,8 @@
+plugin-enable:
+  - ' '
+  - '{0} &f已加载... {1}'
+  - ' '
+
+reload: '{0} &f已重载.'
+
+unsupported-reload: '{0} &f当前插件 {1} &f不支持通过&areload命令&f重载属性.请自行重启服务器.'
