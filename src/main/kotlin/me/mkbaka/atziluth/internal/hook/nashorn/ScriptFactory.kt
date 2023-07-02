@@ -8,7 +8,7 @@ object ScriptFactory : Reloadable(priority = 2) {
     private val compiledScripts = ConcurrentHashMap<Int, CompiledScript>()
 
     /**
-     * 预编译脚本对象
+     * 预编译脚本
      * @param [script] 脚本
      * @return [CompiledScript]
      */

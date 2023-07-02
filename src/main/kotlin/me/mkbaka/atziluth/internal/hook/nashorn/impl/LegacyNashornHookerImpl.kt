@@ -17,6 +17,7 @@ object LegacyNashornHookerImpl : AbstractNashornHooker() {
         return ((script.scriptEngine as Invocable).invokeFunction("newObject") as ScriptObjectMirror).run {
             putAll(map)
             put("vars", map)
+            callMember("initGlobalVariables")
             callMember(func, *args)
         }
     }

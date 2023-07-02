@@ -9,6 +9,10 @@ object ClassUtil {
 
     private val classes = ConcurrentHashMap<String, Class<*>>()
 
+    /**
+     * 根据全限定类名获取一个Class对象
+     * @return [Class<*>]
+     */
     @Suppress("UNCHECKED_CAST")
     fun String.getClass(): Class<*> {
         return try {
@@ -20,12 +24,20 @@ object ClassUtil {
         }
     }
 
+    /**
+     * 获取一个Bukkit事件类
+     * @return [Class<out Event>]
+     */
     @Suppress("UNCHECKED_CAST")
     fun String.toBukkitEvent(): Class<out Event> {
         val clazz = getClass()
         return if (clazz.isBukkitEvent()) clazz as Class<out Event> else error("类 $this 不是 Event 的子类或为抽象类!")
     }
 
+    /**
+     * 是否为Bukkit事件类
+     * @return [Boolean]
+     */
     fun Class<*>.isBukkitEvent(): Boolean {
         return Event::class.java.isAssignableFrom(this) && this.simpleName != "Event" && !Modifier.isAbstract(this.modifiers)
     }

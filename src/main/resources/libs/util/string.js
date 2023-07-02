@@ -2,11 +2,12 @@ const Util = Packages.me.mkbaka.atziluth.internal.utils.Util.INSTANCE
 const CompatUtil = Packages.me.mkbaka.atziluth.internal.utils.CompatUtil.INSTANCE
 
 /**
- * 转换文本中的变量 (变量目标为自己)
+ * 转换文本中的PlaceholderAPI变量
+ * 变量目标为自己 前提是上下文内有player这个变量
  * @param str 文本
  * @return 转换后的文本
  */
-const parse = function (str) {
+const papi = function (str) {
     return CompatUtil.parse(player, str)
 }
 
@@ -16,8 +17,19 @@ const parse = function (str) {
  * @param str 文本
  * @return 转换后的文本
  */
-const parseOther = function (target, str) {
+const parsePapi = function (target, str) {
     return CompatUtil.parse(target, str)
+}
+
+/**
+ * 判断变量值是否大于等于指定数值
+ * @param {*} player 玩家
+ * @param {*} str 变量
+ * @param {*} target 目标数值
+ * @returns
+ */
+const checkPlaceholder = function (player, str, target) {
+    return CompatUtil.check(player, str, target)
 }
 
 /**

@@ -2,8 +2,10 @@ package me.mkbaka.atziluth.internal.register.impl.attributeplus
 
 import me.mkbaka.atziluth.internal.register.AbstractCustomAttribute
 import me.mkbaka.atziluth.internal.register.AttributeType
+import me.mkbaka.atziluth.internal.register.BaseAttribute
 import org.bukkit.entity.LivingEntity
 import org.serverct.ersha.api.component.SubAttribute
+import taboolib.common5.cdouble
 
 class AttributePlusAdapter(
     override val attrPriority: Int,
@@ -16,7 +18,7 @@ class AttributePlusAdapter(
     override fun build(): SubAttribute {
         return object : SubAttribute(
             attrPriority, combatPower, name, getType(), placeholder
-        ) {
+        ), BaseAttribute {
             override fun onLoad(): SubAttribute {
                 onLoad?.let { it(this) }
                 return this
@@ -29,6 +31,25 @@ class AttributePlusAdapter(
             override fun runDefense(entity: LivingEntity, killer: LivingEntity): Boolean {
                 return callback?.let { it(this, entity, killer) } ?: false
             }
+
+            override fun getFinalDamage(attacker: LivingEntity): Double {
+                return attacker.getDamage().cdouble
+            }
+
+            override fun addFinalDamage(attacker: LivingEntity, value: Double) {
+                attacker.addDamage(value)
+            }
+
+            override fun takeFinalDamage(attacker: LivingEntity, value: Double) {
+                attacker.takeDamage(value)
+            }
+
+            override fun setFinalDamage(attacker: LivingEntity, value: Double) {
+                attacker.setDamage(value)
+            }
+
+            override val isProjectile: Boolean
+                get() = isProjectileDamage()
         }
     }
 

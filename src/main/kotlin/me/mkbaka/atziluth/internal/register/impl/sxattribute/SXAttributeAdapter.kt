@@ -6,6 +6,8 @@ import github.saukiya.sxattribute.data.eventdata.sub.DamageData
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.register.AbstractCustomAttribute
 import me.mkbaka.atziluth.internal.register.AttributeType
+import me.mkbaka.atziluth.internal.register.BaseAttribute
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
 class SXAttributeAdapter(
@@ -16,20 +18,24 @@ class SXAttributeAdapter(
 ) : AbstractCustomAttribute<SubAttribute, github.saukiya.sxattribute.data.attribute.AttributeType>() {
 
     override fun build(): SubAttribute {
-        return object : SubAttribute(name, Atziluth.plugin, 2, getType()) {
+        return object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute {
 
             init {
                 this.priority = getAttributes().size
                 onLoad?.let { it(this) }
             }
 
+            private var damage = 0.0
+
             override fun eventMethod(values: DoubleArray, data: EventData) {
                 if (data !is DamageData) return
+                this.damage = data.damage
                 when (type) {
                     AttributeType.ATTACK -> callback?.let { it(this, data.attacker, data.defender) }
                     AttributeType.DEFENSE -> callback?.let { it(this, data.defender, data.attacker) }
                     else -> error("Unsupported type $type")
                 }
+                data.damage = damage
             }
 
             override fun getPlaceholder(values: DoubleArray, player: Player, str: String): Any {
@@ -54,6 +60,25 @@ class SXAttributeAdapter(
                     }
                 }
             }
+
+            override fun getFinalDamage(attacker: LivingEntity): Double {
+                return this.damage
+            }
+
+            override fun addFinalDamage(attacker: LivingEntity, value: Double) {
+                this.damage += value
+            }
+
+            override fun takeFinalDamage(attacker: LivingEntity, value: Double) {
+                this.damage -= value
+            }
+
+            override fun setFinalDamage(attacker: LivingEntity, value: Double) {
+                this.damage = value
+            }
+
+            override val isProjectile: Boolean
+                get() = error("Unsupported method for SX-Attribute v2.x")
 
         }
     }

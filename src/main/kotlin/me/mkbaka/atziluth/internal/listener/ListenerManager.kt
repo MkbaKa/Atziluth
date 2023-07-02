@@ -12,6 +12,10 @@ object ListenerManager {
 
     private val listeners = ConcurrentHashMap<String, ProxyListener>()
 
+    /**
+     * 注册监听器
+     * @param [listener] 监听器
+     */
     fun registerListener(
         listener: SimpleListener
     ) {
@@ -24,6 +28,14 @@ object ListenerManager {
         )
     }
 
+    /**
+     * 注册监听器
+     * @param [source] 源
+     * @param [clazz] 事件类
+     * @param [priority] 优先级
+     * @param [ignore] 是否忽略取消
+     * @param [callback] 回调函数
+     */
     fun registerListener(
         source: String,
         clazz: Class<out Event>,
@@ -37,18 +49,29 @@ object ListenerManager {
         }
     }
 
+    /**
+     * 注销监听器
+     * @param [listener] 监听器
+     */
     fun unRegisterListener(listener: SimpleListener) {
         callSync {
             if (listeners.containsKey(listener.source)) unregisterListener(listeners[listener.source]!!)
         }
     }
 
+    /**
+     * 注销监听器
+     * @param [source] 源
+     */
     fun unRegisterListener(source: String) {
         callSync {
             if (listeners.containsKey(source)) unregisterListener(listeners[source]!!)
         }
     }
 
+    /**
+     * 注销所有监听器
+     */
     fun unRegisterAllListener() {
         callSync {
             listeners.forEach {

@@ -15,11 +15,32 @@ class LegacyAttributePlusAdapter(
     override fun build(): BaseAttribute {
         return object : BaseAttribute(
             getType(), name, placeholder
-        ) {
-            override fun run(attacker: Entity?, entity: Entity?, attributeValue: Double) {
+        ), me.mkbaka.atziluth.internal.register.BaseAttribute {
+
+            override fun run(attacker: Entity, entity: Entity, attributeValue: Double) {
                 if (attacker !is LivingEntity || entity !is LivingEntity) return
                 callback?.let { it(this, attacker, entity) }
             }
+
+            override fun getFinalDamage(attacker: LivingEntity): Double {
+                return this.damage
+            }
+
+            override fun addFinalDamage(attacker: LivingEntity, value: Double) {
+                this.damage += value
+            }
+
+            override fun takeFinalDamage(attacker: LivingEntity, value: Double) {
+                this.damage -= value
+            }
+
+            override fun setFinalDamage(attacker: LivingEntity, value: Double) {
+                damage = value
+            }
+
+            override val isProjectile: Boolean
+                get() = error("Unsupported method for AttributePlus v2.x")
+
         }
     }
 

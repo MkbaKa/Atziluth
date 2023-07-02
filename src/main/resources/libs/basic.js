@@ -3,58 +3,7 @@ const ItemStack = Packages.org.bukkit.inventory.ItemStack
 const Material = Packages.org.bukkit.inventory.Material
 const Reflex = Packages.me.mkbaka.atziluth.internal.utils.ReflexUtil.INSTANCE
 
-const AttributeValueType = Packages.me.mkbaka.atziluth.internal.bridge.AttributeValueType
-
 const logger = Bukkit.getLogger()
-
-/**
- * 增加属性
- * @param entity 实体
- * @param source 属性源
- * @param attrs 属性列表
- */
-const addAttributes = function (entity, source, attrs) {
-    bridge.addAttributes(entity, source, attrs)
-}
-
-/**
- * 删除属性源内的属性
- * @param entity 实体
- * @param source 属性源
- */
-const takeAttribute = function (entity, source) {
-    bridge.takeAttribute(entity, source)
-}
-
-/**
- * 获取指定属性的最小数值
- * @param entity 实体
- * @param attrName 属性名
- * @return double
- */
-const getMinValue = function (entity, attrName) {
-    return bridge.getAttrValue(entity, attrName, AttributeValueType.MIN)
-}
-
-/**
- * 获取指定属性的最大数值
- * @param entity 实体
- * @param attrName 属性名
- * @return double
- */
-const getMaxValue = function (entity, attrName) {
-    return bridge.getAttrValue(entity, attrName, AttributeValueType.MAX)
-}
-
-/**
- * 在属性的最小和最大属性值中随机一个数值
- * @param entity 实体
- * @param attrName 属性名
- * @return double
- */
-const getAttrValue = function (entity, attrName) {
-    return bridge.getAttrValue(entity, attrName, AttributeValueType.RANDOM)
-}
 
 /**
  * 向后台输出消息
@@ -93,3 +42,14 @@ const listOf = function (array) {
     return newList
 }
 
+/**
+ * 初始化全局变量
+ * 省掉this关键字 且支持所有函数内直接调用 不必再挨个传参
+ * 如果你不知道该函数有什么作用
+ * 请不要 调用 或 修改 甚至是 删除
+ */
+function initGlobalVariables() {
+    Attr = this.Attr
+    attacker = this.attacker
+    entity = this.entity
+}
