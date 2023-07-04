@@ -69,7 +69,7 @@ object AttributeManager : Reloadable(priority = 6) {
                     }
                 }
 
-                if (this.type == RUNTIME) this.period = reader.getTopLevel<Long>("period") ?: -1L
+                if (this.type == RUNTIME) this.period = reader.getTopLevel<Long>("period") ?: 5L
 
                 subAttributes[this.name] = this
             }

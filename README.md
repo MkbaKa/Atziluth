@@ -1,15 +1,5 @@
 # wiki完善再发布
 
-**Windows:**
+# wiki 页面
 
-```
-gradlew.bat clean build
-```
-
-**macOS/Linux:**
-
-```
-./gradlew clean build
-```
-
-Build artifacts should be found in `./build/libs` folder.
+[点击前往](https://github.com/MkbaKa/Atziluth-wiki)

@@ -12,7 +12,7 @@ abstract class AbstractCustomAttribute<T> {
     open val combatPower: Double = 0.0
 
     open var skipFilter: Boolean = false
-    open var period: Long = -1
+    open var period: Long = 5L
 
     abstract val inst: T
 
