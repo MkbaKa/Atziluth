@@ -84,3 +84,13 @@ const getMaxValue = function (entity, attrName) {
 const getAttrValue = function (entity, attrName) {
     return bridge.getAttrValue(entity, attrName, AttributeValueType.RANDOM)
 }
+
+/**
+ * 设置属性是否跳过过滤即可触发
+ * 若为 true 则数值为0也能触发
+ * 除 runtime 类型以为 均需要属性插件本身支持才能生效
+ * @param value boolean
+ */
+const skipFilter = function (value) {
+    Adapter.skipFilter = value
+}

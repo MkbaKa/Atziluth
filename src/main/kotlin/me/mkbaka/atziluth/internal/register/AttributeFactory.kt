@@ -2,7 +2,7 @@ package me.mkbaka.atziluth.internal.register
 
 import me.mkbaka.atziluth.Atziluth.attributeFactory
 
-abstract class AttributeFactory<T : AbstractCustomAttribute<*, *>> {
+abstract class AttributeFactory<T : AbstractCustomAttribute<*>> {
 
     /**
      * 重载
@@ -65,6 +65,11 @@ abstract class AttributeFactory<T : AbstractCustomAttribute<*, *>> {
 
     companion object {
 
+        fun registerAttributes(attrs: Collection<AbstractCustomAttribute<*>>) {
+            attrs.forEach { it.register() }
+            attributeFactory.registeredCallback()
+        }
+
         /**
          * 构造属性
          * @param [priority] 优先级
@@ -72,7 +77,7 @@ abstract class AttributeFactory<T : AbstractCustomAttribute<*, *>> {
          * @param [placeholder] 占位符
          * @param [combatPower] 战斗力
          * @param [type] 类型
-         * @return [AbstractCustomAttribute<*, *>]
+         * @return [AbstractCustomAttribute<*>]
          */
         fun buildAttribute(
             priority: Int,
@@ -80,7 +85,7 @@ abstract class AttributeFactory<T : AbstractCustomAttribute<*, *>> {
             placeholder: String,
             combatPower: Double,
             type: AttributeType
-        ): AbstractCustomAttribute<*, *> {
+        ): AbstractCustomAttribute<*> {
             return attributeFactory.buildAttribute(priority, name, placeholder, combatPower, type)
         }
 
@@ -89,13 +94,13 @@ abstract class AttributeFactory<T : AbstractCustomAttribute<*, *>> {
          * @param [name] 名字
          * @param [placeholder] 占位符
          * @param [type] 类型
-         * @return [AbstractCustomAttribute<*, *>]
+         * @return [AbstractCustomAttribute<*>]
          */
         fun buildAttribute(
             name: String,
             placeholder: String,
             type: AttributeType
-        ): AbstractCustomAttribute<*, *> {
+        ): AbstractCustomAttribute<*> {
             return attributeFactory.buildAttribute(name, placeholder, type)
         }
 

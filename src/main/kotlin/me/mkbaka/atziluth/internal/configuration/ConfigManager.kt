@@ -12,10 +12,12 @@ object ConfigManager {
     @Config("config.yml")
     lateinit var config: ConfigFile
 
+    var runtimeResetPeriod: Long = 60
+
     @Awake(LifeCycle.ENABLE)
     fun enable() {
         config.onReload {
-
+            runtimeResetPeriod = config.getLong("Settings.runtimeResetPeriod", 60)
         }
     }
 

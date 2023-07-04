@@ -1,0 +1,3 @@
+Settings:
+  # runtime 类属性 计时器的重置间隔
+  runtimeResetPeriod: 60

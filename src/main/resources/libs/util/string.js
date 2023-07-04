@@ -3,7 +3,7 @@ const CompatUtil = Packages.me.mkbaka.atziluth.internal.utils.CompatUtil.INSTANC
 
 /**
  * 转换文本中的PlaceholderAPI变量
- * 变量目标为自己 前提是上下文内有player这个变量
+ * 变量的目标为自己 顶级变量内需要有player这个变量
  * @param str 文本
  * @return 转换后的文本
  */

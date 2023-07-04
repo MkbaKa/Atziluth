@@ -13,23 +13,27 @@ class AttributePlusAdapter(
     override val placeholder: String,
     override val combatPower: Double,
     override val type: AttributeType
-) : AbstractCustomAttribute<SubAttribute, org.serverct.ersha.attribute.enums.AttributeType>() {
+) : AbstractCustomAttribute<SubAttribute>() {
 
-    override fun build(): SubAttribute {
-        return object : SubAttribute(
+    override val inst: SubAttribute
+
+    init {
+        inst = object : SubAttribute(
             attrPriority, combatPower, name, getType(), placeholder
         ), BaseAttribute {
+
             override fun onLoad(): SubAttribute {
-                onLoad?.let { it(this) }
+                onLoad?.let { it(this@AttributePlusAdapter) }
+                skipFilter.setSkipFilter()
                 return this
             }
 
             override fun runAttack(attacker: LivingEntity, entity: LivingEntity): Boolean {
-                return callback?.let { it(this, attacker, entity) } ?: false
+                return callback?.let { it(this@AttributePlusAdapter, attacker, entity) } ?: false
             }
 
             override fun runDefense(entity: LivingEntity, killer: LivingEntity): Boolean {
-                return callback?.let { it(this, entity, killer) } ?: false
+                return callback?.let { it(this@AttributePlusAdapter, entity, killer) } ?: false
             }
 
             override fun getFinalDamage(attacker: LivingEntity): Double {
@@ -57,7 +61,7 @@ class AttributePlusAdapter(
         AttributePlusImpl.registerAttribute(this)
     }
 
-    override fun getType(): org.serverct.ersha.attribute.enums.AttributeType {
+    private fun getType(): org.serverct.ersha.attribute.enums.AttributeType {
         return when (type) {
             AttributeType.ATTACK -> org.serverct.ersha.attribute.enums.AttributeType.ATTACK
             AttributeType.DEFENSE -> org.serverct.ersha.attribute.enums.AttributeType.DEFENSE

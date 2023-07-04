@@ -49,7 +49,8 @@ const listOf = function (array) {
  * 请不要 调用 或 修改 甚至是 删除
  */
 function initGlobalVariables() {
-    Attr = this.Attr
+    Adapter = this.Attr
+    Attr = Adapter.inst
     attacker = this.attacker
     entity = this.entity
 }

@@ -4,35 +4,38 @@ import org.bukkit.entity.LivingEntity
 
 /**
  * 自定义属性
- * @param I 属性接口类
- * @param T 属性类型
+ * @param T 属性接口类
  */
-abstract class AbstractCustomAttribute<I, T> {
+abstract class AbstractCustomAttribute<T> {
 
     open val attrPriority: Int = 0
     open val combatPower: Double = 0.0
+
+    open var skipFilter: Boolean = false
+    open var period: Long = -1
+
+    abstract val inst: T
 
     abstract val name: String
     abstract val placeholder: String
 
     abstract val type: AttributeType
 
-    var onLoad: ((I) -> Unit)? = null
-    var callback: ((I, LivingEntity, LivingEntity) -> Boolean)? = null
+    var onLoad: ((AbstractCustomAttribute<*>) -> Unit)? = null
+    var callback: ((AbstractCustomAttribute<*>, LivingEntity, LivingEntity) -> Boolean)? = null
+    var runtimeCallback: ((Any, LivingEntity) -> Boolean)? = null
 
-    open val period: Long = 0
-
-    fun onLoad(callback: (I) -> Unit) {
+    fun onLoad(callback: (AbstractCustomAttribute<*>) -> Unit) {
         this.onLoad = callback
     }
 
-    fun callback(block: (I, LivingEntity, LivingEntity) -> Boolean) {
+    fun callback(block: (AbstractCustomAttribute<*>, LivingEntity, LivingEntity) -> Boolean) {
         this.callback = block
     }
 
-    abstract fun build(): I
-
-    abstract fun getType(): T
+    fun run(block: (Any, LivingEntity) -> Boolean) {
+        this.runtimeCallback = block
+    }
 
     abstract fun register()
 

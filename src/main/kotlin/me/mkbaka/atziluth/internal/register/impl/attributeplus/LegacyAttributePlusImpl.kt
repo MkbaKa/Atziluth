@@ -9,7 +9,7 @@ object LegacyAttributePlusImpl : AttributeFactory<LegacyAttributePlusAdapter>() 
     private val manager by lazy { Main.getAttributeManager() }
 
     override fun registerAttribute(customAttribute: LegacyAttributePlusAdapter) {
-        customAttribute.build().registerAttribute()
+        customAttribute.inst.registerAttribute()
     }
 
     override fun reload() {

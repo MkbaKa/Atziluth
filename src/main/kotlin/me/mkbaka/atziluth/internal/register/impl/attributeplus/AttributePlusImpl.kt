@@ -9,7 +9,7 @@ object AttributePlusImpl : AttributeFactory<AttributePlusAdapter>() {
     private val manager by lazy { AttributePlus.attributeManager }
 
     override fun registerAttribute(customAttribute: AttributePlusAdapter) {
-        manager.registerAttribute(customAttribute.build())
+        manager.registerAttribute(customAttribute.inst)
     }
 
     override fun reload() {

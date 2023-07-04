@@ -87,6 +87,7 @@ const callAsyncTimer = function (delay, period, callback) {
 
 /**
  * 判断自身是否拥有指定权限
+ * 判断的目标为自己 顶级变量内需要有player这个变量
  * @param perm 权限节点
  * @returns boolean
  */

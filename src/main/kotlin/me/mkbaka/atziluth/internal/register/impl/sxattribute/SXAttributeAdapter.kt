@@ -15,14 +15,15 @@ class SXAttributeAdapter(
     override val name: String,
     override val placeholder: String,
     override val type: AttributeType
-) : AbstractCustomAttribute<SubAttribute, github.saukiya.sxattribute.data.attribute.AttributeType>() {
+) : AbstractCustomAttribute<SubAttribute>() {
 
-    override fun build(): SubAttribute {
-        return object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute {
+    override val inst: SubAttribute
 
+    init {
+        inst = object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute {
             init {
                 this.priority = getAttributes().size
-                onLoad?.let { it(this) }
+                onLoad?.let { it(this@SXAttributeAdapter) }
             }
 
             private var damage = 0.0
@@ -31,8 +32,8 @@ class SXAttributeAdapter(
                 if (data !is DamageData) return
                 this.damage = data.damage
                 when (type) {
-                    AttributeType.ATTACK -> callback?.let { it(this, data.attacker, data.defender) }
-                    AttributeType.DEFENSE -> callback?.let { it(this, data.defender, data.attacker) }
+                    AttributeType.ATTACK -> callback?.let { it(this@SXAttributeAdapter, data.attacker, data.defender) }
+                    AttributeType.DEFENSE -> callback?.let { it(this@SXAttributeAdapter, data.defender, data.attacker) }
                     else -> error("Unsupported type $type")
                 }
                 data.damage = damage
@@ -79,7 +80,6 @@ class SXAttributeAdapter(
 
             override val isProjectile: Boolean
                 get() = error("Unsupported method for SX-Attribute v2.x")
-
         }
     }
 
@@ -87,7 +87,7 @@ class SXAttributeAdapter(
         SXAttributeImpl.registerAttribute(this)
     }
 
-    override fun getType(): github.saukiya.sxattribute.data.attribute.AttributeType {
+    private fun getType(): github.saukiya.sxattribute.data.attribute.AttributeType {
         return when (type) {
             AttributeType.ATTACK -> github.saukiya.sxattribute.data.attribute.AttributeType.ATTACK
             AttributeType.DEFENSE -> github.saukiya.sxattribute.data.attribute.AttributeType.DEFENCE

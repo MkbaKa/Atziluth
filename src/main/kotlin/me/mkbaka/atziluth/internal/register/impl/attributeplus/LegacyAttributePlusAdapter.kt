@@ -10,16 +10,18 @@ class LegacyAttributePlusAdapter(
     override val name: String,
     override val placeholder: String,
     override val type: AttributeType
-) : AbstractCustomAttribute<BaseAttribute, org.serverct.ersha.jd.api.AttributeType>() {
+) : AbstractCustomAttribute<BaseAttribute>() {
 
-    override fun build(): BaseAttribute {
-        return object : BaseAttribute(
+    override val inst: BaseAttribute
+
+    init {
+        inst = object : BaseAttribute(
             getType(), name, placeholder
         ), me.mkbaka.atziluth.internal.register.BaseAttribute {
 
             override fun run(attacker: Entity, entity: Entity, attributeValue: Double) {
                 if (attacker !is LivingEntity || entity !is LivingEntity) return
-                callback?.let { it(this, attacker, entity) }
+                callback?.let { it(this@LegacyAttributePlusAdapter, attacker, entity) }
             }
 
             override fun getFinalDamage(attacker: LivingEntity): Double {
@@ -48,7 +50,7 @@ class LegacyAttributePlusAdapter(
         LegacyAttributePlusImpl.registerAttribute(this)
     }
 
-    override fun getType(): org.serverct.ersha.jd.api.AttributeType {
+    private fun getType(): org.serverct.ersha.jd.api.AttributeType {
         return when (type) {
             AttributeType.ATTACK -> org.serverct.ersha.jd.api.AttributeType.DAMAGE
             AttributeType.DEFENSE -> org.serverct.ersha.jd.api.AttributeType.INJURED

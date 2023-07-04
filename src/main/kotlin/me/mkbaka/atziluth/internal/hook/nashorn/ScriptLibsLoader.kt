@@ -26,11 +26,12 @@ object ScriptLibsLoader : Reloadable(priority = 1) {
             }
         }
 
-        releaseResourceFile("${folder.name}/basic.js", replace = false)
-        releaseResourceFile("${folder.name}/util.js", replace = false)
-        releaseResourceFile("${folder.name}/util/item.js", replace = false)
-        releaseResourceFile("${folder.name}/util/message.js", replace = false)
-        releaseResourceFile("${folder.name}/util/string.js", replace = false)
+        releaseResourceFile("${folder.name}/basic.js")
+        releaseResourceFile("${folder.name}/util.js")
+        releaseResourceFile("${folder.name}/util/attribute.js")
+        releaseResourceFile("${folder.name}/util/item.js")
+        releaseResourceFile("${folder.name}/util/message.js")
+        releaseResourceFile("${folder.name}/util/string.js")
     }
 
     override fun reload() {

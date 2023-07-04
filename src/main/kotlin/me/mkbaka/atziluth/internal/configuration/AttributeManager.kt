@@ -1,10 +1,10 @@
 package me.mkbaka.atziluth.internal.configuration
 
-import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.api.interfaces.Reloadable
 import me.mkbaka.atziluth.internal.register.AbstractCustomAttribute
 import me.mkbaka.atziluth.internal.register.AttributeFactory
 import me.mkbaka.atziluth.internal.register.AttributeType
+import me.mkbaka.atziluth.internal.register.AttributeType.*
 import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
 import me.mkbaka.atziluth.internal.utils.FileUtil.executeSubFiles
 import me.mkbaka.atziluth.internal.utils.FileUtil.newFolder
@@ -25,7 +25,7 @@ object AttributeManager : Reloadable(priority = 6) {
         }
     }
 
-    val subAttributes = ConcurrentHashMap<String, AbstractCustomAttribute<*, *>>()
+    val subAttributes = ConcurrentHashMap<String, AbstractCustomAttribute<*>>()
 
     /**
      * 注册属性
@@ -46,23 +46,36 @@ object AttributeManager : Reloadable(priority = 6) {
                 AttributeType.of(reader.getTopLevel("type"))!!
             ).apply {
                 if (reader.isFunction("onLoad")) onLoad { attr ->
-                    reader.invoke("onLoad", hashMapOf("Attr" to attr!!))
+                    reader.invoke("onLoad", hashMapOf("Attr" to attr))
                 }
-                if (this.type != AttributeType.OTHER && this.type.function.isNotEmpty() && reader.isFunction(this.type.function)) {
-                    callback { attr, attacker, entity ->
-                        reader.invoke(
-                            this.type.function,
-                            hashMapOf("Attr" to attr!!, "attacker" to attacker, "entity" to entity)
-                        ).cbool
+
+                if (this.type.function.isNotEmpty() && reader.isFunction(this.type.function)) {
+                    when (this.type) {
+                        ATTACK, DEFENSE -> callback { attr, attacker, entity ->
+                            reader.invoke(
+                                this.type.function,
+                                hashMapOf("Attr" to attr, "attacker" to attacker, "entity" to entity)
+                            ).cbool
+                        }
+
+                        RUNTIME -> run { attr, player ->
+                            reader.invoke(
+                                this.type.function,
+                                hashMapOf("Attr" to attr, "player" to player, "entity" to player)
+                            ).cbool
+                        }
+
+                        OTHER -> Unit
                     }
                 }
+
+                if (this.type == RUNTIME) this.period = reader.getTopLevel<Long>("period") ?: -1L
 
                 subAttributes[this.name] = this
             }
         }
 
-        subAttributes.values.sortedBy { it.attrPriority }.forEach { attrImpl -> attrImpl.register() }
-        Atziluth.attributeFactory.registeredCallback()
+        AttributeFactory.registerAttributes(subAttributes.values.sortedBy { attr -> attr.attrPriority })
     }
 
 }

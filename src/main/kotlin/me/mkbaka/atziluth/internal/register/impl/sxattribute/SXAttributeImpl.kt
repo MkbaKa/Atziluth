@@ -30,7 +30,7 @@ object SXAttributeImpl : AttributeFactory<SXAttributeAdapter>() {
             SXAttribute.getInst().logger.warning("Attribute >> Disable [§9Atzi§3luth§r|§c${customAttribute.name}§r] !");
             return
         }
-        customAttribute.build().apply {
+        customAttribute.inst.apply {
             SubAttribute.getAttributes().add(this.priority, this)
             SXAttribute.getInst().logger
                 .info("Attribute >> Register [§9Atzi§3luth§r|§a${name}§r] To Priority $priority !")
