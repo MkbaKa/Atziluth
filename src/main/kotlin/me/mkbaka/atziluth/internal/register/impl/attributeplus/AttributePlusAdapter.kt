@@ -15,10 +15,8 @@ class AttributePlusAdapter(
     override val type: AttributeType
 ) : AbstractCustomAttribute<SubAttribute>() {
 
-    override val inst: SubAttribute
-
-    init {
-        inst = object : SubAttribute(
+    override val inst: SubAttribute by lazy {
+        object : SubAttribute(
             attrPriority, combatPower, name, getType(), placeholder
         ), BaseAttribute {
 

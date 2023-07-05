@@ -17,10 +17,8 @@ class SXAttributeAdapter(
     override val type: AttributeType
 ) : AbstractCustomAttribute<SubAttribute>() {
 
-    override val inst: SubAttribute
-
-    init {
-        inst = object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute {
+    override val inst: SubAttribute by lazy {
+        object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute {
             init {
                 this.priority = getAttributes().size
                 onLoad?.let { it(this@SXAttributeAdapter) }
@@ -31,6 +29,7 @@ class SXAttributeAdapter(
             override fun eventMethod(values: DoubleArray, data: EventData) {
                 if (data !is DamageData) return
                 this.damage = data.damage
+
                 when (type) {
                     AttributeType.ATTACK -> callback?.let { it(this@SXAttributeAdapter, data.attacker, data.defender) }
                     AttributeType.DEFENSE -> callback?.let { it(this@SXAttributeAdapter, data.defender, data.attacker) }

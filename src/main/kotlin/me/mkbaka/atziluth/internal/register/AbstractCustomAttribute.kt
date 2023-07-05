@@ -22,20 +22,9 @@ abstract class AbstractCustomAttribute<T> {
     abstract val type: AttributeType
 
     var onLoad: ((AbstractCustomAttribute<*>) -> Unit)? = null
+
     var callback: ((AbstractCustomAttribute<*>, LivingEntity, LivingEntity) -> Boolean)? = null
     var runtimeCallback: ((Any, LivingEntity) -> Boolean)? = null
-
-    fun onLoad(callback: (AbstractCustomAttribute<*>) -> Unit) {
-        this.onLoad = callback
-    }
-
-    fun callback(block: (AbstractCustomAttribute<*>, LivingEntity, LivingEntity) -> Boolean) {
-        this.callback = block
-    }
-
-    fun run(block: (Any, LivingEntity) -> Boolean) {
-        this.runtimeCallback = block
-    }
 
     abstract fun register()
 

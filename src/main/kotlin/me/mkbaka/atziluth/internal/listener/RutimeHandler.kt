@@ -28,10 +28,11 @@ object RutimeHandler {
             }
 
             Bukkit.getOnlinePlayers().forEach { player ->
-                attrs.filter { (key, attr) ->
-                    attr.skipFilter || AttributeBridge.getAttrValue(player, key) > 0.0
-                }.forEach { (_, attr) ->
-                    attr.runtimeCallback!!(attr, player)
+                attrs.forEach { (key, attr) ->
+                    // 用filter会再创建个新的map  所以直接用if了
+                    if (attr.skipFilter || AttributeBridge.getAttrValue(player, key) > 0.0) {
+                        attr.runtimeCallback?.let { it(attr, player) }
+                    }
                 }
             }
 

@@ -12,10 +12,8 @@ class LegacyAttributePlusAdapter(
     override val type: AttributeType
 ) : AbstractCustomAttribute<BaseAttribute>() {
 
-    override val inst: BaseAttribute
-
-    init {
-        inst = object : BaseAttribute(
+    override val inst: BaseAttribute by lazy {
+        object : BaseAttribute(
             getType(), name, placeholder
         ), me.mkbaka.atziluth.internal.register.BaseAttribute {
 

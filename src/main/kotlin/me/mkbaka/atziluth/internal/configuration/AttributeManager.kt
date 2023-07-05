@@ -45,31 +45,34 @@ object AttributeManager : Reloadable(priority = 6) {
                 reader.getTopLevel("combatPower"),
                 AttributeType.of(reader.getTopLevel("type"))!!
             ).apply {
-                if (reader.isFunction("onLoad")) onLoad { attr ->
+                if (reader.isFunction("onLoad")) onLoad = { attr ->
                     reader.invoke("onLoad", hashMapOf("Attr" to attr))
                 }
 
                 if (this.type.function.isNotEmpty() && reader.isFunction(this.type.function)) {
+
                     when (this.type) {
-                        ATTACK, DEFENSE -> callback { attr, attacker, entity ->
+                        ATTACK, DEFENSE -> callback = { attr, attacker, entity ->
                             reader.invoke(
                                 this.type.function,
                                 hashMapOf("Attr" to attr, "attacker" to attacker, "entity" to entity)
                             ).cbool
                         }
 
-                        RUNTIME -> run { attr, player ->
-                            reader.invoke(
-                                this.type.function,
-                                hashMapOf("Attr" to attr, "player" to player, "entity" to player)
-                            ).cbool
+                        RUNTIME -> {
+                            runtimeCallback = { attr, player ->
+                                reader.invoke(
+                                    this.type.function,
+                                    hashMapOf("Attr" to attr, "player" to player, "entity" to player)
+                                ).cbool
+                            }
+                            this.period = reader.getTopLevel<Long>("period") ?: 5L
                         }
 
                         OTHER -> Unit
                     }
-                }
 
-                if (this.type == RUNTIME) this.period = reader.getTopLevel<Long>("period") ?: 5L
+                }
 
                 subAttributes[this.name] = this
             }
