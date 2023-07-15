@@ -21,7 +21,7 @@ object AttributeManager : Reloadable(priority = 6) {
             "attributes"
         ) { file ->
             releaseResourceFile("${file.name}/example.js")
-            releaseResourceFile("${file.name}/example.ks")
+//            releaseResourceFile("${file.name}/example.ks")
         }
     }
 
@@ -66,7 +66,7 @@ object AttributeManager : Reloadable(priority = 6) {
                                     hashMapOf("Attr" to attr, "player" to player, "entity" to player)
                                 ).cbool
                             }
-                            this.period = reader.getTopLevel<Long>("period") ?: 5L
+                            this.period = reader.getTopLevel<Long?>("period") ?: 5L
                         }
 
                         OTHER -> Unit
