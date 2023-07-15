@@ -41,4 +41,8 @@ object SXAttributeImpl : AttributeFactory<SXAttributeAdapter>() {
         SXAttribute.getAttributeManager().loadDefaultAttributeData()
     }
 
+    override fun getAllAttributeNames(): Collection<String> {
+        return SubAttribute.getAttributes().map { it.name }
+    }
+
 }

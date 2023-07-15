@@ -10,7 +10,7 @@ import javax.script.ScriptEngine
 
 @RuntimeDependency(
     "!org.openjdk.nashorn:nashorn-core:15.4",
-    test = "!jdk.nashorn.api.scripting.NashornScriptEngineFactory"
+    test = "!org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory"
 )
 object NashornHookerImpl : AbstractNashornHooker() {
 

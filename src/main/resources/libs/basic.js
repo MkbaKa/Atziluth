@@ -34,12 +34,25 @@ const error = function (any) {
  * @param array 数组
  * @returns java.util.ArrayList
  */
-const listOf = function (array) {
+const toList = function (array) {
     const newList = new java.util.ArrayList()
     for (let i in array) {
         newList.add(array[i])
     }
     return newList
+}
+
+/**
+ * 将多个参数变为List集合
+ * @param {...any} any 参数列表
+ * @returns java.util.ArrayList
+ */
+const listOf = function () {
+    const array = new java.util.ArrayList()
+    for (let i in arguments) {
+        array.add(arguments[i])
+    }
+    return array
 }
 
 /**

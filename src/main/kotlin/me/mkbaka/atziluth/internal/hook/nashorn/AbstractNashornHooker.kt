@@ -92,7 +92,7 @@ abstract class AbstractNashornHooker {
             try {
                 Class.forName("jdk.nashorn.api.scripting.NashornScriptEngineFactory")
                 LegacyNashornHookerImpl
-            } catch (_: Throwable) {
+            } catch (e: ClassNotFoundException) {
                 NashornHookerImpl
             }
         }

@@ -7,6 +7,7 @@ import org.serverct.ersha.AttributePlus
 object AttributePlusImpl : AttributeFactory<AttributePlusAdapter>() {
 
     private val manager by lazy { AttributePlus.attributeManager }
+    private val attrScriptManager by lazy { AttributePlus.attrScriptManager }
 
     override fun registerAttribute(customAttribute: AttributePlusAdapter) {
         manager.registerAttribute(customAttribute.inst)
@@ -14,6 +15,7 @@ object AttributePlusImpl : AttributeFactory<AttributePlusAdapter>() {
 
     override fun reload() {
         manager.reload()
+        attrScriptManager.registerScriptAttribute()
     }
 
     override fun buildAttribute(
@@ -28,6 +30,10 @@ object AttributePlusImpl : AttributeFactory<AttributePlusAdapter>() {
 
     override fun isAttribute(name: String): Boolean {
         return manager.attributeNameList.containsKey(name)
+    }
+
+    override fun getAllAttributeNames(): Collection<String> {
+        return manager.attributeNameList.map { it.key }
     }
 
 }

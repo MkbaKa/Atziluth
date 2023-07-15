@@ -1,6 +1,10 @@
 package me.mkbaka.atziluth.internal.bridge
 
+import github.saukiya.sxattribute.data.attribute.sub.update.CustomAttribute
 import me.mkbaka.atziluth.Atziluth.attributeBridge
+import me.mkbaka.atziluth.Atziluth.attributeFactory
+import me.mkbaka.atziluth.internal.configuration.ConfigManager
+import me.mkbaka.atziluth.internal.register.AttributeType
 import me.mkbaka.atziluth.internal.utils.callSync
 import me.mkbaka.atziluth.internal.utils.callSyncLater
 import org.bukkit.entity.LivingEntity
@@ -132,6 +136,16 @@ interface AttributeBridge {
             type: AttributeValueType = AttributeValueType.RANDOM
         ): Double {
             return attributeBridge.getAttrValue(entity, attr, type)
+        }
+
+        /**
+         * 注册空属性
+         * @param [attrName] 属性名
+         * @param [combatPower] 战斗力
+         * @param [placeholder] 占位符
+         */
+        fun registerOtherAttribute(attrName: String, combatPower: Double, placeholder: String) {
+            attributeFactory.buildAttribute(-1, attrName, placeholder, combatPower, AttributeType.OTHER).register()
         }
 
     }

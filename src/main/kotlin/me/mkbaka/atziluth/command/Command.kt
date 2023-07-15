@@ -22,4 +22,5 @@ object Command {
             sender.sendLang("reload", prefix)
         }
     }
+
 }

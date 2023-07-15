@@ -1,4 +1,5 @@
 const AttributeValueType = Packages.me.mkbaka.atziluth.internal.bridge.AttributeValueType
+const AttributeBridge = Packages.me.mkbaka.atziluth.internal.bridge.AttributeBridge.Companion
 
 /**
  * 获取运行至当前属性时的伤害数值
@@ -83,6 +84,10 @@ const getMaxValue = function (entity, attrName) {
  */
 const getAttrValue = function (entity, attrName) {
     return bridge.getAttrValue(entity, attrName, AttributeValueType.RANDOM)
+}
+
+const regOtherAttr = function (name, combatPower, placeholder) {
+    AttributeBridge.registerOtherAttribute(name, combatPower, placeholder)
 }
 
 /**

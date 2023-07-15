@@ -38,4 +38,8 @@ object LegacyAttributePlusImpl : AttributeFactory<LegacyAttributePlusAdapter>() 
         return LegacyAttributePlusAdapter(name, placeholder, type)
     }
 
+    override fun getAllAttributeNames(): Collection<String> {
+        return manager.attributeName.map { it.value }
+    }
+
 }

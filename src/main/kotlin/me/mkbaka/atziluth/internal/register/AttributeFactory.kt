@@ -63,6 +63,8 @@ abstract class AttributeFactory<T : AbstractCustomAttribute<*>> {
      */
     abstract fun isAttribute(name: String): Boolean
 
+    abstract fun getAllAttributeNames(): Collection<String>
+
     companion object {
 
         fun registerAttributes(attrs: Collection<AbstractCustomAttribute<*>>) {
