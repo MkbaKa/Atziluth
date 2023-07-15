@@ -22,7 +22,15 @@ abstract class ScriptReader {
      * @param [name] 名字
      * @return [T]
      */
-    abstract fun <T> getTopLevel(name: String): T
+    abstract fun <T> getTopLevel(name: String): T?
+
+    /**
+     * 获取顶级变量
+     * @param [name] 名字
+     * @param [def] 默认值
+     * @return [T]
+     */
+    abstract fun <T> getTopLevel(name: String, def: T): T
 
     /**
      * 调用函数
