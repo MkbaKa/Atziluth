@@ -39,11 +39,11 @@ object AttributeManager : Reloadable(priority = 6) {
             val reader = ScriptReader.create(file)
 
             AttributeFactory.buildAttribute(
-                reader.getTopLevel("priority"),
-                reader.getTopLevel("attributeName"),
-                reader.getTopLevel("placeholder"),
-                reader.getTopLevel("combatPower"),
-                AttributeType.of(reader.getTopLevel("type"))!!
+                reader.getTopLevel("priority", -1),
+                reader.getTopLevel("attributeName")!!,
+                reader.getTopLevel("placeholder")!!,
+                reader.getTopLevel("combatPower", 1.0),
+                AttributeType.of(reader.getTopLevel("type", "other"))!!
             ).apply {
                 if (reader.isFunction("onLoad")) onLoad = { attr ->
                     reader.invoke("onLoad", hashMapOf("Attr" to attr))
@@ -66,7 +66,7 @@ object AttributeManager : Reloadable(priority = 6) {
                                     hashMapOf("Attr" to attr, "player" to player, "entity" to player)
                                 ).cbool
                             }
-                            this.period = reader.getTopLevel<Long?>("period") ?: 5L
+                            this.period = reader.getTopLevel("period", 5L)
                         }
 
                         OTHER -> Unit
