@@ -22,6 +22,11 @@ class JavaScriptReaderImpl : ScriptReader {
         return compiledScript.scriptEngine[name] as T
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getTopLevel(name: String, def: T): T {
+        return compiledScript.scriptEngine[name] as? T ?: def
+    }
+
     override fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any {
         return compiledScript.invoke(name, map, args)
     }

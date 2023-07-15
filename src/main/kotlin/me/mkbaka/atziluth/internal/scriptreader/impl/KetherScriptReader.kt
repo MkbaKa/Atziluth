@@ -20,6 +20,10 @@ class KetherScriptReader : ScriptReader {
         error("Not yet implemented")
     }
 
+    override fun <T> getTopLevel(name: String, def: T): T {
+        error("Not yet implemented")
+    }
+
     override fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any {
         error("Not yet implemented")
     }
