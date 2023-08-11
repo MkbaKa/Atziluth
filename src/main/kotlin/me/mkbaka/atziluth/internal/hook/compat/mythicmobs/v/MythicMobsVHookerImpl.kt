@@ -20,6 +20,9 @@ class MythicMobsVHookerImpl(val inst: MythicBukkit) : AbstractMythicMobsHooker<M
             "add-attr", "addattr" -> e.register(AttributeMechanicV.Add(e.container, e.config))
             "take-attr", "takeattr" -> e.register(AttributeMechanicV.Take(e.container, e.config))
             "attr-damage", "attrdamage" -> e.register(AttributeDamageMechanicV(e.container, e.config))
+            "eval-javascript", "evaljavascript" -> e.register(EvalMechanicV.JavaScript(e.container, e.config))
+            "eval-kether", "evalkether" -> e.register(EvalMechanicV.Kether(e.container, e.config))
+            "invoke-script", "invokescript" -> e.register(InvokeMechanicV(e.container, e.config))
         }
     }
 
