@@ -7,7 +7,7 @@ package me.mkbaka.atziluth.internal.scriptreader
 enum class ScriptType(vararg val names: String) {
 
     JAVASCRIPT("js"),
-    KETHER("ke", "ks", "kether");
+    KETHER("ke", "ks", "kether", "yml");
 
     companion object {
 

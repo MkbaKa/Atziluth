@@ -1,6 +1,7 @@
 package me.mkbaka.atziluth.internal.utils
 
 import org.bukkit.event.Event
+import taboolib.common.platform.event.ProxyEvent
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.concurrent.ConcurrentHashMap
@@ -39,7 +40,8 @@ object ClassUtil {
      * @return [Boolean]
      */
     fun Class<*>.isBukkitEvent(): Boolean {
-        return Event::class.java.isAssignableFrom(this) && this.simpleName != "Event" && !Modifier.isAbstract(this.modifiers)
+        return (Event::class.java.isAssignableFrom(this) || ProxyEvent::class.java.isAssignableFrom(this))
+                && this.simpleName != "Event" && !Modifier.isAbstract(this.modifiers)
     }
 
     /**

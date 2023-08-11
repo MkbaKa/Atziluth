@@ -21,7 +21,7 @@ object AttributeManager : Reloadable(priority = 6) {
             "attributes"
         ) { file ->
             releaseResourceFile("${file.name}/example.js")
-//            releaseResourceFile("${file.name}/example.ks")
+            releaseResourceFile("${file.name}/example.yml")
         }
     }
 
@@ -35,7 +35,7 @@ object AttributeManager : Reloadable(priority = 6) {
         AttributeFactory.onReload()
 
         folder.executeSubFiles { file ->
-            if (file.extension != "js" && file.extension != "ks") return@executeSubFiles
+            if (file.extension != "js" && file.extension != "yml") return@executeSubFiles
             val reader = ScriptReader.create(file)
 
             AttributeFactory.buildAttribute(
@@ -46,16 +46,20 @@ object AttributeManager : Reloadable(priority = 6) {
                 AttributeType.of(reader.getTopLevel("type", "other"))!!
             ).apply {
                 if (reader.isFunction("onLoad")) onLoad = { attr ->
-                    reader.invoke("onLoad", hashMapOf("Attr" to attr))
+                    reader.invoke("onLoad", hashMapOf("args" to hashMapOf("Attr" to attr)))
                 }
 
                 if (this.type.function.isNotEmpty() && reader.isFunction(this.type.function)) {
 
                     when (this.type) {
-                        ATTACK, DEFENSE -> callback = { attr, attacker, entity ->
+                        ATTACK, DEFENSE -> callback = { attr, attacker, entity, args ->
                             reader.invoke(
                                 this.type.function,
-                                hashMapOf("Attr" to attr, "attacker" to attacker, "entity" to entity)
+                                hashMapOf("args" to args.apply {
+                                    this["Attr"] = attr
+                                    this["attacker"] = attacker
+                                    this["entity"] = entity
+                                })
                             ).cbool
                         }
 
@@ -63,7 +67,9 @@ object AttributeManager : Reloadable(priority = 6) {
                             runtimeCallback = { attr, player ->
                                 reader.invoke(
                                     this.type.function,
-                                    hashMapOf("Attr" to attr, "player" to player, "entity" to player)
+                                    hashMapOf("args" to hashMapOf(
+                                        "Attr" to attr, "player" to player, "entity" to player
+                                    ))
                                 ).cbool
                             }
                             this.period = reader.getTopLevel("period", 5L)

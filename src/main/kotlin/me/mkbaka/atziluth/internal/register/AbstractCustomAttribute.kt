@@ -23,7 +23,7 @@ abstract class AbstractCustomAttribute<T> {
 
     var onLoad: ((AbstractCustomAttribute<*>) -> Unit)? = null
 
-    var callback: ((AbstractCustomAttribute<*>, LivingEntity, LivingEntity) -> Boolean)? = null
+    var callback: ((AbstractCustomAttribute<*>, LivingEntity, LivingEntity, HashMap<String, Any>) -> Boolean)? = null
     var runtimeCallback: ((Any, LivingEntity) -> Boolean)? = null
 
     abstract fun register()

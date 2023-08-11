@@ -18,7 +18,7 @@ class SXAttributeAdapter(
 ) : AbstractCustomAttribute<SubAttribute>() {
 
     override val inst: SubAttribute by lazy {
-        object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute {
+        object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute<SubAttribute> {
             init {
                 this.priority = getAttributes().size
                 onLoad?.let { it(this@SXAttributeAdapter) }
@@ -31,8 +31,8 @@ class SXAttributeAdapter(
                 this.damage = data.damage
 
                 when (type) {
-                    AttributeType.ATTACK -> callback?.let { it(this@SXAttributeAdapter, data.attacker, data.defender) }
-                    AttributeType.DEFENSE -> callback?.let { it(this@SXAttributeAdapter, data.defender, data.attacker) }
+                    AttributeType.ATTACK -> callback?.let { it(this@SXAttributeAdapter, data.attacker, data.defender, hashMapOf("handle" to this)) }
+                    AttributeType.DEFENSE -> callback?.let { it(this@SXAttributeAdapter, data.defender, data.attacker, hashMapOf("handle" to this)) }
                     else -> error("Unsupported type $type")
                 }
                 data.damage = damage
@@ -61,19 +61,19 @@ class SXAttributeAdapter(
                 }
             }
 
-            override fun getFinalDamage(attacker: LivingEntity): Double {
+            override fun getFinalDamage(attacker: LivingEntity, handle: SubAttribute): Double {
                 return this.damage
             }
 
-            override fun addFinalDamage(attacker: LivingEntity, value: Double) {
+            override fun addFinalDamage(attacker: LivingEntity, value: Double, handle: SubAttribute) {
                 this.damage += value
             }
 
-            override fun takeFinalDamage(attacker: LivingEntity, value: Double) {
+            override fun takeFinalDamage(attacker: LivingEntity, value: Double, handle: SubAttribute) {
                 this.damage -= value
             }
 
-            override fun setFinalDamage(attacker: LivingEntity, value: Double) {
+            override fun setFinalDamage(attacker: LivingEntity, value: Double, handle: SubAttribute) {
                 this.damage = value
             }
 

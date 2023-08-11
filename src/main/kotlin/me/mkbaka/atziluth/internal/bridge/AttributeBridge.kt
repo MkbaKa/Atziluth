@@ -1,6 +1,5 @@
 package me.mkbaka.atziluth.internal.bridge
 
-import github.saukiya.sxattribute.data.attribute.sub.update.CustomAttribute
 import me.mkbaka.atziluth.Atziluth.attributeBridge
 import me.mkbaka.atziluth.Atziluth.attributeFactory
 import me.mkbaka.atziluth.internal.configuration.ConfigManager
@@ -148,6 +147,27 @@ interface AttributeBridge {
             attributeFactory.buildAttribute(-1, attrName, placeholder, combatPower, AttributeType.OTHER).register()
         }
 
+        /**
+         * 清除玩家身上数值大于0的属性 执行callback后返回
+         * @param [entity] 实体
+         * @param [callback] 回调
+         */
+        fun clearAttributes(entity: LivingEntity, whiteListAttrs: List<String> = emptyList(), callback: (LivingEntity) -> Unit) {
+            val source = UUID.randomUUID().toString()
+
+            val list = arrayListOf<String>()
+            attributeFactory.getAllAttributeNames().forEach {  attrName ->
+                if (attrName in whiteListAttrs || attrName in ConfigManager.clearAttributeWhiteList) return@forEach
+                val value = getAttrValue(entity, attrName, AttributeValueType.MAX)
+                if (value <= 0.0) return@forEach
+                list.add("$attrName: -${getAttrValue(entity, attrName, AttributeValueType.MIN)} - -$value")
+            }
+
+            addAttr(entity, source, list)
+            callback(entity)
+            takeAttr(entity, source)
+        }
+
     }
 
 }
@@ -158,7 +178,7 @@ enum class AttributeValueType {
     companion object {
 
         fun of(str: String): AttributeValueType? {
-            return values().firstOrNull { str.equals(str, ignoreCase = true) }
+            return values().firstOrNull { str.equals(it.name, ignoreCase = true) }
         }
 
     }

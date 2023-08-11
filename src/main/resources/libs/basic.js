@@ -1,6 +1,7 @@
 const Bukkit = Packages.org.bukkit.Bukkit
 const ItemStack = Packages.org.bukkit.inventory.ItemStack
-const Material = Packages.org.bukkit.inventory.Material
+const Material = Packages.org.bukkit.Material
+const EntityType = Packages.org.bukkit.entity.EntityType
 const Reflex = Packages.me.mkbaka.atziluth.internal.utils.ReflexUtil.INSTANCE
 
 const logger = Bukkit.getLogger()
@@ -56,14 +57,40 @@ const listOf = function () {
 }
 
 /**
+ * 获取随机值
+ * @param min 最小数值
+ * @param max 最大数值
+ * @returns {number}
+ */
+const random = function (min, max) {
+    const minValue = Math.min(min, max)
+    const maxValue = Math.max(min, max)
+    return Math.random() * (maxValue - minValue) + minValue
+}
+
+/**
+ * 计算概率
+ * @param number 概率值
+ * @returns {boolean}
+ */
+const evalChance = function (number) {
+    const chance = number > 1.0 ? number / 100 : number
+    return Math.random() <= chance
+}
+
+/**
  * 初始化全局变量
  * 省掉this关键字 且支持所有函数内直接调用 不必再挨个传参
  * 如果你不知道该函数有什么作用
  * 请不要 调用 或 修改 甚至是 删除
  */
 function initGlobalVariables() {
-    Adapter = this.Attr
-    Attr = Adapter.inst
-    attacker = this.attacker
-    entity = this.entity
+    globalVariables = this.args
+    if (globalVariables !== undefined) {
+        Adapter = globalVariables["Attr"]
+        if (Adapter !== undefined) Attr = Adapter.inst
+        handle = globalVariables["handle"]
+        attacker = globalVariables["attacker"]
+        entity = globalVariables["entity"]
+    }
 }

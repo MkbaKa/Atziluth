@@ -42,6 +42,17 @@ class SimpleListener(val source: String) {
      */
     fun setPriority(priority: EventPriority): SimpleListener {
         this.priority = priority
+        setPriority(EventPriority.HIGHEST)
+        return this
+    }
+
+    /**
+     * 根据优先级名称设置
+     * @param [priority] 优先级
+     * @return [SimpleListener]
+     */
+    fun setEventPriority(priority: String): SimpleListener {
+        this.priority = EventPriority.valueOf(priority.uppercase())
         return this
     }
 

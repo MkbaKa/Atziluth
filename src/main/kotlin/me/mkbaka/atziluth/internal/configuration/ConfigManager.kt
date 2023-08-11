@@ -13,11 +13,14 @@ object ConfigManager {
     lateinit var config: ConfigFile
 
     var runtimeResetPeriod: Long = 60
+    val clearAttributeWhiteList = HashSet<String>()
 
     @Awake(LifeCycle.ENABLE)
     fun enable() {
         config.onReload {
             runtimeResetPeriod = config.getLong("Settings.runtimeResetPeriod", 60)
+            clearAttributeWhiteList.clear()
+            clearAttributeWhiteList.addAll(config.getStringList("Settings.clearAttributeWhiteList"))
         }
     }
 

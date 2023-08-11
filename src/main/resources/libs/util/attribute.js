@@ -4,10 +4,10 @@ const AttributeBridge = Packages.me.mkbaka.atziluth.internal.bridge.AttributeBri
 /**
  * 获取运行至当前属性时的伤害数值
  * @param {*} attacker 攻击者
- * @returns
+ * @returns double
  */
 const getDamage = function (attacker) {
-    return Attr.getFinalDamage(attacker)
+    return Attr.getFinalDamage(attacker, handle)
 }
 
 /**
@@ -16,7 +16,7 @@ const getDamage = function (attacker) {
  * @param {*} value 数值
  */
 const addDamage = function (attacker, value) {
-    Attr.addFinalDamage(attacker, value)
+    Attr.addFinalDamage(attacker, value, handle)
 }
 
 /**
@@ -25,7 +25,7 @@ const addDamage = function (attacker, value) {
  * @param {*} value 数值
  */
 const takeDamage = function (attacker, value) {
-    Attr.takeFinalDamage(attacker, value)
+    Attr.takeFinalDamage(attacker, value, handle)
 }
 
 /**
@@ -34,7 +34,7 @@ const takeDamage = function (attacker, value) {
  * @param {*} value 数值
  */
 const setDamage = function (attacker) {
-    Attr.setFinalDamage(attacker)
+    Attr.setFinalDamage(attacker, handle)
 }
 
 /**

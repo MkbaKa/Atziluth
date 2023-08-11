@@ -33,7 +33,7 @@ object AttributePlusImpl : AttributeFactory<AttributePlusAdapter>() {
     }
 
     override fun getAllAttributeNames(): Collection<String> {
-        return manager.attributeNameList.map { it.key }
+        return manager.defaultKey.values
     }
 
 }

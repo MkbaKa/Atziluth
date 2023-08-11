@@ -54,9 +54,7 @@ object ListenerManager {
      * @param [listener] 监听器
      */
     fun unRegisterListener(listener: SimpleListener) {
-        callSync {
-            if (listeners.containsKey(listener.source)) unregisterListener(listeners[listener.source]!!)
-        }
+        unRegisterListener(listener.source)
     }
 
     /**
@@ -65,7 +63,10 @@ object ListenerManager {
      */
     fun unRegisterListener(source: String) {
         callSync {
-            if (listeners.containsKey(source)) unregisterListener(listeners[source]!!)
+            if (listeners.containsKey(source)) {
+                unregisterListener(listeners[source]!!)
+                listeners.remove(source)
+            }
         }
     }
 

@@ -1,7 +1,8 @@
 package me.mkbaka.atziluth.internal.scriptreader
 
 import me.mkbaka.atziluth.internal.scriptreader.impl.JavaScriptReaderImpl
-import me.mkbaka.atziluth.internal.scriptreader.impl.KetherScriptReader
+import me.mkbaka.atziluth.internal.scriptreader.impl.KetherScriptReaderImpl
+import org.bukkit.command.CommandSender
 import java.io.File
 import java.io.Reader
 
@@ -33,13 +34,20 @@ abstract class ScriptReader {
     abstract fun <T> getTopLevel(name: String, def: T): T
 
     /**
+     * 执行脚本内容
+     * @param [map] 顶级变量
+     * @return [Any]
+     */
+    abstract fun eval(sender: CommandSender?, map: Map<String, Any>): Any?
+
+    /**
      * 调用函数
      * @param [name] 名字
      * @param [map] 顶级变量列表
      * @param [args] 函数参数
      * @return [Any]
      */
-    abstract fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any
+    abstract fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any?
 
     /**
      * 是否为函数
@@ -56,7 +64,7 @@ abstract class ScriptReader {
          * @return [ScriptReader]
          */
         fun create(file: File): ScriptReader {
-            return read(file.extension, file) { file.readText() }
+            return read(file.extension, file) { file.reader() }
         }
 
         /**
@@ -66,7 +74,7 @@ abstract class ScriptReader {
          * @return [ScriptReader]
          */
         fun create(scriptType: ScriptType, script: String): ScriptReader {
-            return read(scriptType, script) { script }
+            return read(scriptType, script) { script.reader() }
         }
 
         /**
@@ -76,7 +84,7 @@ abstract class ScriptReader {
          * @return [ScriptReader]
          */
         fun create(scriptType: ScriptType, reader: Reader): ScriptReader {
-            return read(scriptType, reader) { reader.readText() }
+            return read(scriptType, reader) { reader }
         }
 
         /**
@@ -86,7 +94,7 @@ abstract class ScriptReader {
          * @return [ScriptReader]
          */
         fun create(scriptType: String, script: String): ScriptReader {
-            return read(scriptType, script) { script }
+            return read(scriptType, script) { script.reader() }
         }
 
         /**
@@ -96,7 +104,7 @@ abstract class ScriptReader {
          * @return [ScriptReader]
          */
         fun create(scriptType: String, reader: Reader): ScriptReader {
-            return read(scriptType, reader) { reader.readText() }
+            return read(scriptType, reader) { reader }
         }
 
         /**
@@ -106,11 +114,12 @@ abstract class ScriptReader {
          * @param [script] 脚本
          * @return [ScriptReader]
          */
-        private fun <T> read(scriptType: Any, obj: T, script: (T) -> String): ScriptReader {
+        private fun <T> read(scriptType: Any, obj: T, script: (T) -> Reader): ScriptReader {
             return when (val type =
-                if (scriptType is ScriptType) scriptType else ScriptType.of(scriptType.toString())) {
+                if (scriptType is ScriptType) scriptType else ScriptType.of(scriptType.toString())
+            ) {
                 ScriptType.JAVASCRIPT -> JavaScriptReaderImpl(script(obj))
-                ScriptType.KETHER -> KetherScriptReader(script(obj))
+                ScriptType.KETHER -> KetherScriptReaderImpl(script(obj))
                 else -> error("Unsupported script type $type")
             }
         }

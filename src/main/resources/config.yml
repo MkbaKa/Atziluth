@@ -1,3 +1,8 @@
 Settings:
   # runtime 类属性 计时器的重置间隔
   runtimeResetPeriod: 60
+  # 当 attr-damage 内 isClear|clear|c 参数为true时
+  # 不清除的属性
+  clearAttributeWhiteList:
+    - '生命力'
+    - '生命上限'

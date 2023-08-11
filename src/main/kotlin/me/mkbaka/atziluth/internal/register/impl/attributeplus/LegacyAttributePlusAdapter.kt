@@ -15,26 +15,26 @@ class LegacyAttributePlusAdapter(
     override val inst: BaseAttribute by lazy {
         object : BaseAttribute(
             getType(), name, placeholder
-        ), me.mkbaka.atziluth.internal.register.BaseAttribute {
+        ), me.mkbaka.atziluth.internal.register.BaseAttribute<BaseAttribute> {
 
             override fun run(attacker: Entity, entity: Entity, attributeValue: Double) {
                 if (attacker !is LivingEntity || entity !is LivingEntity) return
-                callback?.let { it(this@LegacyAttributePlusAdapter, attacker, entity) }
+                callback?.let { it(this@LegacyAttributePlusAdapter, attacker, entity, hashMapOf("handle" to this)) }
             }
 
-            override fun getFinalDamage(attacker: LivingEntity): Double {
+            override fun getFinalDamage(attacker: LivingEntity, handle: BaseAttribute): Double {
                 return this.damage
             }
 
-            override fun addFinalDamage(attacker: LivingEntity, value: Double) {
+            override fun addFinalDamage(attacker: LivingEntity, value: Double, handle: BaseAttribute) {
                 this.damage += value
             }
 
-            override fun takeFinalDamage(attacker: LivingEntity, value: Double) {
+            override fun takeFinalDamage(attacker: LivingEntity, value: Double, handle: BaseAttribute) {
                 this.damage -= value
             }
 
-            override fun setFinalDamage(attacker: LivingEntity, value: Double) {
+            override fun setFinalDamage(attacker: LivingEntity, value: Double, handle: BaseAttribute) {
                 damage = value
             }
 
