@@ -63,7 +63,7 @@ abstract class AbstractMythicMobsHooker<E, R> {
             hooker.registerPlaceholder()
         }
 
-        fun parseArgsMap(entries: Set<Map.Entry<String, String>>): Map<String, Any> {
+        fun parseArgsMap(entries: Set<Map.Entry<String, String>>): HashMap<String, Any> {
             val map = hashMapOf<String, Any>()
             entries.forEach { entry ->
                 if (entry.key in ignoreScriptArgs) return@forEach

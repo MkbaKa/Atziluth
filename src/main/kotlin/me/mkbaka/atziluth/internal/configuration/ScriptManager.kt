@@ -28,7 +28,7 @@ object ScriptManager : Reloadable(priority = 7) {
 
         folder.executeSubFiles {
             if (it.extension != "js" && it.extension != "yml") return@executeSubFiles
-            scripts[it.path] = AbstractScript.buildScript(it).apply { onLoad() }
+            scripts[it.path.substringAfter("scripts\\")] = AbstractScript.buildScript(it).apply { onLoad() }
         }
     }
 

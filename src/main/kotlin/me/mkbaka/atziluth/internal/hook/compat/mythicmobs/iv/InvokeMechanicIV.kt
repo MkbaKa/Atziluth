@@ -10,7 +10,7 @@ import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHook
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
 
-class InvokeMechanic(mlc: MythicLineConfig) : SkillMechanic(mlc.line, mlc), ITargetedEntitySkill {
+class InvokeMechanicIV(mlc: MythicLineConfig) : SkillMechanic(mlc.line, mlc), ITargetedEntitySkill {
 
     private val file = mlc.getPlaceholderString(arrayOf("file", "path", "p"), "")
     private val func = mlc.getPlaceholderString(arrayOf("func", "function"), "")

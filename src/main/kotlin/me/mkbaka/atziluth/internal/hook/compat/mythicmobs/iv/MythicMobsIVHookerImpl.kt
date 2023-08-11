@@ -21,6 +21,9 @@ class MythicMobsIVHookerImpl(private val inst: MythicMobs) : AbstractMythicMobsH
             "add-attr", "addattr" -> e.register(AttributeMechanicIV.Add(e.config))
             "take-attr", "takeattr" -> e.register(AttributeMechanicIV.Take(e.config))
             "attr-damage", "attrdamage" -> e.register(AttributeDamageMechanicIV(e.config))
+            "eval-javascript", "evaljavascript" -> e.register(EvalMechanicIV.JavaScript(e.config))
+            "eval-kether", "evalkether" -> e.register(EvalMechanicIV.Kether(e.config))
+            "invoke-script", "invokescript" -> e.register(InvokeMechanicIV(e.config))
         }
     }
 
