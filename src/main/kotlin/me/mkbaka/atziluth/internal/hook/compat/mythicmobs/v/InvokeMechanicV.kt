@@ -30,7 +30,7 @@ class InvokeMechanicV(cm: CustomMechanic, mlc: MythicLineConfig) : SkillMechanic
             if (func.isEmpty()) return SkillResult.INVALID_CONFIG
             val script = ScriptManager.scripts[path.get(meta)] ?: return SkillResult.INVALID_CONFIG
 
-            ScriptManager.invoke(script, func, args)
+            script.invoke(func, args)
         }
         return SkillResult.SUCCESS
     }

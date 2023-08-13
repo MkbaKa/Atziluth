@@ -28,7 +28,7 @@ class InvokeMechanicIV(mlc: MythicLineConfig) : SkillMechanic(mlc.line, mlc), IT
             if (func.isEmpty()) return false
             val script = ScriptManager.scripts[file.get(meta)] ?: return false
 
-            ScriptManager.invoke(script, func, args)
+            script.invoke(func, args)
         }
         return true
     }

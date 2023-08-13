@@ -34,7 +34,8 @@ class KetherScriptReaderImpl : ScriptReader {
         return super.script.eval(sender, map)
     }
 
-    override fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any {
+    override fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any? {
+        if (!isFunction(name)) return null
         val mapArgs = map["args"] as? HashMap<String, Any> ?: hashMapOf()
         return functions[name]?.eval(map["sender"] as? CommandSender, mapArgs.apply { putAll(topLevels) }) ?: false
     }

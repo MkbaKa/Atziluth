@@ -1,11 +1,16 @@
-package me.mkbaka.atziluth.internal.data
+package me.mkbaka.atziluth.internal.data.impl
 
+import me.mkbaka.atziluth.internal.data.Data
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class PlayerData(val owner: UUID) {
+class PlayerData(val owner: UUID) : Data {
 
     private val data = ConcurrentHashMap<String, Data>()
+
+    override fun getValue(): Any {
+        return HashMap(data)
+    }
 
     /**
      * 保存数据

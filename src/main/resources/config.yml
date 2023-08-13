@@ -6,3 +6,11 @@ Settings:
   clearAttributeWhiteList:
     - '生命力'
     - '生命上限'
+
+TempData:
+  # 检测间隔 (分钟)
+  taskPeriod: 30
+  # 玩家离线后
+  # 若指定时间内未登录则清除临时数据
+  # 单位: 分钟
+  timeout: 30

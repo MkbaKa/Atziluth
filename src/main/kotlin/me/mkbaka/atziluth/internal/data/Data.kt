@@ -2,7 +2,9 @@ package me.mkbaka.atziluth.internal.data
 
 import me.mkbaka.atziluth.internal.data.impl.DataImpl
 
-abstract class Data(open val value: Any) {
+interface Data {
+
+    fun getValue(): Any
 
     companion object {
 

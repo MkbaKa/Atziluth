@@ -15,12 +15,18 @@ object ConfigManager {
     var runtimeResetPeriod: Long = 60
     val clearAttributeWhiteList = HashSet<String>()
 
+    var checkTaskPeriod: Long = 20 * 60 * 30
+    var tempDataTimeout: Long = 1000 * 60 * 30
+
     @Awake(LifeCycle.ENABLE)
     fun enable() {
         config.onReload {
             runtimeResetPeriod = config.getLong("Settings.runtimeResetPeriod", 60)
             clearAttributeWhiteList.clear()
             clearAttributeWhiteList.addAll(config.getStringList("Settings.clearAttributeWhiteList"))
+
+            checkTaskPeriod = 20 * 60 * config.getLong("TempData.taskPeriod", 30)
+            tempDataTimeout = 1000 * 60 * config.getLong("TempData.timeout", 30)
         }
     }
 

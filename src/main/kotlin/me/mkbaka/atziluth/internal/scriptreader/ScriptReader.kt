@@ -47,7 +47,7 @@ abstract class ScriptReader {
      * @param [args] 函数参数
      * @return [Any]
      */
-    abstract fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any?
+    abstract fun invoke(name: String, map: Map<String, Any> = hashMapOf(), vararg args: Any): Any?
 
     /**
      * 是否为函数

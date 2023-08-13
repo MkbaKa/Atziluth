@@ -34,7 +34,8 @@ class JavaScriptReaderImpl : ScriptReader {
         return compiledScript.eval(args.apply { put("sender", sender ?: Bukkit.getConsoleSender()) })
     }
 
-    override fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any {
+    override fun invoke(name: String, map: Map<String, Any>, vararg args: Any): Any? {
+        if (!isFunction(name)) return null
         return compiledScript.invoke(name, map, args)
     }
 
