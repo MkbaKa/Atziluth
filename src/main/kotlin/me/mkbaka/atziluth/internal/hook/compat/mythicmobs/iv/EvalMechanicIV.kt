@@ -2,10 +2,10 @@ package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity
 import io.lumine.xikage.mythicmobs.io.MythicLineConfig
-import io.lumine.xikage.mythicmobs.skills.ITargetedEntitySkill
-import io.lumine.xikage.mythicmobs.skills.SkillMechanic
 import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
 import me.mkbaka.atziluth.internal.scriptreader.ScriptType
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
@@ -13,7 +13,8 @@ import org.bukkit.entity.LivingEntity
 
 class EvalMechanicIV {
 
-    class JavaScript(mlc: MythicLineConfig) : SkillMechanic(mlc.line, mlc), ITargetedEntitySkill {
+    @CustomSkillMechanic(["eval-javascript", "evaljavascript"], MythicMobVersion.IV)
+    class JavaScript(mlc: MythicLineConfig) : CustomSkillMechanicIV(mlc) {
 
         private val script = mlc.getString(arrayOf("script", "s"), "")
         private val args = AbstractMythicMobsHooker.parseArgsMap(mlc.entrySet())
@@ -36,7 +37,8 @@ class EvalMechanicIV {
 
     }
 
-    class Kether(mlc: MythicLineConfig) : SkillMechanic(mlc.line, mlc), ITargetedEntitySkill {
+    @CustomSkillMechanic(["eval-kether", "evalkether"], MythicMobVersion.IV)
+    class Kether(mlc: MythicLineConfig) : CustomSkillMechanicIV(mlc) {
 
         private val script = mlc.getString(arrayOf("script", "s"), "")
         private val args = AbstractMythicMobsHooker.parseArgsMap(mlc.entrySet())

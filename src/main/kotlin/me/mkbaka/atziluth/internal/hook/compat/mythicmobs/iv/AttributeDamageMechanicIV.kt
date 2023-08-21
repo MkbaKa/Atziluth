@@ -2,12 +2,12 @@ package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity
 import io.lumine.xikage.mythicmobs.io.MythicLineConfig
-import io.lumine.xikage.mythicmobs.skills.ITargetedEntitySkill
-import io.lumine.xikage.mythicmobs.skills.SkillMechanic
 import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import io.lumine.xikage.mythicmobs.skills.placeholders.parsers.PlaceholderString
 import me.mkbaka.atziluth.internal.data.TempDataManager
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.utils.EntityUtil
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
@@ -15,9 +15,10 @@ import org.bukkit.entity.Player
 import taboolib.common5.cbool
 import taboolib.common5.cdouble
 
+@CustomSkillMechanic(["attr-damage", "attrdamage"], MythicMobVersion.IV)
 class AttributeDamageMechanicIV(
     mlc: MythicLineConfig
-) : SkillMechanic(mlc.line, mlc), ITargetedEntitySkill {
+) : CustomSkillMechanicIV(mlc) {
 
     private val damageValue = mlc.getPlaceholderString(arrayOf("damage", "d"), "1.0")
     private val isClear = mlc.getPlaceholderString(arrayOf("isClear", "clear", "c"), "false")

@@ -6,6 +6,7 @@ import io.lumine.mythic.bukkit.events.MythicReloadedEvent
 import io.lumine.mythic.core.skills.placeholders.Placeholder
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import org.bukkit.entity.LivingEntity
+import taboolib.library.reflex.Reflex.Companion.invokeConstructor
 
 class MythicMobsVHookerImpl(val inst: MythicBukkit) : AbstractMythicMobsHooker<MythicMechanicLoadEvent, MythicReloadedEvent>() {
 
@@ -16,14 +17,7 @@ class MythicMobsVHookerImpl(val inst: MythicBukkit) : AbstractMythicMobsHooker<M
         get() = MythicReloadedEvent::class.java
 
     override fun registerSkill(e: MythicMechanicLoadEvent) {
-        when (e.mechanicName.lowercase()) {
-            "add-attr", "addattr" -> e.register(AttributeMechanicV.Add(e.container, e.config))
-            "take-attr", "takeattr" -> e.register(AttributeMechanicV.Take(e.container, e.config))
-            "attr-damage", "attrdamage" -> e.register(AttributeDamageMechanicV(e.container, e.config))
-            "eval-javascript", "evaljavascript" -> e.register(EvalMechanicV.JavaScript(e.container, e.config))
-            "eval-kether", "evalkether" -> e.register(EvalMechanicV.Kether(e.container, e.config))
-            "invoke-script", "invokescript" -> e.register(InvokeMechanicV(e.container, e.config))
-        }
+        CustomSkillMechanicV.skills[e.mechanicName.lowercase()]?.let { e.register(it.invokeConstructor(e.container, e.config)) }
     }
 
     override fun registerPlaceholder() {

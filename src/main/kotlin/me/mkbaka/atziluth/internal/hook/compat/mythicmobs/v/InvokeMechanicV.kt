@@ -2,17 +2,18 @@ package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v
 
 import io.lumine.mythic.api.adapters.AbstractEntity
 import io.lumine.mythic.api.config.MythicLineConfig
-import io.lumine.mythic.api.skills.ITargetedEntitySkill
 import io.lumine.mythic.api.skills.SkillMetadata
 import io.lumine.mythic.api.skills.SkillResult
-import io.lumine.mythic.core.skills.SkillMechanic
 import io.lumine.mythic.core.skills.mechanics.CustomMechanic
 import me.mkbaka.atziluth.internal.configuration.ScriptManager
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
 
-class InvokeMechanicV(cm: CustomMechanic, mlc: MythicLineConfig) : SkillMechanic(cm.manager, cm.file, mlc.line, mlc), ITargetedEntitySkill {
+@CustomSkillMechanic(["invoke-script", "invokescript"], MythicMobVersion.V)
+class InvokeMechanicV(cm: CustomMechanic, mlc: MythicLineConfig) : CustomSkillMechanicV(cm, mlc) {
 
     private val path = mlc.getPlaceholderString(arrayOf("file", "path", "p"), "")
     private val func = mlc.getPlaceholderString(arrayOf("func", "function"), "")

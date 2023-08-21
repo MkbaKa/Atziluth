@@ -7,8 +7,10 @@ import io.lumine.xikage.mythicmobs.skills.placeholders.Placeholder
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import org.bukkit.entity.LivingEntity
+import taboolib.library.reflex.Reflex.Companion.invokeConstructor
 
-class MythicMobsIVHookerImpl(private val inst: MythicMobs) : AbstractMythicMobsHooker<MythicMechanicLoadEvent, MythicReloadedEvent>() {
+class MythicMobsIVHookerImpl(private val inst: MythicMobs) :
+    AbstractMythicMobsHooker<MythicMechanicLoadEvent, MythicReloadedEvent>() {
 
     override val mechanicEventClass: Class<MythicMechanicLoadEvent>
         get() = MythicMechanicLoadEvent::class.java
@@ -17,14 +19,7 @@ class MythicMobsIVHookerImpl(private val inst: MythicMobs) : AbstractMythicMobsH
         get() = MythicReloadedEvent::class.java
 
     override fun registerSkill(e: MythicMechanicLoadEvent) {
-        when (e.mechanicName.lowercase()) {
-            "add-attr", "addattr" -> e.register(AttributeMechanicIV.Add(e.config))
-            "take-attr", "takeattr" -> e.register(AttributeMechanicIV.Take(e.config))
-            "attr-damage", "attrdamage" -> e.register(AttributeDamageMechanicIV(e.config))
-            "eval-javascript", "evaljavascript" -> e.register(EvalMechanicIV.JavaScript(e.config))
-            "eval-kether", "evalkether" -> e.register(EvalMechanicIV.Kether(e.config))
-            "invoke-script", "invokescript" -> e.register(InvokeMechanicIV(e.config))
-        }
+        CustomSkillMechanicIV.skills[e.mechanicName.lowercase()]?.let { e.register(it.invokeConstructor(e.config)) }
     }
 
     override fun registerPlaceholder() {

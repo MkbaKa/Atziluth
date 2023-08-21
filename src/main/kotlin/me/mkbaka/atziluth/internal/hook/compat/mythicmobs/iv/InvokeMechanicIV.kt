@@ -2,15 +2,16 @@ package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity
 import io.lumine.xikage.mythicmobs.io.MythicLineConfig
-import io.lumine.xikage.mythicmobs.skills.ITargetedEntitySkill
-import io.lumine.xikage.mythicmobs.skills.SkillMechanic
 import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import me.mkbaka.atziluth.internal.configuration.ScriptManager
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
 
-class InvokeMechanicIV(mlc: MythicLineConfig) : SkillMechanic(mlc.line, mlc), ITargetedEntitySkill {
+@CustomSkillMechanic(["invoke-script", "invokescript"], MythicMobVersion.IV)
+class InvokeMechanicIV(mlc: MythicLineConfig) : CustomSkillMechanicIV(mlc) {
 
     private val file = mlc.getPlaceholderString(arrayOf("file", "path", "p"), "")
     private val func = mlc.getPlaceholderString(arrayOf("func", "function"), "")
