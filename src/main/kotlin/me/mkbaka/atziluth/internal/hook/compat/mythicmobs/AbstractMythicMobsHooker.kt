@@ -4,8 +4,8 @@ import io.lumine.mythic.bukkit.MythicBukkit
 import io.lumine.xikage.mythicmobs.MythicMobs
 import me.mkbaka.atziluth.internal.bridge.AttributeBridge
 import me.mkbaka.atziluth.internal.bridge.AttributeValueType
-import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.MythicMobsIVHookerImpl
-import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v.MythicMobsVHookerImpl
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.MythicMobsHookerImplIV
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v.MythicMobsHookerImplV
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
@@ -14,14 +14,19 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common5.format
 
-abstract class AbstractMythicMobsHooker<E, R> {
+abstract class AbstractMythicMobsHooker<M, C, R> {
 
-    abstract val mechanicEventClass: Class<E>
+    abstract val mechanicEventClass: Class<M>
+    abstract val conditionEventClass: Class<C>
     abstract val reloadEvent: Class<R>
 
     init {
         registerBukkitListener(mechanicEventClass) { event ->
             registerSkill(event)
+        }
+
+        registerBukkitListener(conditionEventClass) { event ->
+            registerCondition(event)
         }
 
         registerBukkitListener(reloadEvent) { _ ->
@@ -35,13 +40,16 @@ abstract class AbstractMythicMobsHooker<E, R> {
         val splits = if (args.contains(":")) args.split(":") else args.split("_")
         val attrName = splits.getOrNull(0) ?: return "Error attribute: $args"
 
-        val valueType = AttributeValueType.of(splits.getOrNull(1) ?: "RANDOM") ?: return "Error value type: ${splits[1]}"
+        val valueType = AttributeValueType.of(splits.getOrNull(1) ?: "RANDOM")
+            ?: return "Error value type: ${splits[1]}"
         val digits = splits.getOrNull(2)?.toInt() ?: 2
 
         return AttributeBridge.getAttrValue(entity, attrName, valueType).format(digits).toString()
     }
 
-    abstract fun registerSkill(e: E)
+    abstract fun registerSkill(e: M)
+
+    abstract fun registerCondition(e: C)
 
     abstract fun registerPlaceholder()
 
@@ -50,13 +58,13 @@ abstract class AbstractMythicMobsHooker<E, R> {
         val ignoreSkillArgs by lazy { hashSetOf("type", "source", "timeout") }
         val ignoreScriptArgs by lazy { hashSetOf("script", "s") }
 
-        lateinit var hooker: AbstractMythicMobsHooker<*, *>
+        lateinit var hooker: AbstractMythicMobsHooker<*, *, *>
 
         @Awake(LifeCycle.ACTIVE)
         fun init() {
             hooker = when (MythicMobVersion.version) {
-                MythicMobVersion.IV -> MythicMobsIVHookerImpl(MythicMobs.inst())
-                MythicMobVersion.V -> MythicMobsVHookerImpl(MythicBukkit.inst())
+                MythicMobVersion.IV -> MythicMobsHookerImplIV(MythicMobs.inst())
+                MythicMobVersion.V -> MythicMobsHookerImplV(MythicBukkit.inst())
                 else -> return
             }
 

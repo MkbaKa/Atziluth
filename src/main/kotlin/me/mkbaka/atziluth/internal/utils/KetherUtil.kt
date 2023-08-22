@@ -10,12 +10,12 @@ import taboolib.module.kether.runKether
 object KetherUtil {
 
     fun String.eval(sender: CommandSender?, args: Map<String, Any> = emptyMap()): Any? {
-        return runKether {
+        return runKether(null) {
             KetherShell.eval(this, ScriptOptions.new {
                 namespace(namespaces)
                 sender(sender ?: Bukkit.getConsoleSender())
                 vars(args)
-            })
+            }).get()
         }
     }
 

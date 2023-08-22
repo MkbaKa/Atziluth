@@ -1,23 +1,33 @@
 package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v
 
 import io.lumine.mythic.bukkit.MythicBukkit
+import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent
 import io.lumine.mythic.bukkit.events.MythicReloadedEvent
 import io.lumine.mythic.core.skills.placeholders.Placeholder
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import org.bukkit.entity.LivingEntity
 import taboolib.library.reflex.Reflex.Companion.invokeConstructor
+import java.util.concurrent.ConcurrentHashMap
 
-class MythicMobsVHookerImpl(val inst: MythicBukkit) : AbstractMythicMobsHooker<MythicMechanicLoadEvent, MythicReloadedEvent>() {
+class MythicMobsHookerImplV(val inst: MythicBukkit) :
+    AbstractMythicMobsHooker<MythicMechanicLoadEvent, MythicConditionLoadEvent, MythicReloadedEvent>() {
 
     override val mechanicEventClass: Class<MythicMechanicLoadEvent>
         get() = MythicMechanicLoadEvent::class.java
+
+    override val conditionEventClass: Class<MythicConditionLoadEvent>
+        get() = MythicConditionLoadEvent::class.java
 
     override val reloadEvent: Class<MythicReloadedEvent>
         get() = MythicReloadedEvent::class.java
 
     override fun registerSkill(e: MythicMechanicLoadEvent) {
-        CustomSkillMechanicV.skills[e.mechanicName.lowercase()]?.let { e.register(it.invokeConstructor(e.container, e.config)) }
+        skills[e.mechanicName.lowercase()]?.let { e.register(it.invokeConstructor(e.container, e.config)) }
+    }
+
+    override fun registerCondition(e: MythicConditionLoadEvent) {
+        conditions[e.conditionName.lowercase()]?.let { e.register(it.invokeConstructor(e.config)) }
     }
 
     override fun registerPlaceholder() {
@@ -35,6 +45,13 @@ class MythicMobsVHookerImpl(val inst: MythicBukkit) : AbstractMythicMobsHooker<M
                 return@parent handlePlaceholder(parent.bukkitEntity, args)
             })
         }
+    }
+
+    companion object {
+
+        val skills = ConcurrentHashMap<String, Class<CustomSkillMechanicV>>()
+        val conditions = ConcurrentHashMap<String, Class<CustomSkillConditionV>>()
+
     }
 
 }

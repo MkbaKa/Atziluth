@@ -1,4 +1,4 @@
-package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv
+package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.mechanic
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity
 import io.lumine.xikage.mythicmobs.io.MythicLineConfig
@@ -6,6 +6,7 @@ import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.CustomSkillMechanicIV
 import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
 import me.mkbaka.atziluth.internal.scriptreader.ScriptType
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
@@ -30,7 +31,10 @@ class EvalMechanicIV {
                     function invoke() {
                         $script
                     }
-                """.trimIndent()).invoke("invoke", args.apply { put("meta", meta) })
+                """.trimIndent()).invoke("invoke", args.also {
+                    it["meta"] = meta
+                    it["entity"] = entity
+                })
             }
             return true
         }
@@ -50,7 +54,10 @@ class EvalMechanicIV {
             val entity = ae.bukkitEntity as? LivingEntity ?: return false
 
             if (entity.isAlive) {
-                ScriptReader.create(ScriptType.KETHER, script).eval(entity, args.apply { put("meta", meta) })
+                ScriptReader.create(ScriptType.KETHER, script).eval(entity, args.also {
+                    it["meta"] = meta
+                    it["entity"] = entity
+                })
             }
             return true
         }

@@ -1,4 +1,4 @@
-package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv
+package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.mechanic
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity
 import io.lumine.xikage.mythicmobs.io.MythicLineConfig
@@ -7,6 +7,7 @@ import me.mkbaka.atziluth.internal.configuration.ScriptManager
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.CustomSkillMechanicIV
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
 

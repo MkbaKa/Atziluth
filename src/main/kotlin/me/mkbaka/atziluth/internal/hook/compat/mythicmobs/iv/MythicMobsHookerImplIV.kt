@@ -1,6 +1,7 @@
 package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv
 
 import io.lumine.xikage.mythicmobs.MythicMobs
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicConditionLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
 import io.lumine.xikage.mythicmobs.skills.placeholders.Placeholder
@@ -8,18 +9,26 @@ import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHook
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import org.bukkit.entity.LivingEntity
 import taboolib.library.reflex.Reflex.Companion.invokeConstructor
+import java.util.concurrent.ConcurrentHashMap
 
-class MythicMobsIVHookerImpl(private val inst: MythicMobs) :
-    AbstractMythicMobsHooker<MythicMechanicLoadEvent, MythicReloadedEvent>() {
+class MythicMobsHookerImplIV(private val inst: MythicMobs) :
+    AbstractMythicMobsHooker<MythicMechanicLoadEvent, MythicConditionLoadEvent, MythicReloadedEvent>() {
 
     override val mechanicEventClass: Class<MythicMechanicLoadEvent>
         get() = MythicMechanicLoadEvent::class.java
+
+    override val conditionEventClass: Class<MythicConditionLoadEvent>
+        get() = MythicConditionLoadEvent::class.java
 
     override val reloadEvent: Class<MythicReloadedEvent>
         get() = MythicReloadedEvent::class.java
 
     override fun registerSkill(e: MythicMechanicLoadEvent) {
-        CustomSkillMechanicIV.skills[e.mechanicName.lowercase()]?.let { e.register(it.invokeConstructor(e.config)) }
+        skills[e.mechanicName.lowercase()]?.let { e.register(it.invokeConstructor(e.config)) }
+    }
+
+    override fun registerCondition(e: MythicConditionLoadEvent) {
+        conditions[e.conditionName.lowercase()]?.let { e.register(it.invokeConstructor(e.config)) }
     }
 
     override fun registerPlaceholder() {
@@ -41,6 +50,13 @@ class MythicMobsIVHookerImpl(private val inst: MythicMobs) :
             }
 
         }
+    }
+
+    companion object {
+
+        val skills = ConcurrentHashMap<String, Class<CustomSkillMechanicIV>>()
+        val conditions = ConcurrentHashMap<String, Class<CustomSkillConditionIV>>()
+
     }
 
 }
