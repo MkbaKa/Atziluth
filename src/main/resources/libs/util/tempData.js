@@ -8,11 +8,11 @@ const TempDataManager = Packages.me.mkbaka.atziluth.internal.data.TempDataManage
 
 /**
  * 获取玩家的所有临时数据
- * @param player
+ * @param uuid
  * @returns me.mkbaka.atziluth.internal.data.PlayerData
  */
-const getPlayerData = function (player) {
-    return TempDataManager.getPlayerData(player)
+const getPlayerData = function (uuid) {
+    return TempDataManager.getPlayerData(uuid)
 }
 
 /**
@@ -22,7 +22,7 @@ const getPlayerData = function (player) {
  * @returns Any?
  */
 const getDataFromKey = function (player, key) {
-    const data = getPlayerData(player)
+    const data = getPlayerData(player.uniqueId)
     if (data == null) return null
     return data.fromKey(key)
 }
@@ -34,7 +34,7 @@ const getDataFromKey = function (player, key) {
  * @returns boolean
  */
 const hasData = function (player, key) {
-    const data = getPlayerData(player)
+    const data = getPlayerData(player.uniqueId)
     if (data == null) return false
     return data.hasData(key)
 }

@@ -33,8 +33,8 @@ const takeDamage = function (attacker, value) {
  * @param {*} attacker 攻击者
  * @param {*} value 数值
  */
-const setDamage = function (attacker) {
-    Attr.setFinalDamage(attacker, handle)
+const setDamage = function (attacker, value) {
+    Attr.setFinalDamage(attacker, value, handle)
 }
 
 /**

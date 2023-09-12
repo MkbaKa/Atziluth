@@ -2,18 +2,18 @@ package me.mkbaka.atziluth.internal.scriptreader.impl
 
 import me.mkbaka.atziluth.internal.hook.nashorn.CompiledScript
 import me.mkbaka.atziluth.internal.hook.nashorn.ScriptFactory
-import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
+import me.mkbaka.atziluth.internal.scriptreader.AbstractScriptReader
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import java.io.Reader
 
-class JavaScriptReaderImpl : ScriptReader {
+class JavaScriptReaderImpl : AbstractScriptReader {
 
     constructor(script: String) : super(script) {
         this.compiledScript = ScriptFactory.compile(script)
     }
 
-    constructor(reader: Reader, script: String = reader.readText()) : super(script) {
+    constructor(reader: Reader, script: String = reader.use { it.readText() }) : super(script) {
         this.compiledScript = ScriptFactory.compile(script)
     }
 

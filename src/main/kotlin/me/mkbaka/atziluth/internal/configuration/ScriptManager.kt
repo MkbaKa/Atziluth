@@ -1,7 +1,7 @@
 package me.mkbaka.atziluth.internal.configuration
 
 import me.mkbaka.atziluth.api.interfaces.Reloadable
-import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
+import me.mkbaka.atziluth.internal.scriptreader.AbstractScriptReader
 import me.mkbaka.atziluth.internal.utils.FileUtil
 import me.mkbaka.atziluth.internal.utils.FileUtil.executeSubFiles
 import taboolib.common.LifeCycle
@@ -21,14 +21,15 @@ object ScriptManager : Reloadable(priority = 7) {
         }
     }
 
-    val scripts = ConcurrentHashMap<String, ScriptReader>()
+    val scripts = ConcurrentHashMap<String, AbstractScriptReader>()
 
     override fun reload() {
         scripts.clear()
 
         folder.executeSubFiles {
             if (it.extension != "js" && it.extension != "yml") return@executeSubFiles
-            scripts[it.path.substringAfter("scripts\\")] = ScriptReader.create(it).apply { this.invoke("onLoad") }
+            scripts[it.path.substringAfter("scripts\\")] =
+                AbstractScriptReader.create(it).apply { this.invoke("onLoad") }
         }
     }
 

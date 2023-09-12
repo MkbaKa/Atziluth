@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender
 import java.io.File
 import java.io.Reader
 
-abstract class ScriptReader {
+abstract class AbstractScriptReader {
 
     protected val script: String
 
@@ -15,7 +15,7 @@ abstract class ScriptReader {
     }
 
     constructor(reader: Reader) {
-        this.script = reader.readText()
+        this.script = reader.use { it.readText() }
     }
 
     /**
@@ -61,9 +61,9 @@ abstract class ScriptReader {
         /**
          * 创建一个脚本读取器
          * @param [file] 文件
-         * @return [ScriptReader]
+         * @return [AbstractScriptReader]
          */
-        fun create(file: File): ScriptReader {
+        fun create(file: File): AbstractScriptReader {
             return read(file.extension, file) { file.reader() }
         }
 
@@ -71,9 +71,9 @@ abstract class ScriptReader {
          * 创建一个脚本读取器
          * @param [scriptType] 脚本类型
          * @param [script] 脚本
-         * @return [ScriptReader]
+         * @return [AbstractScriptReader]
          */
-        fun create(scriptType: ScriptType, script: String): ScriptReader {
+        fun create(scriptType: ScriptType, script: String): AbstractScriptReader {
             return read(scriptType, script) { script.reader() }
         }
 
@@ -81,9 +81,9 @@ abstract class ScriptReader {
          * 创建一个脚本读取器
          * @param [scriptType] 脚本类型
          * @param [reader] Reader
-         * @return [ScriptReader]
+         * @return [AbstractScriptReader]
          */
-        fun create(scriptType: ScriptType, reader: Reader): ScriptReader {
+        fun create(scriptType: ScriptType, reader: Reader): AbstractScriptReader {
             return read(scriptType, reader) { reader }
         }
 
@@ -91,9 +91,9 @@ abstract class ScriptReader {
          * 创建一个脚本读取器
          * @param [scriptType] 脚本类型
          * @param [script] 脚本
-         * @return [ScriptReader]
+         * @return [AbstractScriptReader]
          */
-        fun create(scriptType: String, script: String): ScriptReader {
+        fun create(scriptType: String, script: String): AbstractScriptReader {
             return read(scriptType, script) { script.reader() }
         }
 
@@ -101,9 +101,9 @@ abstract class ScriptReader {
          * 创建一个脚本读取器
          * @param [scriptType] 脚本类型
          * @param [reader] Reader
-         * @return [ScriptReader]
+         * @return [AbstractScriptReader]
          */
-        fun create(scriptType: String, reader: Reader): ScriptReader {
+        fun create(scriptType: String, reader: Reader): AbstractScriptReader {
             return read(scriptType, reader) { reader }
         }
 
@@ -112,9 +112,9 @@ abstract class ScriptReader {
          * @param [scriptType] 脚本类型
          * @param [obj] object
          * @param [script] 脚本
-         * @return [ScriptReader]
+         * @return [AbstractScriptReader]
          */
-        private fun <T> read(scriptType: Any, obj: T, script: (T) -> Reader): ScriptReader {
+        private fun <T> read(scriptType: Any, obj: T, script: (T) -> Reader): AbstractScriptReader {
             return when (val type =
                 if (scriptType is ScriptType) scriptType else ScriptType.of(scriptType.toString())
             ) {

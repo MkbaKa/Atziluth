@@ -33,6 +33,7 @@ object ScriptLibsLoader : Reloadable(priority = 1) {
         releaseResourceFile("${folder.name}/util/message.js")
         releaseResourceFile("${folder.name}/util/string.js")
         releaseResourceFile("${folder.name}/util/entity.js")
+        releaseResourceFile("${folder.name}/util/tempData.js")
     }
 
     override fun reload() {

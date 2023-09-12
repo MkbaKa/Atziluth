@@ -1,19 +1,18 @@
 package me.mkbaka.atziluth.internal.scriptreader.impl
 
-import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
+import me.mkbaka.atziluth.internal.scriptreader.AbstractScriptReader
 import me.mkbaka.atziluth.internal.utils.KetherUtil.eval
 import org.bukkit.command.CommandSender
-import org.serverct.ersha.jd.T
 import taboolib.module.configuration.Configuration
 import java.io.Reader
 
-class KetherScriptReaderImpl : ScriptReader {
+class KetherScriptReaderImpl : AbstractScriptReader {
 
     constructor(script: String) : super(script) {
         initScript(Configuration.loadFromString(script))
     }
 
-    constructor(reader: Reader, script: String = reader.readText()) : super(script) {
+    constructor(reader: Reader, script: String = reader.use { it.readText() }) : super(script) {
         initScript(Configuration.loadFromString(script))
     }
 

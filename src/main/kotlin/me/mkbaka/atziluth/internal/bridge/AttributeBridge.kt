@@ -8,6 +8,7 @@ import me.mkbaka.atziluth.internal.utils.callSync
 import me.mkbaka.atziluth.internal.utils.callSyncLater
 import org.bukkit.entity.LivingEntity
 import java.util.*
+import kotlin.math.abs
 
 interface AttributeBridge {
 
@@ -158,9 +159,16 @@ interface AttributeBridge {
             val list = arrayListOf<String>()
             attributeFactory.getAllAttributeNames().forEach {  attrName ->
                 if (attrName in whiteListAttrs || attrName in ConfigManager.clearAttributeWhiteList) return@forEach
-                val value = getAttrValue(entity, attrName, AttributeValueType.MAX)
-                if (value <= 0.0) return@forEach
-                list.add("$attrName: -${getAttrValue(entity, attrName, AttributeValueType.MIN)} - -$value")
+                val maxValue = getAttrValue(entity, attrName, AttributeValueType.MAX)
+                if (maxValue == 0.0) return@forEach
+                val minValue = getAttrValue(entity, attrName, AttributeValueType.MIN)
+
+                list.add(
+                    when {
+                        maxValue > 0.0 -> "$attrName: -$minValue - -$maxValue"
+                        else -> "$attrName: ${abs(minValue)} - ${abs(maxValue)}"
+                    }
+                )
             }
 
             addAttr(entity, source, list)

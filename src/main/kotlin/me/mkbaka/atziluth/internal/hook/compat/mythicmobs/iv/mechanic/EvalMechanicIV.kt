@@ -7,7 +7,7 @@ import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHook
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.CustomSkillMechanicIV
-import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
+import me.mkbaka.atziluth.internal.scriptreader.AbstractScriptReader
 import me.mkbaka.atziluth.internal.scriptreader.ScriptType
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
@@ -27,11 +27,13 @@ class EvalMechanicIV {
             val entity = ae.bukkitEntity as? LivingEntity ?: return false
 
             if (entity.isAlive) {
-                ScriptReader.create(ScriptType.JAVASCRIPT, """
+                AbstractScriptReader.create(
+                    ScriptType.JAVASCRIPT, """
                     function invoke() {
                         $script
                     }
-                """.trimIndent()).invoke("invoke", args.also {
+                """.trimIndent()
+                ).invoke("invoke", args.also {
                     it["meta"] = meta
                     it["entity"] = entity
                 })
@@ -54,7 +56,7 @@ class EvalMechanicIV {
             val entity = ae.bukkitEntity as? LivingEntity ?: return false
 
             if (entity.isAlive) {
-                ScriptReader.create(ScriptType.KETHER, script).eval(entity, args.also {
+                AbstractScriptReader.create(ScriptType.KETHER, script).eval(entity, args.also {
                     it["meta"] = meta
                     it["entity"] = entity
                 })

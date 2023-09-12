@@ -13,10 +13,12 @@ import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v.CustomSkillMechanicV
 import me.mkbaka.atziluth.internal.utils.EntityUtil
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
+import me.mkbaka.atziluth.internal.utils.damage.impl.AttributeDamageOptions
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import taboolib.common5.cbool
 import taboolib.common5.cdouble
+import taboolib.common5.cint
 
 @CustomSkillMechanic(["attr-damage", "attrdamage"], MythicMobVersion.V)
 class AttributeDamageMechanicV(
@@ -26,6 +28,7 @@ class AttributeDamageMechanicV(
 
     private val damageValue = mlc.getPlaceholderString(arrayOf("damage", "d"), "1.0")
     private val isClear = mlc.getPlaceholderString(arrayOf("isClear", "clear", "c"), "false")
+    private val noDamageTick = mlc.getPlaceholderString(arrayOf("noDamageTicks", "ndt"), "0")
     private val entries = AbstractMythicMobsHooker.parseArgsMap(mlc.entrySet())
 
     /**
@@ -40,15 +43,18 @@ class AttributeDamageMechanicV(
             val entities =
                 meta.entityTargets.filter { it.bukkitEntity is LivingEntity }.map { it.bukkitEntity as LivingEntity }
 
-            if (caster is Player) TempDataManager.getPlayerData(caster.uniqueId)!!
-                .saveData("MythicMobs-AttrDamageData", entries)
-            EntityUtil.doAttributeDamage(
-                caster,
-                entities,
-                damageValue.get(meta).cdouble,
-                attrs,
-                isClear = isClear.get(meta).cbool
-            )
+            if (caster is Player) TempDataManager.getPlayerData(caster.uniqueId)
+                ?.saveData(AbstractMythicMobsHooker.damageMetadataKey, entries)
+
+            EntityUtil.doAttributeDamage(caster, entities, AttributeDamageOptions.new {
+                setDamageValue(damageValue.get(meta).cdouble)
+                setAttribute(attrs)
+                setClear(isClear.get(meta).cbool)
+            }.apply { noDamageTicks = noDamageTick.get(meta).cint })
+
+            if (caster is Player) TempDataManager.getPlayerData(caster.uniqueId)
+                ?.removeData(AbstractMythicMobsHooker.damageMetadataKey)
+
         }
         return SkillResult.SUCCESS
     }

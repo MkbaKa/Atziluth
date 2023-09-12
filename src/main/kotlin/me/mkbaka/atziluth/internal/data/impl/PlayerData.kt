@@ -49,5 +49,9 @@ class PlayerData(val owner: UUID) : Data {
     fun hasData(value: Data): Boolean {
         return data.containsValue(value)
     }
-    
+
+    fun removeData(key: String) {
+        data.remove(key)
+    }
+
 }

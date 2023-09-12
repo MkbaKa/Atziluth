@@ -17,7 +17,7 @@ taboolib {
     install("platform-bukkit")
     install("expansion-command-helper")
     classifier = null
-    version = "6.0.10-119"
+    version = "6.0.12-15"
 
     description {
         dependencies {
@@ -60,8 +60,4 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.withType<Jar> {
-    destinationDirectory = File("E:\\Servers\\TestServer\\plugins")
 }

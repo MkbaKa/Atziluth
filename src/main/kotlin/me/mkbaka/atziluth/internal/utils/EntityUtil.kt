@@ -1,6 +1,8 @@
 package me.mkbaka.atziluth.internal.utils
 
-import me.mkbaka.atziluth.internal.bridge.AttributeBridge
+import me.mkbaka.atziluth.internal.utils.damage.DamageOptions
+import me.mkbaka.atziluth.internal.utils.damage.impl.AttributeDamageMeta
+import me.mkbaka.atziluth.internal.utils.damage.impl.AttributeDamageOptions
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
@@ -21,36 +23,39 @@ object EntityUtil {
         return if (entity?.isLiving == true) entity as LivingEntity else null
     }
 
-    fun doAttributeDamage(attacker: LivingEntity, entity: LivingEntity, damage: Double, attrs: List<String>, whiteListAttrs: List<String> = emptyList(), isClear: Boolean = false) {
-        val source = UUID.randomUUID().toString()
-        val action = {
-            AttributeBridge.addAttr(attacker, source, attrs)
-            callSync {
-                entity.damage(damage, attacker)
-            }
-            AttributeBridge.takeAttr(attacker, source)
-        }
-
-        if (isClear) {
-            AttributeBridge.clearAttributes(attacker, whiteListAttrs) { action() }
-        } else action()
+    fun doAttributeDamage(
+        attacker: LivingEntity,
+        entity: LivingEntity,
+        damage: Double,
+        attrs: List<String>,
+        whiteListAttrs: List<String> = emptyList(),
+        isClear: Boolean = false
+    ) {
+        doAttributeDamage(attacker, listOf(entity), damage, attrs, whiteListAttrs, isClear)
     }
 
-    fun doAttributeDamage(attacker: LivingEntity, entities: Collection<LivingEntity>, damage: Double, attrs: List<String>, whiteListAttrs: List<String> = emptyList(), isClear: Boolean = false) {
-        val source = UUID.randomUUID().toString()
-        val action = {
-            AttributeBridge.addAttr(attacker, source, attrs)
-            callSync {
-                entities.forEach { entity ->
-                    entity.damage(damage, attacker)
-                }
-            }
-            AttributeBridge.takeAttr(attacker, source)
-        }
+    fun doAttributeDamage(
+        attacker: LivingEntity,
+        entities: Collection<LivingEntity>,
+        damage: Double,
+        attrs: List<String>,
+        whiteListAttrs: List<String> = emptyList(),
+        isClear: Boolean = false
+    ) {
+        AttributeDamageMeta.createMeta(attacker, entities, AttributeDamageOptions.new {
+            setDamageValue(damage)
+            setAttribute(attrs)
+            setWhitelistAttr(whiteListAttrs)
+            setClear(isClear)
+        }).doDamage()
+    }
 
-        if (isClear) {
-            AttributeBridge.clearAttributes(attacker, whiteListAttrs) { action() }
-        } else action()
+    fun doAttributeDamage(attacker: LivingEntity, entity: LivingEntity, options: DamageOptions) {
+        AttributeDamageMeta.createMeta(attacker, entity, options).doDamage()
+    }
+
+    fun doAttributeDamage(attacker: LivingEntity, entities: Collection<LivingEntity>, options: DamageOptions) {
+        AttributeDamageMeta.createMeta(attacker, entities, options).doDamage()
     }
 
 }

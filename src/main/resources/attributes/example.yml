@@ -8,6 +8,6 @@ example:
     combatPower: 1.0
   functions:
     onLoad: |-
-      print "load!"
+#      print "load!"
     onAttack: |-
-      print "attack!"
+    #      print "attack!"

@@ -5,7 +5,7 @@ import me.mkbaka.atziluth.internal.register.AbstractCustomAttribute
 import me.mkbaka.atziluth.internal.register.AttributeFactory
 import me.mkbaka.atziluth.internal.register.AttributeType
 import me.mkbaka.atziluth.internal.register.AttributeType.*
-import me.mkbaka.atziluth.internal.scriptreader.ScriptReader
+import me.mkbaka.atziluth.internal.scriptreader.AbstractScriptReader
 import me.mkbaka.atziluth.internal.utils.FileUtil.executeSubFiles
 import me.mkbaka.atziluth.internal.utils.FileUtil.newFolder
 import taboolib.common.platform.function.getDataFolder
@@ -36,7 +36,7 @@ object AttributeManager : Reloadable(priority = 6) {
 
         folder.executeSubFiles { file ->
             if (file.extension != "js" && file.extension != "yml") return@executeSubFiles
-            val reader = ScriptReader.create(file)
+            val reader = AbstractScriptReader.create(file)
 
             AttributeFactory.buildAttribute(
                 reader.getTopLevel("priority", -1),
