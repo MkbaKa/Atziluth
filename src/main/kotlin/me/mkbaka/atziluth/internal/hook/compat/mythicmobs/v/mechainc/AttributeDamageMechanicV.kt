@@ -57,7 +57,7 @@ class AttributeDamageMechanicV(
                 isClear = clear.get(meta).cbool
                 isIgnoreImmunity = ignoreImmunity.get(meta).cbool
                 isPreventKnockback = preventKnockback.get(meta).cbool
-            }.apply { noDamageTicks = noDamageTick.get(meta).cint })
+            })
 
             if (caster is Player) TempDataManager.getPlayerData(caster.uniqueId)
                 ?.removeData(AbstractMythicMobsHooker.damageMetadataKey)
