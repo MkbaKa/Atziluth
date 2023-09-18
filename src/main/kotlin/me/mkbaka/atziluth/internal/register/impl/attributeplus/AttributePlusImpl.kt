@@ -7,15 +7,13 @@ import org.serverct.ersha.AttributePlus
 object AttributePlusImpl : AttributeFactory<AttributePlusAdapter>() {
 
     private val manager by lazy { AttributePlus.attributeManager }
-    private val attrScriptManager by lazy { AttributePlus.attrScriptManager }
 
     override fun registerAttribute(customAttribute: AttributePlusAdapter) {
         manager.registerAttribute(customAttribute.inst)
     }
 
     override fun reload() {
-        manager.reload()
-        attrScriptManager.registerScriptAttribute()
+        AttributePlus.instance.reload()
     }
 
     override fun buildAttribute(

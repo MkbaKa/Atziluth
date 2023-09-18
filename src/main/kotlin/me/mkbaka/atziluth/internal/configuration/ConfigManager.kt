@@ -28,6 +28,7 @@ object ConfigManager {
             checkTaskPeriod = 20 * 60 * config.getLong("TempData.taskPeriod", 30)
             tempDataTimeout = 1000 * 60 * config.getLong("TempData.timeout", 30)
         }
+        reload()
     }
 
     fun reload() {

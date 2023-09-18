@@ -21,14 +21,6 @@ enum class AttributePlugin(
     ATTRIBUTE_PLUS("AttributePlus", AttributePlusImpl, AttributePlusBridge, { it.version == 3 }),
     SX_ATTRIBUTE("SX-Attribute", SXAttributeImpl, SXAttributeBridge, { it.version == 3 }),
     LEGACY_ATTRIBUTE_PLUS("AttributePlus", LegacyAttributePlusImpl, LegacyAttributePlusBridge, { it.version == 2 });
-//    ORIGIN_ATTRIBUTE("OriginAttribute", OriginAttributeImpl, { true });
-
-    /**
-     * 设计过于先进 非常人可理解
-     * 个人技术力不足 有能力可以自行尝试
-     *
-     * LEGACY_SX_ATTRIBUTE("SX-Attribute", LegacySXAttributeImpl, { it.version == 2 }),
-     */
 
     companion object {
 
