@@ -1,5 +1,7 @@
 package me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v
 
+import io.lumine.mythic.api.skills.SkillMetadata
+import io.lumine.mythic.api.skills.placeholders.PlaceholderString
 import io.lumine.mythic.bukkit.MythicBukkit
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent
@@ -51,6 +53,14 @@ class MythicMobsHookerImplV(val inst: MythicBukkit) :
 
         val skills = ConcurrentHashMap<String, Class<CustomSkillMechanicV>>()
         val conditions = ConcurrentHashMap<String, Class<CustomSkillConditionV>>()
+
+        fun parse(entries: Set<Map.Entry<String, String>>, meta: SkillMetadata): List<String> {
+            return entries.map {
+                "${PlaceholderString.of(it.key).get(meta)}: ${
+                    PlaceholderString.of(it.value).get(meta)
+                }"
+            }
+        }
 
     }
 

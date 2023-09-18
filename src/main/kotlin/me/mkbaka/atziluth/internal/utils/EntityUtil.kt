@@ -43,18 +43,30 @@ object EntityUtil {
         isClear: Boolean = false
     ) {
         AttributeDamageMeta.createMeta(attacker, entities, AttributeDamageOptions.new {
-            setDamageValue(damage)
-            setAttribute(attrs)
-            setWhitelistAttr(whiteListAttrs)
-            setClear(isClear)
+            this.basicDamageValue = damage
+            this.setAttribute(attrs)
+            this.setWhitelistAttr(whiteListAttrs)
+            this.isClear = isClear
         }).doDamage()
     }
 
-    fun doAttributeDamage(attacker: LivingEntity, entity: LivingEntity, options: DamageOptions) {
+    /**
+     * 基于 DamageOptions 造成有源伤害
+     * @param [attacker] 攻击方
+     * @param [entity] 受击方
+     * @param [options] DamageOptions
+     */
+    fun doDamage(attacker: LivingEntity, entity: LivingEntity, options: DamageOptions) {
         AttributeDamageMeta.createMeta(attacker, entity, options).doDamage()
     }
 
-    fun doAttributeDamage(attacker: LivingEntity, entities: Collection<LivingEntity>, options: DamageOptions) {
+    /**
+     * 基于 DamageOptions 造成有源伤害
+     * @param [attacker] 攻击方
+     * @param [entities] 受击方
+     * @param [options] DamageOptions
+     */
+    fun doDamage(attacker: LivingEntity, entities: Collection<LivingEntity>, options: DamageOptions) {
         AttributeDamageMeta.createMeta(attacker, entities, options).doDamage()
     }
 

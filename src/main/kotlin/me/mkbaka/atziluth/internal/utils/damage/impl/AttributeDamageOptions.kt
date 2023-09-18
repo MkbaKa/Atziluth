@@ -4,20 +4,19 @@ import me.mkbaka.atziluth.internal.utils.damage.DamageOptions
 import java.util.*
 
 class AttributeDamageOptions(
-    basicDamageValue: Double = 1.0,
+    // 属性源
     var source: String = UUID.randomUUID().toString(),
+    // 若clear为true 白名单中的属性不会被清除
     val whitelistAttributes: MutableList<String> = mutableListOf(),
+    // 要触发的属性 String中需包含属性名和数值
     val attributes: MutableList<String> = mutableListOf(),
+    // 是否清除玩家原有属性再造成伤害
     var clear: Boolean = false
-) : BasicDamageOptions(basicDamageValue) {
+) : BasicDamageOptions(1.0) {
 
-    class OptionsBuilder {
+    class AttributeDamageOptionsBuilder : DamageOptions.DamageOptionsBuilder() {
 
-        private val options = AttributeDamageOptions()
-
-        fun setDamageValue(value: Double) {
-            options.basicDamageValue = value
-        }
+        override val options = AttributeDamageOptions()
 
         fun setAttributeSource(source: String) {
             options.source = source
@@ -38,20 +37,18 @@ class AttributeDamageOptions(
             options.attributes.addAll(attrs.map { entry -> "${entry.key}: ${entry.value}" })
         }
 
-        fun setClear(clear: Boolean) {
-            options.clear = clear
-        }
-
-        fun build(): DamageOptions {
-            return options
-        }
+        var isClear: Boolean
+            get() = options.clear
+            set(value) {
+                options.clear = value
+            }
 
     }
 
     companion object {
 
-        fun new(constructor: OptionsBuilder.() -> Unit): DamageOptions {
-            return OptionsBuilder().also(constructor).build()
+        fun new(constructor: AttributeDamageOptionsBuilder.() -> Unit): DamageOptions {
+            return AttributeDamageOptionsBuilder().also(constructor).build()
         }
 
     }

@@ -27,8 +27,12 @@ class AttributeDamageMechanicV(
 ) : CustomSkillMechanicV(cm, mlc) {
 
     private val damageValue = mlc.getPlaceholderString(arrayOf("damage", "d"), "1.0")
-    private val isClear = mlc.getPlaceholderString(arrayOf("isClear", "clear", "c"), "false")
+    private val clear = mlc.getPlaceholderString(arrayOf("isClear", "clear", "c"), "false")
     private val noDamageTick = mlc.getPlaceholderString(arrayOf("noDamageTicks", "ndt"), "0")
+
+    private val ignoreImmunity = mlc.getPlaceholderString(arrayOf("ignoreImmunity", "pi", "ii"), "false")
+    private val preventKnockback = mlc.getPlaceholderString(arrayOf("preventKnockback", "pk"), "false")
+
     private val entries = AbstractMythicMobsHooker.parseArgsMap(mlc.entrySet())
 
     /**
@@ -46,10 +50,13 @@ class AttributeDamageMechanicV(
             if (caster is Player) TempDataManager.getPlayerData(caster.uniqueId)
                 ?.saveData(AbstractMythicMobsHooker.damageMetadataKey, entries)
 
-            EntityUtil.doAttributeDamage(caster, entities, AttributeDamageOptions.new {
-                setDamageValue(damageValue.get(meta).cdouble)
+            EntityUtil.doDamage(caster, entities, AttributeDamageOptions.new {
+                basicDamageValue = damageValue.get(meta).cdouble
                 setAttribute(attrs)
-                setClear(isClear.get(meta).cbool)
+                noDamageTicks = noDamageTick.get(meta).cint
+                isClear = clear.get(meta).cbool
+                isIgnoreImmunity = ignoreImmunity.get(meta).cbool
+                isPreventKnockback = preventKnockback.get(meta).cbool
             }.apply { noDamageTicks = noDamageTick.get(meta).cint })
 
             if (caster is Player) TempDataManager.getPlayerData(caster.uniqueId)

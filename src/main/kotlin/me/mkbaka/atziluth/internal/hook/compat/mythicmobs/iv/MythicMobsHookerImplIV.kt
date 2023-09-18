@@ -4,7 +4,9 @@ import io.lumine.xikage.mythicmobs.MythicMobs
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicConditionLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
+import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import io.lumine.xikage.mythicmobs.skills.placeholders.Placeholder
+import io.lumine.xikage.mythicmobs.skills.placeholders.parsers.PlaceholderString
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import org.bukkit.entity.LivingEntity
@@ -56,6 +58,14 @@ class MythicMobsHookerImplIV(private val inst: MythicMobs) :
 
         val skills = ConcurrentHashMap<String, Class<CustomSkillMechanicIV>>()
         val conditions = ConcurrentHashMap<String, Class<CustomSkillConditionIV>>()
+
+        fun parse(entries: Set<Map.Entry<String, String>>, meta: SkillMetadata): List<String> {
+            return entries.map {
+                "${PlaceholderString.of(it.key).get(meta)}: ${
+                    PlaceholderString.of(it.value).get(meta)
+                }"
+            }
+        }
 
     }
 

@@ -57,7 +57,6 @@ abstract class AbstractMythicMobsHooker<M, C, R> {
 
         val damageMetadataKey by lazy { "MythicMobs-AttrDamageData" }
 
-        val ignoreSkillArgs by lazy { hashSetOf("type", "source", "timeout") }
         val ignoreScriptArgs by lazy { hashSetOf("script", "s") }
 
         lateinit var hooker: AbstractMythicMobsHooker<*, *, *>

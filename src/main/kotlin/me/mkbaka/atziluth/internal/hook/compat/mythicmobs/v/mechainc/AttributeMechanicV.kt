@@ -7,10 +7,10 @@ import io.lumine.mythic.api.skills.SkillResult
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString
 import io.lumine.mythic.core.skills.mechanics.CustomMechanic
 import me.mkbaka.atziluth.internal.bridge.AttributeBridge
-import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v.CustomSkillMechanicV
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.v.MythicMobsHookerImplV
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
 import taboolib.common5.clong
@@ -24,9 +24,7 @@ class AttributeMechanicV {
         private val source = PlaceholderString.of(mlc.getString(arrayOf("source", "s"), UUID.randomUUID().toString()))
         private val timeout = PlaceholderString.of(mlc.getString(arrayOf("timeout", "t"), "0"))
 
-        private val attrs =
-            mlc.entrySet().filter { it.key.lowercase() !in AbstractMythicMobsHooker.ignoreSkillArgs }
-                .flatMap { listOf("${it.key}: ${it.value}") }
+        private val entries = mlc.entrySet()
 
         /**
          * add-attr{source=test;物理伤害=100} @Self
@@ -36,7 +34,12 @@ class AttributeMechanicV {
             val entity = ae.bukkitEntity as? LivingEntity ?: return SkillResult.INVALID_TARGET
 
             if (entity.isAlive) {
-                AttributeBridge.addAttr(entity, source.get(meta), attrs, timeout.get(meta).clong)
+                AttributeBridge.addAttr(
+                    entity,
+                    source.get(meta),
+                    MythicMobsHookerImplV.parse(entries, meta),
+                    timeout.get(meta).clong
+                )
             }
             return SkillResult.SUCCESS
         }

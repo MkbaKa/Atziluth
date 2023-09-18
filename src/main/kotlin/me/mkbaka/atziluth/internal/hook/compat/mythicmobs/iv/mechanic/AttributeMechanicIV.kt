@@ -5,10 +5,10 @@ import io.lumine.xikage.mythicmobs.io.MythicLineConfig
 import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import io.lumine.xikage.mythicmobs.skills.placeholders.parsers.PlaceholderString
 import me.mkbaka.atziluth.internal.bridge.AttributeBridge
-import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.CustomSkillMechanic
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.MythicMobVersion
 import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.CustomSkillMechanicIV
+import me.mkbaka.atziluth.internal.hook.compat.mythicmobs.iv.MythicMobsHookerImplIV
 import me.mkbaka.atziluth.internal.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
 import taboolib.common5.clong
@@ -22,9 +22,7 @@ class AttributeMechanicIV {
         private val source = PlaceholderString.of(mlc.getString(arrayOf("source", "s"), UUID.randomUUID().toString()))
         private val timeout = PlaceholderString.of(mlc.getString(arrayOf("timeout", "t"), "0"))
 
-        private val attrs =
-            mlc.entrySet().filter { it.key.lowercase() !in AbstractMythicMobsHooker.ignoreSkillArgs }
-                .flatMap { listOf("${it.key}: ${it.value}") }
+        private val entries = mlc.entrySet()
 
         /**
          * add-attr{source=test;物理伤害=100} @Self
@@ -34,7 +32,12 @@ class AttributeMechanicIV {
             val entity = ae.bukkitEntity as? LivingEntity ?: return false
 
             if (entity.isAlive) {
-                AttributeBridge.addAttr(entity, source.get(meta), attrs, timeout.get(meta).clong)
+                AttributeBridge.addAttr(
+                    entity,
+                    source.get(meta),
+                    MythicMobsHookerImplIV.parse(entries, meta),
+                    timeout.get(meta).clong
+                )
             }
             return true
         }
