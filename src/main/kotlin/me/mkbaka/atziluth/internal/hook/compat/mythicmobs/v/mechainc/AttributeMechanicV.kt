@@ -22,7 +22,7 @@ class AttributeMechanicV {
     class Add(cm: CustomMechanic, mlc: MythicLineConfig) : CustomSkillMechanicV(cm, mlc) {
 
         private val source = PlaceholderString.of(mlc.getString(arrayOf("source", "s"), UUID.randomUUID().toString()))
-        private val timeout = PlaceholderString.of(mlc.getString(arrayOf("timeout", "t"), "0"))
+        private val timeout = PlaceholderString.of(mlc.getString(arrayOf("timeout", "time", "t"), "0"))
 
         private val entries = mlc.entrySet()
 

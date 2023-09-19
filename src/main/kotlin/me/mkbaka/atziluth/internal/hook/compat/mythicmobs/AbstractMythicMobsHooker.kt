@@ -57,8 +57,6 @@ abstract class AbstractMythicMobsHooker<M, C, R> {
 
         val damageMetadataKey by lazy { "MythicMobs-AttrDamageData" }
 
-        val ignoreScriptArgs by lazy { hashSetOf("script", "s") }
-
         lateinit var hooker: AbstractMythicMobsHooker<*, *, *>
 
         @Awake(LifeCycle.ACTIVE)
@@ -75,7 +73,6 @@ abstract class AbstractMythicMobsHooker<M, C, R> {
         fun parseArgsMap(entries: Set<Map.Entry<String, String>>): HashMap<String, Any> {
             val map = hashMapOf<String, Any>()
             entries.forEach { entry ->
-                if (entry.key in ignoreScriptArgs) return@forEach
                 map[entry.key] = entry.value
             }
             return map

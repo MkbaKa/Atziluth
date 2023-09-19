@@ -1,5 +1,7 @@
 package me.mkbaka.atziluth.internal.configuration
 
+import me.mkbaka.atziluth.Atziluth
+import me.mkbaka.atziluth.Atziluth.attributeFactory
 import me.mkbaka.atziluth.api.interfaces.Reloadable
 import me.mkbaka.atziluth.internal.register.AbstractCustomAttribute
 import me.mkbaka.atziluth.internal.register.AttributeFactory
@@ -32,7 +34,7 @@ object AttributeManager : Reloadable(priority = 6) {
      */
     override fun reload() {
         subAttributes.clear()
-        AttributeFactory.onReload()
+        if (!Atziluth.isStart) attributeFactory.reload()
 
         folder.executeSubFiles { file ->
             if (file.extension != "js" && file.extension != "yml") return@executeSubFiles

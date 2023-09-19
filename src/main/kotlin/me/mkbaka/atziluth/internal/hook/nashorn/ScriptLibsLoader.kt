@@ -44,8 +44,7 @@ object ScriptLibsLoader : Reloadable(priority = 1) {
 
         folder.executeSubFiles { file ->
             if (file.extension != "js") return@executeSubFiles
-            builder
-                .append(file.readText())
+            builder.append(file.readText())
                 .append("\n")
         }
 

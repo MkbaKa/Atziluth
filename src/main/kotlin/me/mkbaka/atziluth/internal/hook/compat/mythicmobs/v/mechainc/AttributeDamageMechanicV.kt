@@ -31,7 +31,7 @@ class AttributeDamageMechanicV(
     private val noDamageTick = mlc.getPlaceholderString(arrayOf("noDamageTicks", "ndt"), "0")
 
     private val ignoreImmunity = mlc.getPlaceholderString(arrayOf("ignoreImmunity", "pi", "ii"), "false")
-    private val preventKnockback = mlc.getPlaceholderString(arrayOf("preventKnockback", "pk"), "false")
+    private val preventKnockback = mlc.getPlaceholderString(arrayOf("preventKnockback", "pk", "pkb"), "false")
 
     private val entries = AbstractMythicMobsHooker.parseArgsMap(mlc.entrySet())
 

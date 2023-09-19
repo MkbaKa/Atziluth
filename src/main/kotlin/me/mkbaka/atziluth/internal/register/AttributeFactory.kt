@@ -115,10 +115,6 @@ abstract class AttributeFactory<T : AbstractCustomAttribute<*>> {
             return attributeFactory.isAttribute(name)
         }
 
-        fun onReload() {
-            attributeFactory.reload()
-        }
-
     }
 
 }

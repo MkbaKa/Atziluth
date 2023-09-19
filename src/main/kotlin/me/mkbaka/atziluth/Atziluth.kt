@@ -1,7 +1,8 @@
 package me.mkbaka.atziluth
 
+import me.mkbaka.atziluth.api.interfaces.Reloadable
 import me.mkbaka.atziluth.internal.bridge.AttributeBridge
-import me.mkbaka.atziluth.internal.hook.nashorn.ScriptLibsLoader
+import me.mkbaka.atziluth.internal.configuration.ConfigManager
 import me.mkbaka.atziluth.internal.register.AttributeFactory
 import org.bukkit.Bukkit
 import taboolib.common.platform.Plugin
@@ -24,6 +25,8 @@ object Atziluth : Plugin() {
 
     lateinit var attributeBridge: AttributeBridge
 
+    var isStart = true
+
     override fun onEnable() {
         console().sendLang("plugin-enable", prefix, Bukkit.getBukkitVersion())
 
@@ -37,21 +40,10 @@ object Atziluth : Plugin() {
 
         attributeBridge = attributePlugin.bridge
 
-        ScriptLibsLoader
-    }
+        Reloadable.scan()
+        ConfigManager.enable()
 
-//    override fun onActive() {
-//        val pluginManager = Bukkit.getPluginManager()
-//
-//        attributePlugin = AttributePlugin.values().firstOrNull {
-//            pluginManager.isPluginEnabled(it.pluginName) && it.condition(pluginManager.getPlugin(it.pluginName)!!)
-//        } ?: error("Not found can support plugin.")
-//
-//        attributeFactory = attributePlugin.impl
-//
-//        attributeBridge = attributePlugin.bridge
-//
-//        ScriptLibsLoader
-//    }
+        isStart = false
+    }
 
 }

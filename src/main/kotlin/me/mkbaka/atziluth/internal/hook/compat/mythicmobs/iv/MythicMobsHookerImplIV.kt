@@ -61,10 +61,12 @@ class MythicMobsHookerImplIV(private val inst: MythicMobs) :
 
         fun parse(entries: Set<Map.Entry<String, String>>, meta: SkillMetadata): List<String> {
             return entries.map {
-                "${PlaceholderString.of(it.key).get(meta)}: ${
-                    PlaceholderString.of(it.value).get(meta)
-                }"
+                "${it.key.toMythicValue(meta)}: ${it.value.toMythicValue(meta)}"
             }
+        }
+
+        private fun String.toMythicValue(meta: SkillMetadata): String {
+            return PlaceholderString.of(this).get(meta)
         }
 
     }
