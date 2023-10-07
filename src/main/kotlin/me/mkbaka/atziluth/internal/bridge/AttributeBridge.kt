@@ -2,10 +2,9 @@ package me.mkbaka.atziluth.internal.bridge
 
 import me.mkbaka.atziluth.Atziluth.attributeBridge
 import me.mkbaka.atziluth.Atziluth.attributeFactory
+import me.mkbaka.atziluth.internal.bridge.tempattr.TempAttributeManager
 import me.mkbaka.atziluth.internal.configuration.ConfigManager
 import me.mkbaka.atziluth.internal.register.AttributeType
-import me.mkbaka.atziluth.internal.utils.callSync
-import me.mkbaka.atziluth.internal.utils.callSyncLater
 import org.bukkit.entity.LivingEntity
 import java.util.*
 import kotlin.math.abs
@@ -74,10 +73,7 @@ interface AttributeBridge {
          * @param [timeout] 持续时间 (tick)
          */
         fun addAttr(uuid: UUID, source: String, attrs: List<String>, timeout: Long = 0) {
-            callSync {
-                attributeBridge.addAttributes(uuid, source, attrs)
-                if (timeout != 0L) callSyncLater(timeout) { takeAttr(uuid, source) }
-            }
+            TempAttributeManager.addAttr(uuid, source, attrs, timeout)
         }
 
         /**
@@ -88,10 +84,7 @@ interface AttributeBridge {
          * @param [timeout] 持续时间 (tick)
          */
         fun addAttr(entity: LivingEntity, source: String, attrs: List<String>, timeout: Long = 0) {
-            callSync {
-                attributeBridge.addAttributes(entity, source, attrs)
-                if (timeout != 0L) callSyncLater(timeout) { takeAttr(entity, source) }
-            }
+            TempAttributeManager.addAttr(entity.uniqueId, source, attrs, timeout)
         }
 
         /**
@@ -100,7 +93,7 @@ interface AttributeBridge {
          * @param [source] 源
          */
         fun takeAttr(uuid: UUID, source: String) {
-            callSync { attributeBridge.takeAttribute(uuid, source) }
+            TempAttributeManager.takeAttr(uuid, source)
         }
 
         /**
@@ -109,7 +102,7 @@ interface AttributeBridge {
          * @param [source] 源
          */
         fun takeAttr(entity: LivingEntity, source: String) {
-            callSync { attributeBridge.takeAttribute(entity, source) }
+            TempAttributeManager.takeAttr(entity.uniqueId, source)
         }
 
         /**
@@ -145,7 +138,7 @@ interface AttributeBridge {
          * @param [placeholder] 占位符
          */
         fun registerOtherAttribute(attrName: String, combatPower: Double, placeholder: String) {
-            attributeFactory.buildAttribute(-1, attrName, placeholder, combatPower, AttributeType.OTHER).register()
+            attributeFactory.buildAttribute(114514, attrName, placeholder, combatPower, AttributeType.OTHER).register()
         }
 
         /**

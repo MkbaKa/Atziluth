@@ -44,13 +44,11 @@ class AttributeDamageMechanicV(
 
         if (entity.isAlive && caster.isAlive) {
             val attrs = entries.map { PlaceholderString.of("${it.key}: ${it.value}").get(meta) }
-            val entities =
-                meta.entityTargets.filter { it.bukkitEntity is LivingEntity }.map { it.bukkitEntity as LivingEntity }
 
             if (caster is Player) TempDataManager.getPlayerData(caster.uniqueId)
                 ?.saveData(AbstractMythicMobsHooker.damageMetadataKey, entries)
 
-            EntityUtil.doDamage(caster, entities, AttributeDamageOptions.new {
+            EntityUtil.doDamage(caster, entity, AttributeDamageOptions.new {
                 basicDamageValue = damageValue.get(meta).cdouble
                 setAttribute(attrs)
                 noDamageTicks = noDamageTick.get(meta).cint

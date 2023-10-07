@@ -68,7 +68,10 @@ abstract class AttributeFactory<T : AbstractCustomAttribute<*>> {
     companion object {
 
         fun registerAttributes(attrs: Collection<AbstractCustomAttribute<*>>) {
-            attrs.forEach { it.register() }
+            attrs.forEach { attr ->
+                attr.register()
+                attr.onLoad?.let { it(attr) }
+            }
             attributeFactory.registeredCallback()
         }
 

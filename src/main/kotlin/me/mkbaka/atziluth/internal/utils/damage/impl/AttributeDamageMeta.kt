@@ -14,8 +14,7 @@ class AttributeDamageMeta(
 ) : BasicDamageMeta(damager, defenders, options) {
 
     override fun doDamage() {
-        damageOptions as? AttributeDamageOptions
-            ?: error("错误的伤害元选项, 你应该传递 AttributeDamageOptions 而非 ${damageOptions::class.java.name}")
+        if (damageOptions !is AttributeDamageOptions) return super.doDamage()
 
         val source = UUID.randomUUID().toString()
         val action = {

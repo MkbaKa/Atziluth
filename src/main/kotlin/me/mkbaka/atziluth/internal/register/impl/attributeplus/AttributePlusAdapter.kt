@@ -22,7 +22,6 @@ class AttributePlusAdapter(
         ), BaseAttribute<AttributeHandle> {
 
             override fun onLoad(): SubAttribute {
-                onLoad?.let { it(this@AttributePlusAdapter) }
                 skipFilter.setSkipFilter()
                 return this
             }

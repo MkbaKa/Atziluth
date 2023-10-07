@@ -25,11 +25,15 @@ object SXAttributeBridge : AttributeBridge {
         val uuid = entity.uniqueId
         val sources = attributeSources.getOrPut(uuid) { hashMapOf() }
 
-        if (sources.containsKey(source)) takeAttribute(entity, source)
+        if (sources.containsKey(source)) {
+            takeAttribute(entity, source)
+            sources.remove(source)
+        }
+
         val data = api.loadListData(attrs)
 
         sources[source] = data
-        entity.attrData.add(api.loadListData(attrs))
+        entity.attrData.add(data)
     }
 
     override fun takeAttribute(uuid: UUID, source: String) {
@@ -57,7 +61,10 @@ object SXAttributeBridge : AttributeBridge {
         return when (type) {
             AttributeValueType.MIN -> values[0]
             AttributeValueType.MAX -> values[1]
-            AttributeValueType.RANDOM -> random(values[0], values[1])
+            AttributeValueType.RANDOM -> if (values[0] != 0.0 && values[1] == 0.0) values[0] else random(
+                values[0],
+                values[1]
+            )
         }.cdouble
     }
 

@@ -9,6 +9,7 @@ import me.mkbaka.atziluth.internal.register.AttributeType
 import me.mkbaka.atziluth.internal.register.BaseAttribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import taboolib.common5.eqic
 
 class SXAttributeAdapter(
     override val attrPriority: Int,
@@ -18,30 +19,46 @@ class SXAttributeAdapter(
 ) : AbstractCustomAttribute<SubAttribute>() {
 
     override val inst: SubAttribute by lazy {
-        object : SubAttribute(name, Atziluth.plugin, 2, getType()), BaseAttribute<SubAttribute> {
-            init {
-                this.priority = getAttributes().size
-                onLoad?.let { it(this@SXAttributeAdapter) }
-            }
+        object : SubAttribute(name, Atziluth.plugin, 10, getType()), BaseAttribute<SubAttribute> {
 
             private var damage = 0.0
+
+            init {
+                priority = getAttributes().size
+            }
 
             override fun eventMethod(values: DoubleArray, data: EventData) {
                 if (data !is DamageData) return
                 this.damage = data.damage
 
                 when (type) {
-                    AttributeType.ATTACK -> callback?.let { it(this@SXAttributeAdapter, data.attacker, data.defender, hashMapOf("handle" to this)) }
-                    AttributeType.DEFENSE -> callback?.let { it(this@SXAttributeAdapter, data.defender, data.attacker, hashMapOf("handle" to this)) }
+                    AttributeType.ATTACK -> callback?.let {
+                        it(
+                            this@SXAttributeAdapter,
+                            data.attacker,
+                            data.defender,
+                            hashMapOf("handle" to this)
+                        )
+                    }
+
+                    AttributeType.DEFENSE -> callback?.let {
+                        it(
+                            this@SXAttributeAdapter,
+                            data.defender,
+                            data.attacker,
+                            hashMapOf("handle" to this)
+                        )
+                    }
+
                     else -> error("Unsupported type $type")
                 }
                 data.damage = damage
             }
 
-            override fun getPlaceholder(values: DoubleArray, player: Player, str: String): Any {
-                return if (str.equals(placeholder, ignoreCase = true)) {
+            override fun getPlaceholder(values: DoubleArray, player: Player, str: String): Any? {
+                return if (str.eqic(this@SXAttributeAdapter.placeholder)) {
                     if (values[1] != 0.0) "${values[0]} - ${values[1]}" else values[0]
-                } else "NaN"
+                } else null
             }
 
             override fun getPlaceholders(): MutableList<String> {

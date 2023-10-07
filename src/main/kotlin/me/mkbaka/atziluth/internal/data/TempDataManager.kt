@@ -1,5 +1,6 @@
 package me.mkbaka.atziluth.internal.data
 
+import me.mkbaka.atziluth.internal.bridge.tempattr.TempAttributeManager
 import me.mkbaka.atziluth.internal.configuration.ConfigManager
 import me.mkbaka.atziluth.internal.data.impl.PlayerData
 import org.bukkit.Bukkit
@@ -57,7 +58,11 @@ object TempDataManager {
                 if (player != null) continue
 
                 val quitTime = entry.value.fromKey("PlayerQuitTime")
-                if (quitTime == null || System.currentTimeMillis() - quitTime.clong >= ConfigManager.tempDataTimeout) iterator.remove()
+                if (quitTime == null || System.currentTimeMillis() - quitTime.clong >= ConfigManager.tempDataTimeout) {
+                    iterator.remove()
+                    TempAttributeManager.tempAttrs[entry.key]?.forEach { (_, task) -> task.cancel() }
+                    TempAttributeManager.tempAttrs.remove(entry.key)
+                }
             }
         }
     }

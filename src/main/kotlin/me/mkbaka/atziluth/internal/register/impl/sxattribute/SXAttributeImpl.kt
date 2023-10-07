@@ -26,12 +26,8 @@ object SXAttributeImpl : AttributeFactory<SXAttributeAdapter>() {
     }
 
     override fun registerAttribute(customAttribute: SXAttributeAdapter) {
-        if (customAttribute.attrPriority <= -1) {
-            SXAttribute.getInst().logger.warning("Attribute >> Disable [§9Atzi§3luth§r|§c${customAttribute.name}§r] !");
-            return
-        }
         customAttribute.inst.apply {
-            SubAttribute.getAttributes().add(this.priority, this)
+            SubAttribute.getAttributes().add(this)
             SXAttribute.getInst().logger
                 .info("Attribute >> Register [§9Atzi§3luth§r|§a${name}§r] To Priority $priority !")
         }

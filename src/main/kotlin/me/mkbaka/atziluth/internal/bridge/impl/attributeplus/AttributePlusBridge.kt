@@ -44,11 +44,12 @@ object AttributePlusBridge : AttributeBridge {
         get() = api.getAttrData(this)
 
     private fun LivingEntity.attrValue(name: String, type: AttributeValueType): Double {
+        val attrName = api.getServerAttributeName(name) ?: name
         val data = this.attrData
         return when (type) {
-            AttributeValueType.MIN -> data.getAttributeValue(name)[0]
-            AttributeValueType.MAX -> data.getAttributeValue(name)[1]
-            AttributeValueType.RANDOM -> data.getRandomValue(name)
+            AttributeValueType.MIN -> data.getAttributeValue(attrName)[0]
+            AttributeValueType.MAX -> data.getAttributeValue(attrName)[1]
+            AttributeValueType.RANDOM -> data.getRandomValue(attrName)
         }.cdouble
     }
 

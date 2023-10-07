@@ -6,7 +6,7 @@ import org.bukkit.entity.LivingEntity
  * 自定义属性
  * @param T 属性接口类
  */
-abstract class AbstractCustomAttribute<T> {
+abstract class AbstractCustomAttribute<T>() {
 
     open val attrPriority: Int = 0
     open val combatPower: Double = 0.0
