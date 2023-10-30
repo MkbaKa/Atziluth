@@ -1,0 +1,8 @@
+example:
+  functions:
+    onEnable: |-
+#      print "kether enable!"
+    onLoad: |-
+    #      print "kether load!"
+    onDisable: |-
+    #      print "kether disable!"

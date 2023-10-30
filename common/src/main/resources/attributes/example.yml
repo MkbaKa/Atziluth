@@ -1,0 +1,13 @@
+# kether 自定义属性
+example:
+  topLevels:
+    attributeName: 'example'
+    placeholder: 'placeholder'
+    type: 'attack'
+    priority: 1.0
+    combatPower: 1.0
+  functions:
+    onLoad: |-
+#      print "load!"
+    onAttack: |-
+    #      print "attack!"

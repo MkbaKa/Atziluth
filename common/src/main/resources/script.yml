@@ -1,0 +1,5 @@
+# 常用的静态类可以从此处导入,一劳永逸.
+# 效果等同于在js内调用 const System = static("java.lang.System")
+# "变量名": "全限定类名"
+
+"System": "java.lang.System"

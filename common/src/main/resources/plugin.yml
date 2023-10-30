@@ -1,0 +1,15 @@
+name: Atziluth
+main: me.mkbaka.libs.taboolib.platform.BukkitPlugin
+version: ${version}
+
+authors:
+  - 'Mkbakaa'
+
+softdepend:
+  - 'AttributePlus'
+  - 'SX-Attribute'
+  - 'OriginAttribute'
+  - 'MythicMobs'
+  - 'PlaceholderAPI'
+
+api-version: 1.13
