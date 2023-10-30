@@ -2,3 +2,4 @@
 /plugin/build/
 /.idea/
 /.gradle/
+/common/src/test/
