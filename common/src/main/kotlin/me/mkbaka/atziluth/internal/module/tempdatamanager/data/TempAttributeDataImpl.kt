@@ -2,12 +2,13 @@ package me.mkbaka.atziluth.internal.module.tempdatamanager.data
 
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
+import me.mkbaka.atziluth.utils.AttributeUtil.append
 import java.util.*
 
 open class TempAttributeDataImpl(
     override val owner: UUID,
     override val source: String,
-    override val attrs: HashMap<String, Array<Double>>,
+    override val attrs: MutableMap<String, Array<Double>>,
     override var timeout: Long = -1
 ) : TempAttributeData {
 
@@ -24,15 +25,17 @@ open class TempAttributeDataImpl(
     override fun mergeAttribute(map: Map<String, Array<Double>>) {
         callUpdate {
             map.forEach { (name, newArray) ->
-                newArray.forEachIndexed { index, value ->
-                    this.attrs[name]?.set(index, value)
+                this.attrs.compute(name) { _, oldArray ->
+                    (oldArray ?: arrayOf()).append(newArray)
                 }
             }
         }
     }
 
     override fun formatAttributes(): List<String> {
-        return this.attrs.map { entry -> "${entry.key}: ${entry.value[0]} - ${entry.value.getOrElse(1) { 0 }}" }
+        return this.attrs.map { entry ->
+            if (entry.value.isNotEmpty()) "${entry.key}: ${entry.value.getOrNull(0) ?: 0.0} - ${entry.value.getOrNull(1) ?: 0.0}" else ""
+        }
     }
 
     protected fun callUpdate(callback: () -> Unit) {

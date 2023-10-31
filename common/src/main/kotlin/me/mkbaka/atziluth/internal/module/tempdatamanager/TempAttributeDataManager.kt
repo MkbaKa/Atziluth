@@ -5,11 +5,9 @@ import java.util.*
 
 interface TempAttributeDataManager {
 
-    fun addAttribute(entity: LivingEntity, tempAttributeData: TempAttributeData)
+    fun addAttribute(entity: LivingEntity, tempAttributeData: TempAttributeData, merge: Boolean)
 
-    fun addAttribute(uuid: UUID, tempAttributeData: TempAttributeData)
-
-    fun mergeAttribute(uuid: UUID, source: String, attrs: Map<String, Array<Double>>)
+    fun addAttribute(uuid: UUID, tempAttributeData: TempAttributeData, merge: Boolean)
 
     fun takeAttribute(entity: LivingEntity, source: String)
 

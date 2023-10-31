@@ -5,6 +5,7 @@ import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
 import me.mkbaka.atziluth.api.AttributeAPI.takeAttribute
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.internal.module.tempdatamanager.data.TempAttributeDataImpl
 import org.bukkit.entity.LivingEntity
 import java.util.*
@@ -17,14 +18,15 @@ open class AtziluthDamageMeta(
 ) : VanillaDamageMeta(damager, entities, options) {
 
     override fun doDamage() {
-        this.damager.addAttribute(this.options.attributes)
+        val source = UUID.randomUUID().toString()
+        this.damager.addAttribute(TempAttributeData.new(damager.uniqueId, source, options.attributes))
 
         when {
             options.clearAttribute -> clearAttribute { super.doDamage() }
             else -> super.doDamage()
         }
 
-        this.damager.takeAttribute(this.options.attributes.source)
+        this.damager.takeAttribute(source)
     }
 
     open fun clearAttribute(callback: () -> Unit) {

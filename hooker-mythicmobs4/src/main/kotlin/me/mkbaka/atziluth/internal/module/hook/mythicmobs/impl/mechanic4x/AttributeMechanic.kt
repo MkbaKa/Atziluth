@@ -28,17 +28,11 @@ class AttributeMechanic {
                 val attributeSource = source.get(meta)
                 val attrs = parseToAttribute(meta)
 
-                if (merge.get(meta).cbool) {
-                    Atziluth.tempAttributeDataManager.mergeAttribute(entity.uniqueId, attributeSource, attrs)
-                } else {
-                    Atziluth.tempAttributeDataManager.addAttribute(entity,
-                        TempAttributeData.new(
-                            entity.uniqueId, attributeSource, attrs
-                        ) {
-                            this.timeout = this@Add.timeout.get(meta).clong
-                        }
-                    )
-                }
+                Atziluth.tempAttributeDataManager.addAttribute(
+                    entity, TempAttributeData.new(entity.uniqueId, attributeSource, attrs) {
+                        this.timeout = this@Add.timeout.get(meta).clong
+                    }, merge.get(meta).cbool
+                )
             }
             return true
         }

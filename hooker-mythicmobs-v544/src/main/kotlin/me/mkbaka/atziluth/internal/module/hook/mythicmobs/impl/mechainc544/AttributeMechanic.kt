@@ -16,7 +16,8 @@ import java.util.*
 class AttributeMechanic {
 
     @MythicAnnotations.SkillMechanic(["add-attr", "addattr", "attr-add", "attradd"])
-    class Add(cm: io.lumine.mythic.core.skills.mechanics.CustomMechanic, mlc: MythicLineConfig): CustomMechanic(cm, mlc) {
+    class Add(cm: io.lumine.mythic.core.skills.mechanics.CustomMechanic, mlc: MythicLineConfig) :
+        CustomMechanic(cm, mlc) {
 
         private val source = mlc.getPlaceholderString(arrayOf("source", "s"), UUID.randomUUID().toString())
         private val timeout = mlc.getPlaceholderString(arrayOf("timeout", "time", "t"), "-1")
@@ -29,17 +30,11 @@ class AttributeMechanic {
                 val attributeSource = source.get(meta)
                 val attrs = parseToAttribute(meta)
 
-                if (merge.get(meta).cbool) {
-                    Atziluth.tempAttributeDataManager.mergeAttribute(entity.uniqueId, attributeSource, attrs)
-                } else {
-                    Atziluth.tempAttributeDataManager.addAttribute(entity,
-                        TempAttributeData.new(
-                            entity.uniqueId, attributeSource, attrs
-                        ) {
-                            this.timeout = this@Add.timeout.get(meta).clong
-                        }
-                    )
-                }
+                Atziluth.tempAttributeDataManager.addAttribute(
+                    entity, TempAttributeData.new(entity.uniqueId, attributeSource, attrs) {
+                        this.timeout = this@Add.timeout.get(meta).clong
+                    }, merge.get(meta).cbool
+                )
             }
             return SkillResult.SUCCESS
         }
@@ -47,7 +42,8 @@ class AttributeMechanic {
     }
 
     @MythicAnnotations.SkillMechanic(["take-attr", "takeattr", "attr-take", "attrtake"])
-    class Take(cm: io.lumine.mythic.core.skills.mechanics.CustomMechanic, mlc: MythicLineConfig): CustomMechanic(cm, mlc) {
+    class Take(cm: io.lumine.mythic.core.skills.mechanics.CustomMechanic, mlc: MythicLineConfig) :
+        CustomMechanic(cm, mlc) {
 
         private val source = mlc.getPlaceholderString(arrayOf("source", "s"), "")
 

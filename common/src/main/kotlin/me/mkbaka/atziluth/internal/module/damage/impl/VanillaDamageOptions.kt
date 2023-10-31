@@ -3,8 +3,8 @@ package me.mkbaka.atziluth.internal.module.damage.impl
 import me.mkbaka.atziluth.internal.module.damage.DamageOptions
 
 open class VanillaDamageOptions(
-    override val damageValue: Double,
-    override val preventKnockback: Boolean,
-    override val ignoreImmunity: Boolean,
-    override val noDamageTicks: Int
+    override var damageValue: Double,
+    override var preventKnockback: Boolean,
+    override var ignoreImmunity: Boolean,
+    override var noDamageTicks: Int
 ) : DamageOptions

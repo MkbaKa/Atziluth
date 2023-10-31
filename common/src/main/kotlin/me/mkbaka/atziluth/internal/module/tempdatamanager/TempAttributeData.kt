@@ -18,7 +18,7 @@ interface TempAttributeData {
     /**
      * 属性名与数值
      */
-    val attrs: Map<String, Array<Double>>
+    val attrs: MutableMap<String, Array<Double>>
 
     /**
      * 超时时间(不存在则为-1)
@@ -47,7 +47,7 @@ interface TempAttributeData {
 
     companion object {
 
-        fun new(owner: UUID, source: String, attrs: HashMap<String, Array<Double>>, constructor: TempAttributeData.() -> Unit = {}): TempAttributeData {
+        fun new(owner: UUID, source: String, attrs: MutableMap<String, Array<Double>>, constructor: TempAttributeData.() -> Unit = {}): TempAttributeData {
             return TempAttributeDataImpl(owner, source, attrs).also(constructor)
         }
 

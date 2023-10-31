@@ -17,23 +17,19 @@ object TempAttributeDataManagerImpl : TempAttributeDataManager {
     private val tempAttributeData = ConcurrentHashMap<UUID, HashMap<String, TempAttributeData>>()
     private val attributeDataManager by lazy { Atziluth.attributeHooker.attributeDataManager }
 
-    override fun addAttribute(entity: LivingEntity, tempAttributeData: TempAttributeData) {
-        addAttribute(entity.uniqueId, tempAttributeData)
+    override fun addAttribute(entity: LivingEntity, tempAttributeData: TempAttributeData, merge: Boolean) {
+        addAttribute(entity.uniqueId, tempAttributeData, merge)
     }
 
-    override fun addAttribute(uuid: UUID, tempAttributeData: TempAttributeData) {
-        val map = TempAttributeDataManagerImpl.tempAttributeData.getOrPut(uuid) { hashMapOf() }
+    override fun addAttribute(uuid: UUID, tempAttributeData: TempAttributeData, merge: Boolean) {
+        val map = this.tempAttributeData.getOrPut(uuid) { hashMapOf() }
         map.compute(tempAttributeData.source) { _, oldValue ->
-            oldValue?.let { attributeDataManager.takeAttribute(uuid, oldValue.source) }
-            attributeDataManager.addAttribute(uuid, tempAttributeData)
-            tempAttributeData
-        }
-    }
-
-    override fun mergeAttribute(uuid: UUID, source: String, attrs: Map<String, Array<Double>>) {
-        tempAttributeData[uuid]?.compute(source) { _, oldValue ->
-            oldValue?.mergeAttribute(attrs)
-            oldValue
+            if (merge && map.containsKey(tempAttributeData.source)) {
+                oldValue!!.also { it.mergeAttribute(tempAttributeData.attrs) }
+            } else {
+                oldValue?.let { attributeDataManager.takeAttribute(uuid, oldValue.source) }
+                tempAttributeData.apply { attributeDataManager.addAttribute(uuid, this) }
+            }
         }
     }
 

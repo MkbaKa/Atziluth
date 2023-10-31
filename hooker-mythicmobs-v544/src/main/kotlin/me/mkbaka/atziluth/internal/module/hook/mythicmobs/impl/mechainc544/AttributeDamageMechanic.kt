@@ -7,13 +7,11 @@ import io.lumine.mythic.api.skills.SkillResult
 import me.mkbaka.atziluth.internal.module.damage.impl.AtziluthDamageMeta
 import me.mkbaka.atziluth.internal.module.damage.impl.AtziluthDamageOptions
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.MythicAnnotations
-import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.utils.EntityUtil.isAlive
 import org.bukkit.entity.LivingEntity
 import taboolib.common5.cbool
 import taboolib.common5.cdouble
 import taboolib.common5.cint
-import java.util.*
 
 @MythicAnnotations.SkillMechanic(["attr-damage", "attrdamage"])
 class AttributeDamageMechanic(cm: io.lumine.mythic.core.skills.mechanics.CustomMechanic, mlc: MythicLineConfig) : CustomMechanic(cm, mlc) {
@@ -32,15 +30,14 @@ class AttributeDamageMechanic(cm: io.lumine.mythic.core.skills.mechanics.CustomM
         val entity = ae.bukkitEntity as? LivingEntity ?: return SkillResult.INVALID_TARGET
 
         if (caster.isAlive && entity.isAlive) {
-            val tempAttributeData = TempAttributeData.new(caster.uniqueId, UUID.randomUUID().toString(), parseToAttribute(meta))
-            AtziluthDamageMeta(caster, listOf(entity), AtziluthDamageOptions(
-                basicDamageValue.get(meta).cdouble,
-                preventKnockback.get(meta).cbool,
-                ignoreImmunity.get(meta).cbool,
-                noDamageTicks.get(meta).cint,
-                tempAttributeData,
-                isClear.get(meta).cbool
-            )).doDamage()
+            AtziluthDamageMeta(caster, listOf(entity), AtziluthDamageOptions.new {
+                damageValue = this@AttributeDamageMechanic.basicDamageValue.get(meta).cdouble
+                preventKnockback = this@AttributeDamageMechanic.preventKnockback.get(meta).cbool
+                ignoreImmunity = this@AttributeDamageMechanic.ignoreImmunity.get(meta).cbool
+                noDamageTicks = this@AttributeDamageMechanic.noDamageTicks.get(meta).cint
+                isClear = this@AttributeDamageMechanic.isClear.get(meta).cbool
+                setAttributes(parseToAttribute(meta))
+            }).doDamage()
         }
 
         return SkillResult.SUCCESS

@@ -11,6 +11,16 @@ import java.io.File
 
 object AttributeUtil {
 
+    fun Array<Double>.append(values: Array<Double>): Array<Double> {
+        if (this.isNotEmpty()) {
+            values.forEachIndexed { index, value ->
+                this[index] = (this.getOrNull(index) ?: 0.0) + value
+            }
+        }
+
+        return this
+    }
+
     fun registerAttribute(file: File): CustomAttribute {
         if (!AttributeManagerComponent.release) error("属性模块未启用, 无法注册属性.")
 
