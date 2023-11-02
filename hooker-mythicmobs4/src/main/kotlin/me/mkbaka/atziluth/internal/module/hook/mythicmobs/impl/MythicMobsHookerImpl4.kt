@@ -3,41 +3,69 @@ package me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicConditionLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicTargeterLoadEvent
 import io.lumine.xikage.mythicmobs.skills.SkillCondition
 import io.lumine.xikage.mythicmobs.skills.SkillMechanic
+import io.lumine.xikage.mythicmobs.skills.SkillTargeter
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.condition4x.ScriptCondition
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.mechanic4x.ScriptMechanic
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.targeter4x.ScriptEntityTargeter
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.targeter4x.ScriptLocationTargeter
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.library.reflex.Reflex.Companion.invokeConstructor
 
 abstract class MythicMobsHookerImpl4 : AbstractMythicMobsHooker() {
 
-    override val mechanicPackage: String
-        get() = "mechanic4x"
-
-    override val conditionPackage: String
-        get() = ""
-
-    override val mechanicLoadEvent: Class<MythicMechanicLoadEvent>
-        get() = MythicMechanicLoadEvent::class.java
-
-    override val conditionLoadEvent: Class<MythicConditionLoadEvent>
-        get() = MythicConditionLoadEvent::class.java
-
     override val reloadEvent: Class<MythicReloadedEvent>
         get() = MythicReloadedEvent::class.java
 
     override fun registerMechanicListener() {
-        registerBukkitListener(mechanicLoadEvent) { event ->
-            skillClasses[event.mechanicName.lowercase()]?.let { mechanic ->
+        registerBukkitListener(MythicMechanicLoadEvent::class.java) { event ->
+            val mechanicName = event.mechanicName.lowercase()
+
+            skillClasses[mechanicName]?.let { mechanic ->
                 event.register(mechanic.invokeConstructor(event.config) as SkillMechanic)
+                return@registerBukkitListener
+            }
+
+            scriptMechanics[mechanicName]?.let { scriptMechanic ->
+                event.register(ScriptMechanic(event.config, scriptMechanic))
             }
         }
     }
 
     override fun registerConditionListener() {
-        registerBukkitListener(conditionLoadEvent) { event ->
-            conditionClasses[event.conditionName.lowercase()]?.let { condition ->
+        registerBukkitListener(MythicConditionLoadEvent::class.java) { event ->
+            val conditionName = event.conditionName.lowercase()
+
+            conditionClasses[conditionName]?.let { condition ->
                 event.register(condition.invokeConstructor(event.config) as SkillCondition)
+                return@registerBukkitListener
+            }
+
+            scriptConditions[conditionName]?.let { scriptCondition ->
+                event.register(ScriptCondition(event.config, scriptCondition))
+            }
+        }
+    }
+
+    override fun registerTargetListener() {
+        registerBukkitListener(MythicTargeterLoadEvent::class.java) { event ->
+            val targeterName = event.targeterName.lowercase()
+
+            targetClasses[targeterName]?.let { target ->
+                event.register(target.invokeConstructor(event.config) as SkillTargeter)
+                return@registerBukkitListener
+            }
+
+            scriptEntityTargeters[targeterName]?.let { entityTargeter ->
+                event.register(ScriptEntityTargeter(event.config, entityTargeter))
+                return@registerBukkitListener
+            }
+
+            scriptLocationTargeters[targeterName]?.let { locationTargeter ->
+                event.register(ScriptLocationTargeter(event.config, locationTargeter))
             }
         }
     }

@@ -32,7 +32,7 @@ subprojects {
         compileOnly("io.izzel.taboolib:common:$taboolib_version")
         compileOnly("io.izzel.taboolib:common-5:$taboolib_version")
         compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
-        compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
+        compileOnly("org.spigotmc:spigot:1.20.1-R0.1-20230921.165347-11@jar")
         compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
     }
 

@@ -13,18 +13,29 @@ import taboolib.common.platform.Plugin
 import taboolib.common.platform.function.console
 import taboolib.module.chat.colored
 import taboolib.module.lang.sendLang
+import taboolib.module.nms.MinecraftVersion
 import taboolib.platform.BukkitPlugin
 
 object Atziluth : Plugin() {
 
     val plugin by lazy { BukkitPlugin.getInstance() }
 
-    val prefix by lazy { "&8[&{#5846E2}A&{#5C4BE3}t&{#6050E4}z&{#6455E5}i&{#685AE6}l&{#6C5FE7}u&{#7064E8}t&{#7469E9}h&8]".colored() }
+    val prefix by lazy {
+        // 高于 1.16 使用 rgb 颜色
+        if (MinecraftVersion.isHigherOrEqual(8)) {
+            "&8[&{#5846E2}A&{#5C4BE3}t&{#6050E4}z&{#6455E5}i&{#685AE6}l&{#6C5FE7}u&{#7064E8}t&{#7469E9}h&8]"
+        } else {
+            "&8[&9Atz&3ilu&bth&8]"
+        }.colored()
+    }
 
     val namespaces by lazy { listOf("Atziluth") }
 
     @InitBy("me.mkbaka.atziluth.internal.module.script.javascript.impl.factory.JavaScriptFactoryImpl")
     lateinit var javaScriptFactory: AbstractScriptFactory
+
+    @InitBy("me.mkbaka.atziluth.internal.module.hook.HookerManager")
+    lateinit var hookerManager: HookerManager
 
     @InitBy
     lateinit var tempDataManager: TempDataManager
@@ -36,7 +47,6 @@ object Atziluth : Plugin() {
 
     override fun onEnable() {
         console().sendLang("plugin-enable", prefix, Bukkit.getBukkitVersion())
-
         AttributePlugins.find()?.let { plugin ->
             attributeHooker = plugin.hooker.newInstance()
             val bukkitPlugin = Bukkit.getPluginManager().getPlugin(plugin.pluginName)!!
@@ -45,9 +55,10 @@ object Atziluth : Plugin() {
 
         HookerManager.init()
 
-        Initializes.initClassFields(this::class.java)
+        Initializes.initFields(this::class.java)
     }
 
     // 无法理解为什么不让在其它类中直接获取 isInitialized
     fun isInitAttributeHooker() = this::attributeHooker.isInitialized
+
 }

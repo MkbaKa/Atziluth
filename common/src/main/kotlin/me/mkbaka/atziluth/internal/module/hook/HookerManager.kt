@@ -31,7 +31,7 @@ object HookerManager {
 
     private fun initMythicMobsHooker() {
         val plugin = Bukkit.getPluginManager().getPlugin("MythicMobs") ?: return
-        // 4.x.x 5.x.x
+
         val version = plugin.description.version
         val subVersion = version[2].cint
         val packageName = "me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl"
@@ -41,9 +41,9 @@ object HookerManager {
                 // 4.x
                 '4' -> {
                     when {
-                        // 4.7+
-                        subVersion > 7 -> Class.forName("$packageName.MythicMobsHookerImpl411")
-                        else -> null
+                        // 4.10+
+                        subVersion == 1 && version[3] != '.' -> Class.forName("$packageName.MythicMobsHookerImpl411")
+                        else -> Class.forName("$packageName.MythicMobsHookerImpl472")
                     }
                 }
                 // 5.x

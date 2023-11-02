@@ -5,7 +5,7 @@ import taboolib.common.platform.function.warning
 
 object Initializes {
 
-    fun initClassFields(clazz: Class<*>) {
+    fun initFields(clazz: Class<*>) {
         clazz.fields.forEach { field ->
             if (!field.isAnnotationPresent(InitBy::class.java)) return@forEach
 

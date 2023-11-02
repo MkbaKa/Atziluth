@@ -1,8 +1,12 @@
 package me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.mechainc544
 
+import io.lumine.mythic.api.adapters.AbstractEntity
+import io.lumine.mythic.api.adapters.AbstractLocation
 import io.lumine.mythic.api.config.MythicLineConfig
 import io.lumine.mythic.api.skills.ITargetedEntitySkill
+import io.lumine.mythic.api.skills.ITargetedLocationSkill
 import io.lumine.mythic.api.skills.SkillMetadata
+import io.lumine.mythic.api.skills.SkillResult
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString
 import io.lumine.mythic.core.skills.SkillMechanic
 import io.lumine.mythic.core.skills.mechanics.CustomMechanic
@@ -12,7 +16,15 @@ import taboolib.common5.cdouble
 abstract class CustomMechanic(
     private val cm: CustomMechanic,
     private val mlc: MythicLineConfig
-): SkillMechanic(cm.manager, cm.file, mlc.line, mlc), ITargetedEntitySkill {
+): SkillMechanic(cm.manager, cm.file, mlc.line, mlc), ITargetedEntitySkill, ITargetedLocationSkill {
+
+    override fun castAtEntity(meta: SkillMetadata, ae: AbstractEntity): SkillResult {
+        return SkillResult.SUCCESS
+    }
+
+    override fun castAtLocation(meta: SkillMetadata, al: AbstractLocation): SkillResult {
+        return SkillResult.SUCCESS
+    }
 
     fun parseAllEntries(meta: SkillMetadata): Map<String, Any> {
         val map = hashMapOf<String, Any>()

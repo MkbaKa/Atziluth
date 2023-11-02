@@ -8,7 +8,7 @@ interface Script {
 
     fun evalScript(args: Map<String, Any>): Any?
 
-    fun invokeFunction(func: String, topLevels: Map<String, Any>, vararg args: Any): Any?
+    fun invokeFunction(func: String, topLevels: Map<String, Any> = hashMapOf(), vararg args: Any): Any?
 
     fun isFunction(func: String): Boolean
 

@@ -2,6 +2,7 @@ package me.mkbaka.atziluth.internal.module.script.javascript
 
 import me.mkbaka.atziluth.internal.module.script.javascript.impl.hooker.LegacyNashornHooker
 import me.mkbaka.atziluth.internal.module.script.javascript.impl.hooker.NashornHooker
+import me.mkbaka.atziluth.utils.ClassUtil
 import java.io.Reader
 import javax.script.Compilable
 import javax.script.ScriptEngine
@@ -46,6 +47,7 @@ abstract class AbstractNashornHooker {
                 Class.forName("jdk.nashorn.api.scripting.NashornScriptEngineFactory")
                 LegacyNashornHooker
             } catch (_: ClassNotFoundException) {
+                ClassUtil.loadResourceJar("nashorn-core-15.4.jar")
                 NashornHooker
             }
         }

@@ -8,5 +8,6 @@ find-plugin: '{0} &f已获取到可寄生的插件... &e{1} v{2}&f.'
 register-attribute: '{0} &f已注册属性 &e{1}&f, 优先级 &e{2}&f, 战力值 &e{3}&f, 变量 &e{4}&f.'
 register-mechanic: '{0} &f已注册技能 &e{1}&f.'
 register-condition: '{0} &f已注册条件 &e{1}&f.'
+register-targeters: '{0} &f已注册目标选择器 &e{1}&f.'
 
 reload: '{0} &f已重载.'

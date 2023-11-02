@@ -1,5 +1,6 @@
 package me.mkbaka.atziluth.internal.module.tempdatamanager.impl
 
+import me.mkbaka.atziluth.internal.configuration.ConfigurationManager
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempDataManager
 import me.mkbaka.atziluth.internal.module.tempdatamanager.data.EntityData
 import org.bukkit.Bukkit
@@ -20,7 +21,6 @@ object TempDataManagerImpl : TempDataManager {
     val tempDatas = ConcurrentHashMap<UUID, EntityData>()
 
     val quitKey by lazy { "Atziluth-PlayerQuit" }
-    val requireQuitTime by lazy { 1000 * 60 * 30 }
 
     lateinit var task: PlatformExecutor.PlatformTask
 
@@ -45,7 +45,7 @@ object TempDataManagerImpl : TempDataManager {
 
     @Awake(LifeCycle.ENABLE)
     fun enable() {
-        task = submitAsync(period = 20 * 60 * 30) {
+        task = submitAsync(period = ConfigurationManager.tempDataChecker) {
             val iter = tempDatas.iterator()
             while (iter.hasNext()) {
                 val entry = iter.next()
@@ -54,7 +54,7 @@ object TempDataManagerImpl : TempDataManager {
 
                 if (player == null && entry.value.hasData(quitKey)) {
                     val quitTime = entry.value.getData(quitKey).clong
-                    if (System.currentTimeMillis() - quitTime >= requireQuitTime) {
+                    if (System.currentTimeMillis() - quitTime >= ConfigurationManager.tempDataTimeout) {
                         iter.remove()
                     }
                 }

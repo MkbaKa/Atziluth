@@ -8,4 +8,7 @@ class MythicAnnotations {
     @Target(AnnotationTarget.CLASS)
     annotation class SkillCondition(val names: Array<String>)
 
+    @Target(AnnotationTarget.CLASS)
+    annotation class SkillTarget(val names: Array<String>)
+
 }
