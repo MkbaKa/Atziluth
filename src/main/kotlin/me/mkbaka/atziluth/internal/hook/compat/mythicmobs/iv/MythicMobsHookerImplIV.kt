@@ -43,6 +43,9 @@ class MythicMobsHookerImplIV(private val inst: MythicMobs) :
             })
 
             if (MythicMobVersion.subVersion > 7) {
+                register("trigger.attr", Placeholder.meta { meta, args ->
+                    return@meta handlePlaceholder(meta.trigger.bukkitEntity as LivingEntity, args)
+                })
                 register("target.attr", Placeholder.target { _, target, args ->
                     return@target handlePlaceholder(target.bukkitEntity as LivingEntity, args)
                 })
