@@ -1,7 +1,10 @@
 package me.mkbaka.atziluth.internal.configuration
 
+import me.mkbaka.atziluth.api.event.AtziluthReloadEvent
+import me.mkbaka.atziluth.api.event.ReloadStatus
 import me.mkbaka.atziluth.utils.FileUtil.releaseResource
 import me.mkbaka.atziluth.utils.map.PriorityMap
+import taboolib.common.platform.event.SubscribeEvent
 import java.io.File
 
 abstract class AbstractConfigComponent(priority: Int) {
@@ -34,8 +37,15 @@ abstract class AbstractConfigComponent(priority: Int) {
         val components = PriorityMap<AbstractConfigComponent>()
 
         fun reloadAll() {
-            components.forEach { (_, component) ->
-                component.reload()
+            AtziluthReloadEvent(ReloadStatus.CONFIG).call()
+        }
+
+        @SubscribeEvent
+        fun reload(e: AtziluthReloadEvent) {
+            if (e.status == ReloadStatus.CONFIG) {
+                components.forEach { (_, component) ->
+                    component.reload()
+                }
             }
         }
 

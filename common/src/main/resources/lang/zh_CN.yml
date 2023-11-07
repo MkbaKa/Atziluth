@@ -10,4 +10,10 @@ register-mechanic: '{0} &f已注册技能 &e{1}&f.'
 register-condition: '{0} &f已注册条件 &e{1}&f.'
 register-targeters: '{0} &f已注册目标选择器 &e{1}&f.'
 
+register-expansion: '{0} &f已注册 PlaceholderAPI 扩展 &e{1}&f.'
+register-command: '{0} &f已注册命令 &e{1}&f.'
+unregister-command: '{0} &f已注销命令 &e{1}&f.'
+register-listener: '{0} &f已注册监听器 &e{1} &f- &e{2}&f.'
+unregister-listener: '{0} &f已注销监听器 &e{1} &f- &e{2}&f.'
+
 reload: '{0} &f已重载.'

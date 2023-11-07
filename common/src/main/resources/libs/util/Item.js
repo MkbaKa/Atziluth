@@ -1,4 +1,4 @@
-const ItemUtil = Packages.me.mkbaka.atziluth.internal.utils.ItemUtil.INSTANCE
+const ItemUtil = Packages.me.mkbaka.atziluth.utils.ItemUtil.INSTANCE
 
 /**
  * 懒得再写一遍注释了

@@ -31,7 +31,7 @@ open class AtziluthDamageMeta(
 
     open fun clearAttribute(callback: () -> Unit) {
         val source = UUID.randomUUID().toString()
-        val attrs = hashMapOf<String, Array<Double>>()
+        val attrs = hashMapOf<String, DoubleArray>()
         AttributeManagerComponent.attributes.forEach { (_, attr) ->
             val minValue = damager.getAttrValue(attr.attributeName, AttributeValueType.MIN)
             if (minValue == 0.0) return
@@ -39,8 +39,8 @@ open class AtziluthDamageMeta(
             val maxValue = damager.getAttrValue(attr.attributeName, AttributeValueType.MAX)
 
             when {
-                maxValue > 0.0 -> attrs[attr.attributeName] = arrayOf(-minValue, -maxValue)
-                else -> attrs[attr.attributeName] = arrayOf(abs(minValue), abs(maxValue))
+                maxValue > 0.0 -> attrs[attr.attributeName] = doubleArrayOf(-minValue, -maxValue)
+                else -> attrs[attr.attributeName] = doubleArrayOf(abs(minValue), abs(maxValue))
             }
 
         }

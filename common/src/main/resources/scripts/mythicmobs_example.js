@@ -22,8 +22,8 @@ function onLoad() {
          *      args - 代理技能执行时的传参 类型为 Map<String, Any>
          *          "mythicLineConfig" - 技能执行时的参数 即 - test{xxx=true} 括号 {} 里的所有内容
          *          "caster" - 技能执行者 类型为 LivingEntity
-         *          "target" - 技能目标 同上面的 abstractEntity 类型为 LivingEntity
-         *          "entity" - 技能目标 同上面的 abstractEntity 类型为 LivingEntity
+         *          "target" - 技能目标 同上面的 entity 类型为 LivingEntity
+         *          "entity" - 技能目标 同上面的 entity 类型为 LivingEntity
          *          "meta" - 技能元数据 同上面的 skillMetaData 类型为 SkillMetadata
          */
         .castAtEntity(function (skillMetadata, entity, args) {
@@ -31,7 +31,7 @@ function onLoad() {
             info("本次执行的技能目标为 " + entity.name + " !")
         })
         /**
-         * 大部分与 castAtEnttiy 相同 只介绍不同之处
+         * 大部分与 castAtEntity 相同 只介绍不同之处
          * 参数 location - 技能执行时的目标坐标 类型为 Location
          */
         .castAtLocation(function (meta, location, args) {

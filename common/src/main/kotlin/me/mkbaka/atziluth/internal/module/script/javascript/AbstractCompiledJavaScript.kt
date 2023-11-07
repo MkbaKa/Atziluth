@@ -12,14 +12,14 @@ abstract class AbstractCompiledJavaScript : Script {
     constructor(string: String) {
         this.scriptEngine = hooker.getScriptEngine()
         loadLibs()
-        this.compiledScript = hooker.compile(string)
+        this.compiledScript = hooker.compile(scriptEngine, string)
         mirrorScriptObject()
     }
 
     constructor(reader: Reader) {
         this.scriptEngine = hooker.getScriptEngine()
         loadLibs()
-        this.compiledScript = hooker.compile(reader)
+        this.compiledScript = hooker.compile(scriptEngine, reader)
         mirrorScriptObject()
     }
 
@@ -43,10 +43,8 @@ abstract class AbstractCompiledJavaScript : Script {
     }
 
     private fun mirrorScriptObject() {
+        compiledScript.eval()
         scriptEngine.eval("""
-            
-            const Atziluth = Packages.me.mkbaka.atziluth.Atziluth.INSTANCE
-            
             function ObjectMirror() {}
             ObjectMirror.prototype = this
             function mirror() { return new ObjectMirror() }

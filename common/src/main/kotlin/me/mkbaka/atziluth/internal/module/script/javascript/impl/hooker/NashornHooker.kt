@@ -13,11 +13,15 @@ object NashornHooker : AbstractNashornHooker() {
         return NashornScriptEngineFactory().getScriptEngine(args, this::class.java.classLoader)
     }
 
-    override fun invoke(script: AbstractCompiledJavaScript, func: String, topLevels: Map<String, Any>, vararg args: Any): Any {
+    override fun invoke(
+        script: AbstractCompiledJavaScript,
+        func: String,
+        topLevels: Map<String, Any>,
+        vararg args: Any
+    ): Any? {
         return ((script.scriptEngine as Invocable).invokeFunction("mirror") as ScriptObjectMirror).run {
             this.putAll(topLevels)
             this["vars"] = topLevels
-            this.callMember("initGlobalVariables")
             this.callMember(func, *args)
         }
     }

@@ -5,6 +5,7 @@ import me.mkbaka.atziluth.internal.module.script.javascript.impl.hooker.NashornH
 import me.mkbaka.atziluth.utils.ClassUtil
 import java.io.Reader
 import javax.script.Compilable
+import javax.script.CompiledScript
 import javax.script.ScriptEngine
 import javax.script.SimpleBindings
 
@@ -12,7 +13,7 @@ abstract class AbstractNashornHooker {
 
     abstract fun getNashornEngine(args: Array<String>): ScriptEngine
 
-    abstract fun invoke(script: AbstractCompiledJavaScript, func: String, topLevels: Map<String, Any>, vararg args: Any): Any
+    abstract fun invoke(script: AbstractCompiledJavaScript, func: String, topLevels: Map<String, Any>, vararg args: Any): Any?
 
     fun getScriptEngine(): ScriptEngine {
         return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6"))
@@ -22,15 +23,23 @@ abstract class AbstractNashornHooker {
         return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6", "--global-per-engine"))
     }
 
-    fun compile(script: String): javax.script.CompiledScript {
+    fun compile(script: String): CompiledScript {
         return (getScriptEngine() as Compilable).compile(script)
     }
 
-    fun compile(reader: Reader): javax.script.CompiledScript {
+    fun compile(reader: Reader): CompiledScript {
         return (getScriptEngine() as Compilable).compile(reader)
     }
 
-    fun eval(script: javax.script.CompiledScript, args: Map<String, Any>): Any? {
+    fun compile(engine: ScriptEngine, script: String): CompiledScript {
+        return (engine as Compilable).compile(script)
+    }
+
+    fun compile(engine: ScriptEngine, reader: Reader): CompiledScript {
+        return (engine as Compilable).compile(reader)
+    }
+
+    fun eval(script: CompiledScript, args: Map<String, Any>): Any? {
         val result = try {
             script.eval(SimpleBindings(args))
         } catch (e: Exception) {

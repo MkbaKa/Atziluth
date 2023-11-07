@@ -1,4 +1,4 @@
-const MessageUtil = Packages.me.mkbaka.atziluth.internal.utils.MessageUtil.INSTANCE
+const MessageUtil = Packages.me.mkbaka.atziluth.utils.MessageUtil.INSTANCE
 /**
  * 发送 ActionBar 消息
  * @param sender 发送者

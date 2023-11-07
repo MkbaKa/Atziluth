@@ -17,7 +17,6 @@ import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common5.format
 import taboolib.module.lang.sendLang
 import java.util.concurrent.ConcurrentHashMap
-import java.util.regex.Pattern
 
 abstract class AbstractMythicMobsHooker {
 
@@ -88,8 +87,6 @@ abstract class AbstractMythicMobsHooker {
     }
 
     companion object {
-
-        val number_pattern by lazy { Pattern.compile("(-*\\d+)((-)(-*\\d+))*") }
 
         val scriptMechanics = ConcurrentHashMap<String, ProxyScriptMechanic>()
 

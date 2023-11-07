@@ -18,7 +18,7 @@ interface TempAttributeData {
     /**
      * 属性名与数值
      */
-    val attrs: MutableMap<String, Array<Double>>
+    val attrs: MutableMap<String, DoubleArray>
 
     /**
      * 超时时间(不存在则为-1)
@@ -38,7 +38,7 @@ interface TempAttributeData {
     /**
      * 合并属性值
      */
-    fun mergeAttribute(map: Map<String, Array<Double>>)
+    fun mergeAttribute(map: Map<String, DoubleArray>)
 
     /**
      * 格式化属性值
@@ -47,7 +47,7 @@ interface TempAttributeData {
 
     companion object {
 
-        fun new(owner: UUID, source: String, attrs: MutableMap<String, Array<Double>>, constructor: TempAttributeData.() -> Unit = {}): TempAttributeData {
+        fun new(owner: UUID, source: String, attrs: MutableMap<String, DoubleArray>, constructor: TempAttributeData.() -> Unit = {}): TempAttributeData {
             return TempAttributeDataImpl(owner, source, attrs).also(constructor)
         }
 

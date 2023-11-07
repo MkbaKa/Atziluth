@@ -8,7 +8,7 @@ import io.lumine.xikage.mythicmobs.skills.ITargetedLocationSkill
 import io.lumine.xikage.mythicmobs.skills.SkillMechanic
 import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import io.lumine.xikage.mythicmobs.skills.placeholders.parsers.PlaceholderString
-import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
+import me.mkbaka.atziluth.Atziluth
 import taboolib.common5.cdouble
 
 abstract class CustomMechanic(private val mlc: MythicLineConfig) : SkillMechanic(mlc.line, mlc), ITargetedEntitySkill,
@@ -30,15 +30,15 @@ abstract class CustomMechanic(private val mlc: MythicLineConfig) : SkillMechanic
         return map
     }
 
-    fun parseToAttribute(meta: SkillMetadata): HashMap<String, Array<Double>> {
-        val map = hashMapOf<String, Array<Double>>()
+    fun parseToAttribute(meta: SkillMetadata): HashMap<String, DoubleArray> {
+        val map = hashMapOf<String, DoubleArray>()
         mlc.entrySet().forEach { entry ->
             val str = entry.value.parse(meta)
-            val mather = AbstractMythicMobsHooker.number_pattern.matcher(str)
+            val mather = Atziluth.number_pattern.matcher(str)
             if (mather.find()) {
-                map[entry.key.parse(meta)] = arrayOf(mather.group(1).cdouble, mather.group(4).cdouble)
+                map[entry.key.parse(meta)] = doubleArrayOf(mather.group(1).cdouble, mather.group(4).cdouble)
             } else {
-                map[entry.key.parse(meta)] = arrayOf(str.cdouble, str.cdouble)
+                map[entry.key.parse(meta)] = doubleArrayOf(str.cdouble, str.cdouble)
             }
         }
         return map

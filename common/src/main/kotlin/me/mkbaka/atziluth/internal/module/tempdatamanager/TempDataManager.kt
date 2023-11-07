@@ -4,6 +4,6 @@ import java.util.*
 
 interface TempDataManager {
 
-    fun getData(uuid: UUID, isPlayer: Boolean = false): TempData<*>?
+    fun getData(uuid: UUID): TempData<*>?
 
 }

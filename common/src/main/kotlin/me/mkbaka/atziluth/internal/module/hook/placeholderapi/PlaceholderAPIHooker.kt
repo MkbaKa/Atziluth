@@ -27,8 +27,7 @@ class PlaceholderAPIHooker {
                 return true
             }
 
-            override fun onPlaceholderRequest(player: Player?, params: String): String {
-                player!!
+            override fun onPlaceholderRequest(player: Player, params: String): String {
                 val args = params.split(":")
                 val str = args.getOrNull(0) ?: return "格式错误."
 
@@ -40,6 +39,7 @@ class PlaceholderAPIHooker {
                 return player.getAttrValue(attr.attributeName, valueType).toString()
             }
         }
+
     }
 
     fun parse(player: Player, str: String): String {

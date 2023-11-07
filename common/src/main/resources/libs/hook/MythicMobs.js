@@ -22,7 +22,7 @@ function createMythicMechanic() {
  * @param {...any} 任意数量的字符串
  * @returns me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyScriptCondition
  */
-function createMythicCondition() {
+const createMythicCondition = function () {
     return new ProxyScriptCondition(toList(arguments))
 }
 
@@ -33,7 +33,7 @@ function createMythicCondition() {
  * @param {...any} 任意数量的字符串
  * @returns me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyLocationTargeter
  */
-function createMythicLocationTargeter() {
+const createMythicLocationTargeter = function () {
     return new ProxyLocationTargeter(toList(arguments))
 }
 
@@ -44,6 +44,6 @@ function createMythicLocationTargeter() {
  * @param {...any} 任意数量的字符串
  * @returns me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyLocationTargeter
  */
-function createMythicEntityTargeter() {
+const createMythicEntityTargeter = function () {
     return new ProxyEntityTargeter(toList(arguments))
 }

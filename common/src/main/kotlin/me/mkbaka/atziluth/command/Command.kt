@@ -1,6 +1,8 @@
 package me.mkbaka.atziluth.command
 
 import me.mkbaka.atziluth.Atziluth.prefix
+import me.mkbaka.atziluth.api.event.AtziluthReloadEvent
+import me.mkbaka.atziluth.api.event.ReloadStatus
 import me.mkbaka.atziluth.internal.configuration.AbstractConfigComponent
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.*
@@ -18,7 +20,9 @@ object Command {
     @CommandBody
     val reload = subCommand {
         execute<ProxyCommandSender> { sender, context, argument ->
+            AtziluthReloadEvent(ReloadStatus.PRE).call()
             AbstractConfigComponent.reloadAll()
+            AtziluthReloadEvent(ReloadStatus.POST).call()
             sender.sendLang("reload", prefix)
         }
     }

@@ -24,7 +24,7 @@ object TempDataManagerImpl : TempDataManager {
 
     lateinit var task: PlatformExecutor.PlatformTask
 
-    override fun getData(uuid: UUID, isPlayer: Boolean): EntityData? {
+    override fun getData(uuid: UUID): EntityData? {
         return tempDatas[uuid]
     }
 

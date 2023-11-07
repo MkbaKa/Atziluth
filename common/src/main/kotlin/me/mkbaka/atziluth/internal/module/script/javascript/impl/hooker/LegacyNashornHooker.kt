@@ -17,11 +17,10 @@ object LegacyNashornHooker : AbstractNashornHooker() {
             func: String,
             topLevels: Map<String, Any>,
             vararg args: Any
-    ): Any {
+    ): Any? {
         return ((script.scriptEngine as Invocable).invokeFunction("mirror") as ScriptObjectMirror).run {
             this.putAll(topLevels)
             this["vars"] = topLevels
-            this.callMember("initGlobalVariables")
             this.callMember(func, *args)
         }
     }

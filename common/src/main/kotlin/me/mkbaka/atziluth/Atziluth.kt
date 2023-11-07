@@ -6,6 +6,7 @@ import me.mkbaka.atziluth.internal.module.hook.HookerManager
 import me.mkbaka.atziluth.internal.module.script.AbstractScriptFactory
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeDataManager
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempDataManager
+import me.mkbaka.atziluth.utils.ClassUtil.instance
 import me.mkbaka.atziluth.utils.init.InitBy
 import me.mkbaka.atziluth.utils.init.Initializes
 import org.bukkit.Bukkit
@@ -15,6 +16,7 @@ import taboolib.module.chat.colored
 import taboolib.module.lang.sendLang
 import taboolib.module.nms.MinecraftVersion
 import taboolib.platform.BukkitPlugin
+import java.util.regex.Pattern
 
 object Atziluth : Plugin() {
 
@@ -28,6 +30,8 @@ object Atziluth : Plugin() {
             "&8[&9Atz&3ilu&bth&8]"
         }.colored()
     }
+
+    val number_pattern by lazy { Pattern.compile("(-*\\d+)((-)(-*\\d+))*") }
 
     val namespaces by lazy { listOf("Atziluth") }
 
@@ -48,7 +52,8 @@ object Atziluth : Plugin() {
     override fun onEnable() {
         console().sendLang("plugin-enable", prefix, Bukkit.getBukkitVersion())
         AttributePlugins.find()?.let { plugin ->
-            attributeHooker = plugin.hooker.newInstance()
+            attributeHooker =
+                Class.forName("me.mkbaka.atziluth.internal.module.attributes.impl.${plugin.hookerClass}").instance as AttributePluginHooker<*, *>
             val bukkitPlugin = Bukkit.getPluginManager().getPlugin(plugin.pluginName)!!
             console().sendLang("find-plugin", prefix, plugin.pluginName, bukkitPlugin.description.version)
         }

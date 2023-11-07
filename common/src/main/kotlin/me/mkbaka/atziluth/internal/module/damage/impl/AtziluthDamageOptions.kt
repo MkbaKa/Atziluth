@@ -8,7 +8,7 @@ class AtziluthDamageOptions(
     ignoreImmunity: Boolean = false,
     noDamageTicks: Int = 20,
     var clearAttribute: Boolean = false,
-    val attributes: MutableMap<String, Array<Double>> = hashMapOf(),
+    val attributes: MutableMap<String, DoubleArray> = hashMapOf(),
     val whiteListAttribute: MutableList<String> = mutableListOf()
 ) : VanillaDamageOptions(damageValue, preventKnockback, ignoreImmunity, noDamageTicks) {
 
@@ -46,15 +46,15 @@ class AtziluthDamageOptions(
                 options.clearAttribute = value
             }
 
-        fun setAttributes(map: Map<String, Array<Double>>) {
+        fun setAttributes(map: Map<String, DoubleArray>) {
             options.attributes.clear()
             options.attributes.putAll(map)
         }
 
-        fun addAttributes(map: Map<String, Array<Double>>) {
+        fun addAttributes(map: Map<String, DoubleArray>) {
             map.forEach { (name, values) ->
                 options.attributes.compute(name) { _, oldValue ->
-                    (oldValue ?: arrayOf()).append(values)
+                    (oldValue ?: doubleArrayOf()).append(values)
                 }
             }
         }

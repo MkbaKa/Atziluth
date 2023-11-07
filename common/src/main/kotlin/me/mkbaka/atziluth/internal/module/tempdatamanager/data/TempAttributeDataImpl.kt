@@ -8,7 +8,7 @@ import java.util.*
 open class TempAttributeDataImpl(
     override val owner: UUID,
     override val source: String,
-    override val attrs: MutableMap<String, Array<Double>>,
+    override val attrs: MutableMap<String, DoubleArray>,
     override var timeout: Long = -1
 ) : TempAttributeData {
 
@@ -22,11 +22,11 @@ open class TempAttributeDataImpl(
         this.timeout += target.timeout
     }
 
-    override fun mergeAttribute(map: Map<String, Array<Double>>) {
+    override fun mergeAttribute(map: Map<String, DoubleArray>) {
         callUpdate {
             map.forEach { (name, newArray) ->
                 this.attrs.compute(name) { _, oldArray ->
-                    (oldArray ?: arrayOf()).append(newArray)
+                    (oldArray ?: doubleArrayOf()).append(newArray)
                 }
             }
         }

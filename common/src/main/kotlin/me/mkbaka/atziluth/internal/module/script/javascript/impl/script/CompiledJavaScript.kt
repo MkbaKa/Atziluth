@@ -24,7 +24,7 @@ class CompiledJavaScript : AbstractCompiledJavaScript {
     }
 
     override fun invokeFunction(func: String, topLevels: Map<String, Any>, vararg args: Any): Any? {
-        return hooker.invoke(this, func, topLevels, args)
+        return hooker.invoke(this, func, topLevels, *args)
     }
 
 }

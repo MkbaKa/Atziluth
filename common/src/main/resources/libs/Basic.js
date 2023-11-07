@@ -2,8 +2,10 @@ const Bukkit = Packages.org.bukkit.Bukkit
 const ItemStack = Packages.org.bukkit.inventory.ItemStack
 const Material = Packages.org.bukkit.Material
 const EntityType = Packages.org.bukkit.entity.EntityType
-const Reflex = Packages.me.mkbaka.atziluth.internal.utils.ReflexUtil.INSTANCE
 
+const Atziluth = Packages.me.mkbaka.atziluth.Atziluth.INSTANCE
+const UUID = java.util.UUID
+const HashMap = java.util.HashMap
 const logger = Bukkit.getLogger()
 
 /**
@@ -57,6 +59,26 @@ const listOf = function () {
 }
 
 /**
+ * 将js数组转换为double[]
+ * @returns double[]
+ */
+const toDoubleArray = function (jsArray) {
+    return Java.to(jsArray, "double[]")
+}
+
+/**
+ * 将多个参数塞进java数组
+ * @returns double[]
+ */
+const newArray = function () {
+    const array = []
+    for (let i in arguments) {
+        array[i] = arguments[i]
+    }
+    return Java.to(array, "double[]")
+}
+
+/**
  * 获取随机值
  * @param min 最小数值
  * @param max 最大数值
@@ -69,28 +91,29 @@ const random = function (min, max) {
 }
 
 /**
- * 计算概率
+ * 计算概率 数值会自动 除以100
+ * 用于较大的大数字
  * @param number 概率值
  * @returns {boolean}
  */
 const evalChance = function (number) {
-    const chance = number > 1.0 ? number / 100 : number
-    return Math.random() <= chance
+    return Math.random() <= number / 100
 }
 
 /**
- * 初始化全局变量
- * 省掉this关键字 且支持所有函数内直接调用 不必再挨个传参
- * 如果你不知道该函数有什么作用
- * 请不要 调用 或 修改 甚至是 删除
+ * 计算怪率 数值不会 除以100
+ * 用于已知的小数
+ * @param number
+ * @returns {boolean}
  */
-function initGlobalVariables() {
-    globalVariables = this.args
-    if (globalVariables !== undefined) {
-        Adapter = globalVariables["Attr"]
-        if (Adapter !== undefined) Attr = Adapter.inst
-        handle = globalVariables["handle"]
-        attacker = globalVariables["attacker"]
-        entity = globalVariables["entity"]
-    }
+const chance = function (number) {
+    return Math.random() <= number
+}
+
+/**
+ * 随机一段UUID
+ * @returns java.util.UUID
+ */
+const randomUUID = function () {
+    return UUID.randomUUID()
 }
