@@ -13,7 +13,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import taboolib.common.platform.function.submitAsync
 
-abstract class AttributePluginHooker<BeforeUpdateEvent : Event, AfterUpdateEvent: Event> : AttributeListener<EntityDamageByEntityEvent, BeforeUpdateEvent, AfterUpdateEvent>() {
+abstract class AttributePluginHooker<BeforeUpdateEvent : Event, AfterUpdateEvent : Event> : AttributeListener<EntityDamageByEntityEvent, BeforeUpdateEvent, AfterUpdateEvent>() {
 
     init {
         this.runtimeTask = submitAsync(period = 20) {

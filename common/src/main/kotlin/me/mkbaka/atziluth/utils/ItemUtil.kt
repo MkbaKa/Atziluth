@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.library.xseries.XMaterial
+import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
 import taboolib.platform.util.*
 
@@ -72,7 +73,7 @@ object ItemUtil {
      * 物品是否包含指定lore
      * 若指定描述为空则判断是否拥有lore
      * @param [item] 物品
-     * @param [lore] 传说
+     * @param [lore] lore
      * @return [Boolean]
      */
     fun hasLore(item: ItemStack, lore: String? = null): Boolean {
@@ -91,12 +92,23 @@ object ItemUtil {
     /**
      * 获取物品名
      * 若物品没有自定义名称 且 player 不为空 则根据其使用的语言 获取 I18N 类型名
-     * @param [item] 项
-     * @param [player] 球员
+     * @param [item] 物品
+     * @param [player] 玩家
      * @return [String]
      */
     fun getName(item: ItemStack, player: Player? = null): String {
         return item.getName(player)
+    }
+
+    /**
+     * 判断物品有没有特定NBT key
+     * @param [item] 物品
+     * @param [nbtKey] key
+     * @return [Boolean]
+     */
+    fun hasNBT(item: ItemStack, nbtKey: String): Boolean {
+        val itemTag = item.getItemTag()
+        return if (nbtKey.contains(".")) itemTag.getDeep(nbtKey) != null else itemTag.containsKey(nbtKey)
     }
 
 }

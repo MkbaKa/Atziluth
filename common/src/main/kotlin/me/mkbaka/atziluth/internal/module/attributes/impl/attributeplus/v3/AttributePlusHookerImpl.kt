@@ -22,7 +22,7 @@ class AttributePlusHookerImpl : AttributePluginHooker<AttrUpdateAttributeEvent.B
         val entity = event.attributeData.sourceEntity
         attrs.forEach { attr ->
             if (attr.skipFilter || entity.getAttrValue(attr.attributeName) > 0.0) {
-                attr.run(event.attributeData.sourceEntity, attr)
+                attr.run(entity, attr)
             }
         }
     }
@@ -31,7 +31,7 @@ class AttributePlusHookerImpl : AttributePluginHooker<AttrUpdateAttributeEvent.B
         val entity = event.attributeData.sourceEntity
         attrs.forEach { attr ->
             if (attr.skipFilter || entity.getAttrValue(attr.attributeName) > 0.0) {
-                attr.run(event.attributeData.sourceEntity, attr)
+                attr.run(entity, attr)
             }
         }
     }

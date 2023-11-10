@@ -74,3 +74,4 @@ const doAttributeDamage = function (attacker, entity, attrs, whiteListAttrs, isC
         builder.isClear = isClear
     })).doDamage()
 }
+

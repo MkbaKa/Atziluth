@@ -40,18 +40,20 @@ const setDamage = function (value) {
  * @param entity 实体
  * @param source 属性源
  * @param attrs 属性列表 Map<String, Array<Double>>
+ * @param merge 若同源已存在是否堆叠属性值 否则将替换
  */
-const addAttributes = function (entity, source, attrs) {
-    addTempAttribute(entity, newTempAttributeData(entity.uniqueId, source, attrs, function (data) {}))
+const addAttributes = function (entity, source, attrs, merge) {
+    addTempAttribute(entity, newTempAttributeData(entity.uniqueId, source, attrs, function (data) {}), merge)
 }
 
 /**
  * 增加属性
  * @param entity 实体
  * @param tempAttributeData 属性数据
+ * @param merge 若同源已存在是否堆叠属性值 否则将替换
  */
-const addTempAttribute = function (entity, tempAttributeData) {
-    AttributeAPI.addAttribute(entity, tempAttributeData)
+const addTempAttribute = function (entity, tempAttributeData, merge) {
+    AttributeAPI.addAttribute(entity, tempAttributeData, merge)
 }
 
 /**

@@ -44,3 +44,7 @@ const getName = function (item) {
 const getItemName = function (item, target) {
     return ItemUtil.getName(item, target)
 }
+
+const hasNBT = function (item, nbtKey) {
+    return ItemUtil.hasNBT(item, nbtKey)
+}

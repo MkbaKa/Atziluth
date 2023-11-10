@@ -8,7 +8,7 @@ import io.lumine.xikage.mythicmobs.skills.conditions.IEntityCondition
 import io.lumine.xikage.mythicmobs.skills.conditions.ILocationCondition
 
 abstract class CustomCondition(
-    mlc: MythicLineConfig
+    val mlc: MythicLineConfig
 ) : SkillCondition(mlc.line), IEntityCondition, ILocationCondition {
 
     override fun check(ae: AbstractEntity): Boolean {
@@ -17,6 +17,14 @@ abstract class CustomCondition(
 
     override fun check(al: AbstractLocation): Boolean {
         return true
+    }
+
+    fun parseAllEntries(): Map<String, Any> {
+        val map = hashMapOf<String, Any>()
+        mlc.entrySet().forEach { entry ->
+            map[entry.key] = entry.value
+        }
+        return map
     }
 
 }

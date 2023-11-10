@@ -19,7 +19,7 @@ class AttributeDamageMechanic(cm: io.lumine.mythic.core.skills.mechanics.CustomM
     private val basicDamageValue = mlc.getPlaceholderString(arrayOf("damage", "d", "damageValue", "v", "value"), "1.0")
     private val preventKnockback = mlc.getPlaceholderString(arrayOf("preventKnockback", "pkb", "pk"), "false")
     private val ignoreImmunity = mlc.getPlaceholderString(arrayOf("ignoreImmunity", "im", "pi", "ii"), "false")
-    private val noDamageTicks = mlc.getPlaceholderString(arrayOf("noDamageTicks", "ndt"), "-1")
+    private val noDamageTicks = mlc.getPlaceholderString(arrayOf("noDamageTicks", "ndt"), "20")
     private val isClear = mlc.getPlaceholderString(arrayOf("clear", "c", "isClear"), "false")
 
     /**

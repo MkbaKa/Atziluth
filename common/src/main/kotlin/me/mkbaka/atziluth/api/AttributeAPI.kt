@@ -8,6 +8,7 @@ import java.util.*
 
 object AttributeAPI {
 
+    private val tempAttributeDataManager by lazy { Atziluth.tempAttributeDataManager }
     private val dataManager by lazy { Atziluth.attributeHooker.attributeDataManager }
 
     /**
@@ -34,16 +35,16 @@ object AttributeAPI {
      * 增加临时属性
      * @param [tempAttributeData] 临时属性数据
      */
-    fun UUID.addAttribute(tempAttributeData: TempAttributeData) {
-        dataManager.addAttribute(this, tempAttributeData)
+    fun UUID.addAttribute(tempAttributeData: TempAttributeData, stack: Boolean = false) {
+        tempAttributeDataManager.addAttribute(this, tempAttributeData, stack)
     }
 
     /**
      * 增加临时属性
      * @param [tempAttributeData] 临时属性数据
      */
-    fun LivingEntity.addAttribute(tempAttributeData: TempAttributeData) {
-        dataManager.addAttribute(this, tempAttributeData)
+    fun LivingEntity.addAttribute(tempAttributeData: TempAttributeData, stack: Boolean = false) {
+        tempAttributeDataManager.addAttribute(this, tempAttributeData, stack)
     }
 
     /**
@@ -51,7 +52,7 @@ object AttributeAPI {
      * @param [source] 临时属性数据源
      */
     fun UUID.takeAttribute(source: String) {
-        dataManager.takeAttribute(this, source)
+        tempAttributeDataManager.takeAttribute(this, source)
     }
     
     /**
@@ -59,7 +60,7 @@ object AttributeAPI {
      * @param [source] 临时属性数据源
      */
     fun LivingEntity.takeAttribute(source: String) {
-        dataManager.takeAttribute(this, source)
+        tempAttributeDataManager.takeAttribute(this, source)
     }
 
 }

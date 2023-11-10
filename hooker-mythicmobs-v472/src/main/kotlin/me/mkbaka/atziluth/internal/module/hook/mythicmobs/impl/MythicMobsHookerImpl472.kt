@@ -22,6 +22,9 @@ class MythicMobsHookerImpl472 : MythicMobsHookerImpl4() {
             register("entity.attr", Placeholder.entity { ae, args ->
                 return@entity handlePlaceholder(ae.bukkitEntity, args)
             })
+            register("trigger.attr", Placeholder.meta { meta, args ->
+                return@meta handlePlaceholder(meta.trigger.bukkitEntity as LivingEntity, args)
+            })
         }
     }
 

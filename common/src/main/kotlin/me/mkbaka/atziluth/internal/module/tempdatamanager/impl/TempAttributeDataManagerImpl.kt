@@ -1,6 +1,7 @@
 package me.mkbaka.atziluth.internal.module.tempdatamanager.impl
 
 import me.mkbaka.atziluth.Atziluth
+import me.mkbaka.atziluth.internal.configuration.ConfigurationManager
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeDataManager
 import org.bukkit.entity.LivingEntity
@@ -47,8 +48,10 @@ object TempAttributeDataManagerImpl : TempAttributeDataManager {
 
     @Awake(LifeCycle.ENABLE)
     fun enable() {
-        task = submitAsync(period = 5) {
+        task = submitAsync(period = ConfigurationManager.tempDataChecker) {
+            if (tempAttributeData.isEmpty()) return@submitAsync
             tempAttributeData.forEach { (uuid, map) ->
+                if (map.isEmpty()) return@submitAsync
                 map.forEach { (source, data) ->
                     if (data.isTimeout) {
                         attributeDataManager.takeAttribute(uuid, source)

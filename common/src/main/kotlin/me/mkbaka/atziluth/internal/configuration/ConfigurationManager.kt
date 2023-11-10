@@ -22,12 +22,16 @@ object ConfigurationManager {
     // tempData 超时时间 (m)
     var tempDataTimeout: Int = 60 * 30
 
+    // tempAttribute 检测间隔 (tick)
+    var tempAttributeChecker = 20
+
     @Awake(LifeCycle.ACTIVE)
     fun active() {
         config.onReload {
             this.runtimeResetPeriod = config.getInt("Settings.runtimeResetPeriod", 60)
             this.tempDataChecker = config.getLong("TempData.taskPeriod", 30) * 60 * 20
             this.tempDataTimeout = config.getInt("TempData.timeout", 30) * 60 * 1000
+            this.tempAttributeChecker = config.getInt("TempData.attributeChecker", 20)
         }
         reload()
     }
