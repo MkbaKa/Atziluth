@@ -9,12 +9,24 @@ import taboolib.common.platform.function.console
 import taboolib.common5.cint
 import taboolib.module.lang.sendLang
 
+/**
+ * 其他插件兼容管理
+ */
 object HookerManager {
 
+    /**
+     * MythicMobs 各大版本兼容
+     */
     lateinit var mythicMobsHooker: AbstractMythicMobsHooker
 
+    /**
+     * PlaceholderAPI 兼容
+     */
     lateinit var placeholderAPIHooker: PlaceholderAPIHooker
 
+    /**
+     * 初始化插件兼容
+     */
     fun init() {
         initMythicMobsHooker()
         initPlaceholderAPIHooker()
@@ -37,6 +49,7 @@ object HookerManager {
         val packageName = "me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl"
 
         kotlin.runCatching {
+            // 真死妈啊 三天两头改他那个傻逼包名
             mythicMobsHooker = when (version[0]) {
                 // 4.x
                 '4' -> {
@@ -48,11 +61,13 @@ object HookerManager {
                 }
                 // 5.x
                 '5' -> {
-                    when {
-                        // 5.4.x
-                        subVersion >= 4 -> Class.forName("$packageName.MythicMobsHookerImpl544")
-                        else -> null
-                    }
+//                    when {
+//                        // 5.4.x
+//                        subVersion >= 4 -> Class.forName("$packageName.MythicMobsHookerImpl544")
+//                        else -> null
+//                    }
+                    // 先用着544看看有没有问题
+                    Class.forName("$packageName.MythicMobsHookerImpl544")
                 }
                 else -> null
             }?.newInstance() as? AbstractMythicMobsHooker ?: error("未支持的 MythicMobs 版本.")

@@ -3,6 +3,9 @@ package me.mkbaka.atziluth.internal.module.tempdatamanager
 import me.mkbaka.atziluth.internal.module.tempdatamanager.data.TempAttributeDataImpl
 import java.util.*
 
+/**
+ * 临时属性数据
+ */
 interface TempAttributeData {
 
     /**

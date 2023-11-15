@@ -28,21 +28,36 @@ object TempDataManagerImpl : TempDataManager {
         return tempDatas[uuid]
     }
 
+    /**
+     * 实体死亡时清除缓存
+     */
     @SubscribeEvent
     fun death(e: EntityDeathEvent) {
         tempDatas.remove(e.entity.uniqueId)
     }
 
+    /**
+     * 玩家退出时存储当前时间
+     */
     @SubscribeEvent
     fun quit(e: PlayerQuitEvent) {
         tempDatas[e.player.uniqueId]?.saveData(quitKey, System.currentTimeMillis())
     }
 
+    /**
+     * 玩家进入时初始化数据
+     */
     @SubscribeEvent
     fun join(e: PlayerJoinEvent) {
-        tempDatas[e.player.uniqueId] = EntityData(e.player.uniqueId, true)
+        tempDatas.computeIfAbsent(e.player.uniqueId) {
+            EntityData(e.player.uniqueId, isPlayer = true)
+        }
     }
 
+    /**
+     * 当玩家离线时间超过配置内的时间时
+     * 清除缓存
+     */
     @Awake(LifeCycle.ENABLE)
     fun enable() {
         task = submitAsync(period = ConfigurationManager.tempDataChecker) {

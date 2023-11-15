@@ -17,3 +17,12 @@ const createListener = function (source) {
 const unregister = function (source) {
     ListenerManager.unregister(source)
 }
+
+/**
+ * 监听 org.bukkit.event 下的所有事件
+ * @param filter 过滤器
+ * @param func 回调函数
+ */
+const registerAllListener = function (filter, func) {
+    ListenerManager.registerAllListener(filter, func)
+}

@@ -20,6 +20,9 @@ import taboolib.library.reflex.Reflex.Companion.invokeConstructor
 
 class MythicMobsHookerImpl544 : AbstractMythicMobsHooker() {
 
+    override val instance: MythicBukkit
+        get() = MythicBukkit.inst()
+
     override val reloadEvent: Class<MythicReloadedEvent>
         get() = MythicReloadedEvent::class.java
 

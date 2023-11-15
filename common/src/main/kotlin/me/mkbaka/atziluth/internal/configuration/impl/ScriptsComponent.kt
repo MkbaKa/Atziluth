@@ -32,7 +32,7 @@ object ScriptsComponent : AbstractConfigComponent(8) {
         folder.executeSubFiles { file ->
             val script = AbstractScriptFactory.compile(file) ?: return@executeSubFiles
             scripts[file.path.substringAfter("${folder.name}${File.separator}")] = script.apply {
-                if (isFunction("onLoad")) invokeFunction("onLoad")
+                invoke(this, "onLoad")
             }
         }
     }
@@ -40,15 +40,24 @@ object ScriptsComponent : AbstractConfigComponent(8) {
     @Awake(LifeCycle.ENABLE)
     fun enable() {
         scripts.forEach { (path, script) ->
-            if (script.isFunction("onEnable")) script.invokeFunction("onEnable")
+            invoke(script, "onEnable")
         }
     }
 
     @Awake(LifeCycle.DISABLE)
     fun disable() {
         scripts.forEach { (path, script) ->
-            if (script.isFunction("onDisable")) script.invokeFunction("onDisable")
+            invoke(script, "onDisable")
         }
     }
 
+    fun invoke(script: Script, func: String, args: Map<String, Any> = emptyMap()) {
+        if (script.isFunction(func)) {
+            try {
+                script.invokeFunction(func, args)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

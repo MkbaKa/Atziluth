@@ -1,6 +1,7 @@
 package me.mkbaka.atziluth.utils
 
 import org.bukkit.event.Event
+import org.reflections.Reflections
 import taboolib.library.reflex.Reflex.Companion.invokeMethod
 import taboolib.platform.BukkitEvent
 import java.lang.reflect.Method
@@ -83,6 +84,10 @@ object ClassUtil {
 
         val classLoader = (Thread.currentThread().contextClassLoader as URLClassLoader)
         classLoader.invokeMethod<Unit>("addURL", url)
+    }
+
+    fun getAllClasses(packageName: String): MutableSet<Class<*>> {
+        return Reflections(packageName).getSubTypesOf(Any::class.java)
     }
 
 }

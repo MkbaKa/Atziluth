@@ -12,7 +12,9 @@ object AttributeAPI {
     private val dataManager by lazy { Atziluth.attributeHooker.attributeDataManager }
 
     /**
-     * 获取属性值
+     * 在最小与最大值中随机一个数值返回
+     * 若不存在最大值/最大值与最小值相等
+     * 则返回最小值
      * @param [name] 属性名
      * @param [type] 数值类型
      * @return [Double]
@@ -22,13 +24,52 @@ object AttributeAPI {
     }
 
     /**
-     * 获取属性值
+     * 在最小与最大值中随机一个数值返回
+     * 若不存在最大值/最大值与最小值相等
+     * 则返回最小值
      * @param [name] 属性名
      * @param [type] 数值类型
      * @return [Double]
      */
     fun LivingEntity.getAttrValue(name: String, type: AttributeValueType = AttributeValueType.RANDOM): Double {
         return dataManager.getAttributeValue(this, name, type)
+    }
+
+
+    /**
+     * 获取属性最小值
+     * @param [name] 属性名
+     * @return [Double]
+     */
+    fun UUID.getMinValue(name: String): Double {
+        return dataManager.getAttributeValue(this, name, AttributeValueType.MIN)
+    }
+
+    /**
+     * 获取属性最小值
+     * @param [name] 属性名
+     * @return [Double]
+     */
+    fun LivingEntity.getMinValue(name: String): Double {
+        return dataManager.getAttributeValue(this, name, AttributeValueType.MIN)
+    }
+
+    /**
+     * 获取属性最大值
+     * @param [name] 属性名
+     * @return [Double]
+     */
+    fun UUID.getMaxValue(name: String): Double {
+        return dataManager.getAttributeValue(this, name, AttributeValueType.MAX)
+    }
+
+    /**
+     * 获取属性最大值
+     * @param [name] 属性名
+     * @return [Double]
+     */
+    fun LivingEntity.getMaxValue(name: String): Double {
+        return dataManager.getAttributeValue(this, name, AttributeValueType.MAX)
     }
 
     /**

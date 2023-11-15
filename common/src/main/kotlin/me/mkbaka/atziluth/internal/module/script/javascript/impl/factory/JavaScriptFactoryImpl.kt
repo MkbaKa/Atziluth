@@ -25,7 +25,7 @@ object JavaScriptFactoryImpl : AbstractScriptFactory() {
 
     override fun compileScript(file: File): Script {
         return compiledScripts.computeIfAbsent(file.hashCode()) {
-            CompiledJavaScript(file.reader()).apply { this.scriptEngine.eval(file.reader()) }
+            file.reader().use { CompiledJavaScript(it) }
         }
     }
 

@@ -1,5 +1,6 @@
 package me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl
 
+import io.lumine.xikage.mythicmobs.MythicMobs
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicConditionLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
@@ -16,6 +17,9 @@ import taboolib.common.platform.function.registerBukkitListener
 import taboolib.library.reflex.Reflex.Companion.invokeConstructor
 
 abstract class MythicMobsHookerImpl4 : AbstractMythicMobsHooker() {
+
+    override val instance: MythicMobs
+        get() = MythicMobs.inst()
 
     override val reloadEvent: Class<MythicReloadedEvent>
         get() = MythicReloadedEvent::class.java

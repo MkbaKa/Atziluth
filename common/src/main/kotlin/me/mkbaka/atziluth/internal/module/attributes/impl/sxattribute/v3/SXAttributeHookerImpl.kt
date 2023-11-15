@@ -27,7 +27,7 @@ class SXAttributeHookerImpl : AttributePluginHooker<SXLoadAttributeEvent, SXLoad
         val entity = event.entity
         attrs.forEach { attr ->
             if (attr.skipFilter || entity.getAttrValue(attr.attributeName) > 0.0) {
-                attr.run(entity, attr)
+                attr.run(entity)
             }
         }
     }
@@ -38,6 +38,10 @@ class SXAttributeHookerImpl : AttributePluginHooker<SXLoadAttributeEvent, SXLoad
 
     override fun registerOtherAttribute(name: String, combatPower: Double, placeholder: String) {
         SubAttribute.getAttributes().add(buildOtherAttribute(name, placeholder))
+    }
+
+    override fun getAllAttributes(whiteListAttribute: List<String>): Collection<String> {
+        return SubAttribute.getAttributes().map { it.name }
     }
 
     override fun reload() {

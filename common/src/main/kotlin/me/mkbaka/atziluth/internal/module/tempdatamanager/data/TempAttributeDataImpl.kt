@@ -3,6 +3,7 @@ package me.mkbaka.atziluth.internal.module.tempdatamanager.data
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.utils.AttributeUtil.append
+import me.mkbaka.atziluth.utils.AttributeUtil.getOrDef
 import java.util.*
 
 open class TempAttributeDataImpl(
@@ -34,7 +35,7 @@ open class TempAttributeDataImpl(
 
     override fun formatAttributes(): List<String> {
         return this.attrs.map { entry ->
-            if (entry.value.isNotEmpty()) "${entry.key}: ${entry.value.getOrNull(0) ?: 0.0} - ${entry.value.getOrNull(1) ?: 0.0}" else ""
+            if (entry.value.isNotEmpty()) "${entry.key}: ${entry.value.getOrDef(0, 0.0)} - ${entry.value.getOrDef(1, 0.0)}" else ""
         }
     }
 

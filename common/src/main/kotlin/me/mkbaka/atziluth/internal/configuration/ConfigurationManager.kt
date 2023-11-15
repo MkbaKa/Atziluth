@@ -10,11 +10,11 @@ object ConfigurationManager {
     @Config("config.yml")
     lateinit var config: ConfigFile
 
-    @Config("script.yml")
-    lateinit var script: ConfigFile
-
     // runtime 属性计时器重置间隔 (s)
     var runtimeResetPeriod: Int = 60
+
+    // 清除属性时的基础白名单
+    val clearAttributeWhiteList = ArrayList<String>()
 
     // tempData 检测间隔 (tick)
     var tempDataChecker: Long = 60 * 30 * 20
@@ -28,6 +28,8 @@ object ConfigurationManager {
     @Awake(LifeCycle.ACTIVE)
     fun active() {
         config.onReload {
+            clearAttributeWhiteList.clear()
+            clearAttributeWhiteList.addAll(config.getStringList("Settings.clearAttributeWhiteList"))
             this.runtimeResetPeriod = config.getInt("Settings.runtimeResetPeriod", 60)
             this.tempDataChecker = config.getLong("TempData.taskPeriod", 30) * 60 * 20
             this.tempDataTimeout = config.getInt("TempData.timeout", 30) * 60 * 1000

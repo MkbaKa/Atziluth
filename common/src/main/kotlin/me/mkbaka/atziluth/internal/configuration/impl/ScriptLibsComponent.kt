@@ -18,7 +18,7 @@ object ScriptLibsComponent : AbstractConfigComponent(7) {
     override val folder: File
         get() = newFolder(getDataFolder(), "libs", create = false)
 
-    @Config
+    @Config("script.yml")
     lateinit var script: ConfigFile
 
     val staticClasses = ConcurrentHashMap<String, Any>()

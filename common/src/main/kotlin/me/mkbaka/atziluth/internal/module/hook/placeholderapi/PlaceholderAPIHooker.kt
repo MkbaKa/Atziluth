@@ -5,10 +5,14 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.utils.enumOf
 import org.bukkit.entity.Player
 
 class PlaceholderAPIHooker {
 
+    /**
+     * Atziluth 本体注册的 PAPI 扩展
+     */
     val expansion by lazy {
         object : PlaceholderExpansion() {
             override fun getIdentifier(): String {
@@ -35,17 +39,29 @@ class PlaceholderAPIHooker {
                     attr.attributeName == str || attr.placeholder == str
                 } ?: return "无法根据 $str 获取属性值."
 
-                val valueType = AttributeValueType.of(args.getOrNull(1) ?: "RANDOM") ?: AttributeValueType.RANDOM
+                val valueType = enumOf<AttributeValueType>(args.getOrNull(1) ?: "RANDOM") ?: AttributeValueType.RANDOM
                 return player.getAttrValue(attr.attributeName, valueType).toString()
             }
         }
 
     }
 
+    /**
+     * 转换字符串中的 PAPI 变量
+     * @param [player] 玩家
+     * @param [str] 字符串
+     * @return [String]
+     */
     fun parse(player: Player, str: String): String {
         return PlaceholderAPI.setPlaceholders(player, str)
     }
 
+    /**
+     * 转换字符串列表中的 PAPI 变量
+     * @param [player] 玩家
+     * @param [strs] 字符串列表
+     * @return [Collection<String>]
+     */
     fun parse(player: Player, strs: Collection<String>): Collection<String> {
         return strs.map { str -> parse(player, str) }
     }

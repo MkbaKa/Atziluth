@@ -7,14 +7,29 @@ import org.bukkit.entity.Player
 import taboolib.common.platform.function.console
 import taboolib.module.lang.sendLang
 
+/**
+ * js注册用的PAPI扩展
+ */
 class ProxyExpansion(val identifier: String) {
 
+    /**
+     * 变量作者
+     */
     var author = "Atziluth:Script:$identifier"
 
+    /**
+     * 版本号
+     */
     var version = "1.0.0"
 
+    /**
+     * 通过 在线的玩家 转换变量
+     */
     var onRequest: (Player, String) -> Any = { _, _ -> "" }
 
+    /**
+     * 通过 离线玩家 转换变量
+     */
     var onRequestOfflinePlayer: (OfflinePlayer, String) -> Any = { _, _ -> ""}
 
     fun setAuthor(author: String): ProxyExpansion {

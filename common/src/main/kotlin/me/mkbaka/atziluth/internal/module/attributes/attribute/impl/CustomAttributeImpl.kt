@@ -2,6 +2,7 @@ package me.mkbaka.atziluth.internal.module.attributes.attribute.impl
 
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttributeType
+import me.mkbaka.atziluth.internal.module.fightdata.FightData
 import org.bukkit.entity.LivingEntity
 
 class CustomAttributeImpl(
@@ -20,10 +21,10 @@ class CustomAttributeImpl(
 
     override var skipFilter: Boolean = false
 
-    override var onLoad: (CustomAttribute) -> Unit = {}
+    override var onLoad: () -> Unit = {}
 
-    override var callback: (LivingEntity, LivingEntity, CustomAttribute, Map<String, Any>) -> Unit = { _, _, _, _ -> }
+    override var callback: (FightData, Map<String, Any>) -> Unit = { _, _ -> }
 
-    override var run: (LivingEntity, CustomAttribute) -> Unit = { _, _ -> }
+    override var run: (LivingEntity) -> Unit = { _ -> }
 
 }

@@ -4,6 +4,7 @@ import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
 import me.mkbaka.atziluth.internal.module.attributes.AttributePluginHooker
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
 import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
+import org.serverct.ersha.AttributePlus
 import org.serverct.ersha.api.event.AttrUpdateAttributeEvent
 import org.serverct.ersha.script.AttrScriptUtils
 
@@ -22,7 +23,7 @@ class AttributePlusHookerImpl : AttributePluginHooker<AttrUpdateAttributeEvent.B
         val entity = event.attributeData.sourceEntity
         attrs.forEach { attr ->
             if (attr.skipFilter || entity.getAttrValue(attr.attributeName) > 0.0) {
-                attr.run(entity, attr)
+                attr.run(entity)
             }
         }
     }
@@ -31,13 +32,17 @@ class AttributePlusHookerImpl : AttributePluginHooker<AttrUpdateAttributeEvent.B
         val entity = event.attributeData.sourceEntity
         attrs.forEach { attr ->
             if (attr.skipFilter || entity.getAttrValue(attr.attributeName) > 0.0) {
-                attr.run(entity, attr)
+                attr.run(entity)
             }
         }
     }
 
     override fun registerOtherAttribute(name: String, combatPower: Double, placeholder: String) {
         AttrScriptUtils.registerOtherAttribute(name, combatPower, placeholder)
+    }
+
+    override fun getAllAttributes(whiteListAttribute: List<String>): Collection<String> {
+        return AttributePlus.attributeManager.defaultKey.values
     }
 
     override fun reload() {

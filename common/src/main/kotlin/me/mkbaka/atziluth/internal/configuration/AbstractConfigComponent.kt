@@ -23,21 +23,46 @@ abstract class AbstractConfigComponent(priority: Int) {
         components[priority] = this
     }
 
+    /**
+     * 是否生成文件
+     */
     abstract val release: Boolean
 
+    /**
+     * 所属文件夹
+     */
     abstract val folder: File
 
+    /**
+     * 重载
+     */
     abstract fun reload()
 
+    /**
+     * 默认的配置文件列表
+     */
     open val defaultConfigs: List<String>
         get() = emptyList()
 
     companion object {
 
-        val components = PriorityMap<AbstractConfigComponent>()
+        /**
+         * 所有已注册的配置组件
+         */
+        private val components = PriorityMap<AbstractConfigComponent>()
 
+        /**
+         * 重载所有配置
+         */
         fun reloadAll() {
             AtziluthReloadEvent(ReloadStatus.CONFIG).call()
+        }
+
+        /**
+         * 重载指定优先级的配置
+         */
+        fun reload(index: Int) {
+            components[index]?.reload()
         }
 
         @SubscribeEvent

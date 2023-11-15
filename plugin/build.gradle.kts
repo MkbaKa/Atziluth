@@ -15,7 +15,8 @@ tasks {
 
         // taboolib
         relocate("taboolib", "me.mkbaka.atziluth.libs.taboolib")
-
+        // reflections
+        relocate("org.reflections", "me.mkbaka.atziluth.libs.reflections")
 
         destinationDirectory.set(File("E:\\Servers\\1.20.1\\plugins"))
     }

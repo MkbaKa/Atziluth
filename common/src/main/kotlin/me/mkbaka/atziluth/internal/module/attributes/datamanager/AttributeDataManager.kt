@@ -4,6 +4,9 @@ import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import org.bukkit.entity.LivingEntity
 import java.util.*
 
+/**
+ * 属性值操作
+ */
 interface AttributeDataManager<D> {
 
     /**

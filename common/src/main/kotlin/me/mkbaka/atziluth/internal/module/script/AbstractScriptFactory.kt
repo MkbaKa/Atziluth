@@ -13,12 +13,24 @@ abstract class AbstractScriptFactory : AbstractConfigComponent(1) {
         this.suffixes.forEach { suffix -> suffixFactories.computeIfAbsent(suffix) { this } }
     }
 
+    /**
+     * 编译字符串时判断的前缀
+     */
     abstract val prefixes: Array<String>
 
+    /**
+     * 编译文件时判断的后缀
+     */
     abstract val suffixes: Array<String>
 
+    /**
+     * 编译字符串
+     */
     abstract fun compileScript(script: String): Script
 
+    /**
+     * 编译文件
+     */
     abstract fun compileScript(file: File): Script
 
     override val folder: File
