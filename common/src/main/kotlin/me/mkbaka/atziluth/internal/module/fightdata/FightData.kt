@@ -1,6 +1,7 @@
 package me.mkbaka.atziluth.internal.module.fightdata
 
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
+import me.mkbaka.atziluth.internal.module.tempdatamanager.data.EntityData
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import java.util.*
@@ -29,6 +30,11 @@ interface FightData {
      * 存储战斗过程中的属性数据
      */
     val attributeData: MutableMap<UUID, MutableMap<String, DoubleArray>>
+
+    /**
+     * 仅此次处理中可用的临时数据
+     */
+    val tempData: MutableMap<UUID, EntityData>
 
     /**
      * 伤害事件

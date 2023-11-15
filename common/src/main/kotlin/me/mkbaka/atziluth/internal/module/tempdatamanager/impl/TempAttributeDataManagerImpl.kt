@@ -89,7 +89,7 @@ object TempAttributeDataManagerImpl : TempAttributeDataManager {
             if (tempAttributeData.isEmpty()) return@submitAsync
             tempAttributeData.forEach { (uuid, map) ->
                 // 能省一点是一点
-                if (map.isEmpty()) return@submitAsync
+                if (map.isEmpty()) return@forEach
                 map.forEach { (source, data) ->
                     // 若临时属性已超时
                     // 则清除被寄生属性插件内的属性并清除缓存

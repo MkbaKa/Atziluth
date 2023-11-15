@@ -7,6 +7,7 @@ import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttributeType
 import me.mkbaka.atziluth.internal.module.fightdata.FightData
+import me.mkbaka.atziluth.internal.module.tempdatamanager.data.EntityData
 import me.mkbaka.atziluth.utils.AttributeUtil.getOrDef
 import me.mkbaka.atziluth.utils.AttributeUtil.mapBy
 import me.mkbaka.atziluth.utils.EventUtil.getAttackCooldown
@@ -29,6 +30,7 @@ class FightDataImpl : FightData {
             it[attacker.uniqueId] = mutableMapOf()
             it[entity.uniqueId] = mutableMapOf()
         }
+        this.tempData = mutableMapOf()
         this.damageValue = event.finalDamage
         this.force = event.getAttackCooldown()
         this.isCancelled = false
@@ -44,6 +46,7 @@ class FightDataImpl : FightData {
             it[attacker.uniqueId] = mutableMapOf()
             it[entity.uniqueId] = mutableMapOf()
         }
+        this.tempData = mutableMapOf()
         this.damageValue = 1.0
         this.force = 0.0
         this.isCancelled = false
@@ -60,6 +63,8 @@ class FightDataImpl : FightData {
 
     override val attributeData: MutableMap<UUID, MutableMap<String, DoubleArray>>
 
+    override val tempData: MutableMap<UUID, EntityData>
+
     override var damageValue: Double
 
     override val force: Double
@@ -72,6 +77,37 @@ class FightDataImpl : FightData {
      */
     fun isProjectileDamage(): Boolean {
         return event.isProjectileDamage()
+    }
+
+    /**
+     * 存储数据
+     * 仅此次处理中可用
+     * @param [uuid] 数据归属者的uuid
+     * @param [key] key
+     * @param [value] value
+     */
+    fun saveData(uuid: UUID, key: String, value: Any) {
+        this.tempData.getOrPut(uuid) { EntityData(uuid) }.saveData(key, value)
+    }
+
+    /**
+     * 获取数据
+     * @param [uuid] 数据归属者的uuid
+     * @param [key] key
+     * @return [Any?]
+     */
+    fun getData(uuid: UUID, key: String): Any? {
+        return this.tempData[uuid]?.getData(key)
+    }
+
+    /**
+     * 获取此次攻击的蓄力进度
+     * 0 ~ 1
+     * 仅对玩家生效
+     * @return [Double]
+     */
+    fun getFore(): Double {
+        return this.force
     }
 
     /**
