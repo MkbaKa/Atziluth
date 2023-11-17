@@ -37,7 +37,6 @@ object ScriptsComponent : AbstractConfigComponent(8) {
         }
     }
 
-    @Awake(LifeCycle.ENABLE)
     fun enable() {
         scripts.forEach { (path, script) ->
             invoke(script, "onEnable")

@@ -3,6 +3,7 @@ package me.mkbaka.atziluth.internal.module.fightdata
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
 import me.mkbaka.atziluth.internal.module.tempdatamanager.data.EntityData
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import java.util.*
 
@@ -20,6 +21,12 @@ interface FightData {
      * 受击者
      */
     val entity: LivingEntity
+
+    /**
+     * 触发此次伤害的抛射物
+     * 不存在时为null
+     */
+    var projectile: Projectile?
 
     /**
      * 要触发的属性列表

@@ -5,7 +5,6 @@ import me.mkbaka.atziluth.api.AttributeAPI.addAttribute
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
 import me.mkbaka.atziluth.api.AttributeAPI.takeAttribute
 import me.mkbaka.atziluth.internal.configuration.ConfigurationManager
-import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.internal.module.tempdatamanager.data.TempAttributeDataImpl
@@ -38,18 +37,14 @@ open class AtziluthDamageMeta(
     open fun clearAttribute(callback: () -> Unit) {
         val source = UUID.randomUUID().toString()
 
-        val attrs = filterValues(AttributeManagerComponent.attributes.keys).also {
-            if (Atziluth.isInitAttributeHooker()) {
-                it.putAll(filterValues(Atziluth.attributeHooker.getAllAttributes(options.whiteListAttribute)))
-            }
-        }
+        val attrs = filterValues(Atziluth.attributeHooker.getAllAttributes(options.whiteListAttribute))
 
         damager.addAttribute(TempAttributeDataImpl(damager.uniqueId, source, attrs))
         callback()
         damager.takeAttribute(source)
     }
 
-    private fun filterValues(keys: Collection<String>): HashMap<String, DoubleArray> {
+    protected fun filterValues(keys: Collection<String>): HashMap<String, DoubleArray> {
         val map = hashMapOf<String, DoubleArray>()
         keys.forEach { key ->
             if (key in options.whiteListAttribute || key in ConfigurationManager.clearAttributeWhiteList) return@forEach

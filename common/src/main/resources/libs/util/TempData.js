@@ -11,7 +11,7 @@ const TempDataManager = Packages.me.mkbaka.atziluth.Atziluth.INSTANCE.tempDataMa
  * @param uuid
  * @returns me.mkbaka.atziluth.internal.module.tempdatamanager.data.EntityData?
  */
-const getData = function (uuid) {
+const getTempData = function (uuid) {
     return TempDataManager.getData(uuid)
 }
 
@@ -33,7 +33,7 @@ const getEntityData = function (entity) {
  * @returns Any?
  */
 const getDataFromKey = function (uuid, key) {
-    const data = getData(uuid)
+    const data = getTempData(uuid)
     if (data == null) return null
     return data.getData(key)
 }
@@ -46,7 +46,7 @@ const getDataFromKey = function (uuid, key) {
  * @returns Any?
  */
 const getEntityDataFromKey = function (entity, key) {
-    const data = getData(entity.uniqueId)
+    const data = getTempData(entity.uniqueId)
     if (data == null) return null
     return data.getData(key)
 }
@@ -59,7 +59,7 @@ const getEntityDataFromKey = function (entity, key) {
  * @returns boolean
  */
 const hasData = function (uuid, key) {
-    const data = getData(uuid)
+    const data = getTempData(uuid)
     if (data == null) return false
     return data.hasData(key)
 }
@@ -72,7 +72,7 @@ const hasData = function (uuid, key) {
  * @returns boolean
  */
 const entityHasData = function (entity, key) {
-    const data = getData(player.uniqueId)
+    const data = getTempData(player.uniqueId)
     if (data == null) return false
     return data.hasData(key)
 }

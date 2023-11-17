@@ -6,14 +6,17 @@ import me.mkbaka.atziluth.api.AttributeAPI.getMinValue
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttributeType
+import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
 import me.mkbaka.atziluth.internal.module.fightdata.FightData
 import me.mkbaka.atziluth.internal.module.tempdatamanager.data.EntityData
+import me.mkbaka.atziluth.utils.AttributeUtil.append
 import me.mkbaka.atziluth.utils.AttributeUtil.getOrDef
 import me.mkbaka.atziluth.utils.AttributeUtil.mapBy
 import me.mkbaka.atziluth.utils.EventUtil.getAttackCooldown
 import me.mkbaka.atziluth.utils.EventUtil.getAttacker
 import me.mkbaka.atziluth.utils.EventUtil.isProjectileDamage
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import taboolib.common.util.random
@@ -23,14 +26,15 @@ class FightDataImpl : FightData {
 
     constructor(event: EntityDamageByEntityEvent) {
         this.event = event
-        this.attacker = event.getAttacker()
+        this.attacker = event.getAttacker()!!
         this.entity = event.entity as LivingEntity
+        this.projectile = if (event.isProjectileDamage()) event.damager as Projectile else null
         this.attributes = mutableListOf()
-        this.attributeData = mutableMapOf<UUID, MutableMap<String, DoubleArray>>().also {
-            it[attacker.uniqueId] = mutableMapOf()
-            it[entity.uniqueId] = mutableMapOf()
+        this.attributeData = hashMapOf<UUID, MutableMap<String, DoubleArray>>().also {
+            it[attacker.uniqueId] = hashMapOf()
+            it[entity.uniqueId] = hashMapOf()
         }
-        this.tempData = mutableMapOf()
+        this.tempData = hashMapOf()
         this.damageValue = event.finalDamage
         this.force = event.getAttackCooldown()
         this.isCancelled = false
@@ -41,14 +45,15 @@ class FightDataImpl : FightData {
         this.event = EntityDamageByEntityEvent(attacker, entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 0.0)
         this.attacker = attacker
         this.entity = entity
+        this.projectile = if (attacker is Projectile) attacker else null
         this.attributes = mutableListOf()
-        this.attributeData = mutableMapOf<UUID, MutableMap<String, DoubleArray>>().also {
-            it[attacker.uniqueId] = mutableMapOf()
-            it[entity.uniqueId] = mutableMapOf()
+        this.attributeData = hashMapOf<UUID, MutableMap<String, DoubleArray>>().also {
+            it[attacker.uniqueId] = hashMapOf()
+            it[entity.uniqueId] = hashMapOf()
         }
-        this.tempData = mutableMapOf()
+        this.tempData = hashMapOf()
         this.damageValue = 1.0
-        this.force = 0.0
+        this.force = 1.0
         this.isCancelled = false
         initAttributes()
     }
@@ -58,6 +63,8 @@ class FightDataImpl : FightData {
     override val attacker: LivingEntity
 
     override val entity: LivingEntity
+
+    override var projectile: Projectile?
 
     override val attributes: MutableList<CustomAttribute>
 
@@ -150,7 +157,19 @@ class FightDataImpl : FightData {
      */
     fun addAttribute(entity: LivingEntity, name: String, value: Double) {
         attributeData[entity.uniqueId]?.compute(name) { _, oldValue ->
-            (oldValue ?: doubleArrayOf()).mapBy { it + value }
+            (oldValue ?: doubleArrayOf(0.0, 0.0)).mapBy { it + value }
+        }
+    }
+
+    /**
+     * 操作当前事件触发时的属性值
+     * @param [entity] 实体
+     * @param [name] 属性名
+     * @param [value] 属性值
+     */
+    fun addAttribute(entity: LivingEntity, name: String, values: DoubleArray) {
+        attributeData[entity.uniqueId]?.compute(name) { _, oldValue ->
+            (oldValue ?: doubleArrayOf(0.0, 0.0)).append(values)
         }
     }
 
@@ -162,8 +181,18 @@ class FightDataImpl : FightData {
      */
     fun setAttribute(entity: LivingEntity, name: String, value: Double) {
         attributeData[entity.uniqueId]?.compute(name) { _, oldValue ->
-            (oldValue ?: doubleArrayOf()).mapBy { value }
+            (oldValue ?: doubleArrayOf(0.0, 0.0)).mapBy { value }
         }
+    }
+
+    /**
+     * 操作当前事件触发时的属性值
+     * @param [entity] 实体
+     * @param [name] 属性名
+     * @param [value] 属性值
+     */
+    fun setAttribute(entity: LivingEntity, name: String, values: DoubleArray) {
+        attributeData[entity.uniqueId]?.set(name, values)
     }
 
     /**
@@ -174,7 +203,37 @@ class FightDataImpl : FightData {
      */
     fun takeAttribute(entity: LivingEntity, name: String, value: Double) {
         attributeData[entity.uniqueId]?.compute(name) { _, oldValue ->
-            (oldValue ?: doubleArrayOf()).mapBy { it - value }
+            (oldValue ?: doubleArrayOf(0.0, 0.0)).mapBy { it - value }
+        }
+    }
+
+    /**
+     * 操作当前事件触发时的属性值
+     * @param [entity] 实体
+     * @param [name] 属性名
+     * @param [value] 属性值
+     */
+    fun takeAttribute(entity: LivingEntity, name: String, values: DoubleArray) {
+        if (attributeData.containsKey(entity.uniqueId) && attributeData[entity.uniqueId]!!.containsKey(name)) {
+            attributeData[entity.uniqueId]!!.compute(name) { _, oldValue ->
+                oldValue!!.apply { forEachIndexed { index, _ -> oldValue[index] -= values.getOrDef(index, 0.0) } }
+            }
+        }
+    }
+
+    /**
+     * 获取战斗数据中的属性值
+     * @param [entity] 实体
+     * @param [name] 属性名
+     * @param [valueType] 属性值类型
+     * @return [Double]
+     */
+    fun getAttribute(entity: LivingEntity, name: String, valueType: AttributeValueType = AttributeValueType.RANDOM): Double {
+        val values = attributeData[entity.uniqueId]?.get(name) ?: return 0.0
+        return when (valueType) {
+            AttributeValueType.MIN -> values.getOrDef(0, 0.0)
+            AttributeValueType.MAX -> values.getOrDef(1, 0.0)
+            AttributeValueType.RANDOM -> random(values.getOrDef(0, 0.0), values.getOrDef(1, 0.0))
         }
     }
 
@@ -184,12 +243,14 @@ class FightDataImpl : FightData {
     fun handle() {
         attributes.forEach { attr ->
             val values = when (attr.attributeType) {
-                CustomAttributeType.DEFENSE -> attributeData[entity.uniqueId]!![attr.attributeName]
-                CustomAttributeType.ATTACK -> attributeData[attacker.uniqueId]!![attr.attributeName]
+                CustomAttributeType.DEFENSE -> getAttributeValues(entity, attr.attributeName)
+                CustomAttributeType.ATTACK -> getAttributeValues(attacker, attr.attributeName)
                 else -> null
-            } ?: return@forEach
+            }
 
-            callAttribute(attr, values)
+            if (values == null && !attr.skipFilter) return@forEach
+
+            callAttribute(attr, values ?: doubleArrayOf(0.0, 0.0))
 
             if (isCancelled) return
         }
@@ -198,23 +259,28 @@ class FightDataImpl : FightData {
     /**
      * 尝试运行指定属性
      * 仅对 Atziluth 属性生效
+     * * values内的值 会 附加给该属性
+     * * 触发后删除
      * @param [attrName] 属性名
      * @param [values] 数值
      */
     fun callAttribute(attrName: String, values: DoubleArray) {
         AttributeManagerComponent.attributes[attrName]?.let { attr ->
+            addAttribute(entity, attr.attributeName, values)
             callAttribute(attr, values)
+            takeAttribute(entity, attr.attributeName, values)
         }
     }
 
     /**
      * 尝试运行指定属性
      * 仅对 Atziluth 属性生效
+     * * values内的值 不会 附加给该属性
      * @param [attr] 属性实例
      * @param [values] 数值
      */
     fun callAttribute(attr: CustomAttribute, values: DoubleArray) {
-        if (attr.skipFilter || values.getOrDef(1, 0.0) > 0.0) {
+        if (attr.skipFilter || values.getOrDef(1, values.getOrDef(0, 0.0)) > 0.0) {
             attr.callback(this, hashMapOf(
                 "event" to event,
                 "force" to event.getAttackCooldown())
@@ -226,10 +292,10 @@ class FightDataImpl : FightData {
      * 获取属性值
      * @param [entity] 实体
      * @param [name] 属性名
-     * @return [DoubleArray]
+     * @return [DoubleArray?]
      */
-    fun getAttributeValues(entity: LivingEntity, name: String): DoubleArray {
-        return attributeData[entity.uniqueId]?.get(name) ?: doubleArrayOf(0.0, 0.0)
+    fun getAttributeValues(entity: LivingEntity, name: String): DoubleArray? {
+        return attributeData[entity.uniqueId]?.get(name)
     }
 
     /**
@@ -240,27 +306,8 @@ class FightDataImpl : FightData {
      */
     fun getRandomValue(entity: LivingEntity, name: String): Double {
         val values = attributeData[entity.uniqueId]?.get(name) ?: return 0.0
-        return random(values[0], values[1])
-    }
-
-    /**
-     * 获取最小值
-     * @param [entity] 实体
-     * @param [name] 属性名
-     * @return [Double]
-     */
-    fun getMinValue(entity: LivingEntity, name: String): Double {
-        return attributeData[entity.uniqueId]?.get(name)?.getOrDef(0, 0.0) ?: return 0.0
-    }
-
-    /**
-     * 获取最大值
-     * @param [entity] 实体
-     * @param [name] 属性名
-     * @return [Double]
-     */
-    fun getMaxValue(entity: LivingEntity, name: String): Double {
-        return attributeData[entity.uniqueId]?.get(name)?.getOrDef(1, 0.0) ?: return 0.0
+        val min = values.getOrDef(0, 0.0)
+        return random(min, values.getOrDef(1, min))
     }
 
     /**

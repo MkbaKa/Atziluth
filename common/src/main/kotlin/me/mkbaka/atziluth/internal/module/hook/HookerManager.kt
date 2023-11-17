@@ -1,7 +1,6 @@
 package me.mkbaka.atziluth.internal.module.hook
 
 import me.mkbaka.atziluth.Atziluth
-import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.module.hook.placeholderapi.PlaceholderAPIHooker
 import org.bukkit.Bukkit
@@ -33,10 +32,9 @@ object HookerManager {
     }
 
     private fun initPlaceholderAPIHooker() {
-        if (!AttributeManagerComponent.release) return
         val plugin = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") ?: return
         placeholderAPIHooker = PlaceholderAPIHooker().apply {
-            this.expansion.register()
+            if (Atziluth.isInitAttributeHooker()) expansion.register()
         }
         console().sendLang("find-plugin", Atziluth.prefix, plugin.name, plugin.description.version)
     }

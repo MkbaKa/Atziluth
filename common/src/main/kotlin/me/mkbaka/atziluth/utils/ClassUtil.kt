@@ -2,17 +2,23 @@ package me.mkbaka.atziluth.utils
 
 import org.bukkit.event.Event
 import org.reflections.Reflections
-import taboolib.library.reflex.Reflex.Companion.invokeMethod
 import taboolib.platform.BukkitEvent
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
-import java.net.JarURLConnection
-import java.net.URLClassLoader
 import java.util.concurrent.ConcurrentHashMap
 
 object ClassUtil {
 
     private val classes = ConcurrentHashMap<String, Class<*>>()
+
+    fun checkClass(clazz: String): Boolean {
+        return try {
+            Class.forName(clazz)
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
+    }
 
     val Class<*>.instance: Any?
         get() = kotlin.runCatching {getDeclaredField("INSTANCE").get(null) }.getOrNull()
@@ -71,19 +77,6 @@ object ClassUtil {
 
     fun staticClass(className: String): Any {
         return className.getClass().static()
-    }
-
-    fun loadResourceJar(path: String) {
-        val resourceJar = this::class.java.classLoader.getResource(path)!!
-
-        val url = try {
-            resourceJar.toURI()
-        } catch (ex: IllegalArgumentException) {
-            (resourceJar.openConnection() as JarURLConnection).jarFileURL.toURI()
-        }.toURL()
-
-        val classLoader = (Thread.currentThread().contextClassLoader as URLClassLoader)
-        classLoader.invokeMethod<Unit>("addURL", url)
     }
 
     fun getAllClasses(packageName: String): MutableSet<Class<*>> {

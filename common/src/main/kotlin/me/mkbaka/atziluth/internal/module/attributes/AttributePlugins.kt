@@ -12,7 +12,7 @@ enum class AttributePlugins(val pluginName: String, val hookerClass: String, val
 
         fun find(): AttributePlugins? {
             return values().firstOrNull { attributePlugin ->
-                val plugin = Bukkit.getPluginManager().getPlugin(attributePlugin.pluginName)!!
+                val plugin = Bukkit.getPluginManager().getPlugin(attributePlugin.pluginName) ?: return@firstOrNull false
                 attributePlugin.check(plugin, plugin.description.version)
             }
         }

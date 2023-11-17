@@ -52,12 +52,9 @@ abstract class AbstractNashornHooker {
     companion object {
 
         val hooker by lazy {
-            try {
-                Class.forName("jdk.nashorn.api.scripting.NashornScriptEngineFactory")
-                LegacyNashornHooker
-            } catch (_: ClassNotFoundException) {
-                ClassUtil.loadResourceJar("nashorn-core-15.4.jar")
-                NashornHooker
+            when {
+                ClassUtil.checkClass("jdk.nashorn.api.scripting.NashornScriptEngineFactory") -> LegacyNashornHooker
+                else -> NashornHooker
             }
         }
 

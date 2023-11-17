@@ -27,7 +27,7 @@ open class TempAttributeDataImpl(
         callUpdate {
             map.forEach { (name, newArray) ->
                 this.attrs.compute(name) { _, oldArray ->
-                    (oldArray ?: doubleArrayOf()).append(newArray)
+                    (oldArray ?: doubleArrayOf(0.0, 0.0)).append(newArray)
                 }
             }
         }

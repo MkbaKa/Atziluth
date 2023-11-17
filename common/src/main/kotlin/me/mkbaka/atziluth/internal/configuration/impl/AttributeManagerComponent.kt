@@ -47,7 +47,8 @@ object AttributeManagerComponent : AbstractConfigComponent(10) {
                 attr.attributeName,
                 index,
                 attr.combatPower,
-                attr.placeholder
+                attr.placeholder,
+                attr.attributeType.name
             )
         }
 
@@ -56,10 +57,11 @@ object AttributeManagerComponent : AbstractConfigComponent(10) {
     fun registerAttribute(attribute: CustomAttribute) {
         if (!release) error("属性模块未启用, 无法注册属性.")
         attributes.computeIfAbsent(attribute.attributeName) {
-            priorityMap[attribute.priority] = attribute
-            Atziluth.attributeHooker.registerOtherAttribute(it, attribute.combatPower, attribute.placeholder)
-            attribute.onLoad()
-            attribute
+            attribute.apply {
+                priorityMap[priority] = this
+                Atziluth.attributeHooker.registerOtherAttribute(attributeName, combatPower, placeholder)
+                onLoad()
+            }
         }
     }
 

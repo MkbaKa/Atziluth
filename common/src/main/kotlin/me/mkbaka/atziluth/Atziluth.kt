@@ -1,5 +1,6 @@
 package me.mkbaka.atziluth
 
+import me.mkbaka.atziluth.internal.configuration.impl.ScriptsComponent
 import me.mkbaka.atziluth.internal.module.attributes.AttributePluginHooker
 import me.mkbaka.atziluth.internal.module.attributes.AttributePlugins
 import me.mkbaka.atziluth.internal.module.hook.HookerManager
@@ -51,6 +52,8 @@ object Atziluth : Plugin() {
 
     override fun onEnable() {
         console().sendLang("plugin-enable", prefix, Bukkit.getBukkitVersion())
+
+        // 获取可支持的属性插件
         AttributePlugins.find()?.let { plugin ->
             attributeHooker =
                 Class.forName("me.mkbaka.atziluth.internal.module.attributes.impl.${plugin.hookerClass}").instance as AttributePluginHooker<*, *>
@@ -58,12 +61,23 @@ object Atziluth : Plugin() {
             console().sendLang("find-plugin", prefix, plugin.pluginName, bukkitPlugin.description.version)
         }
 
+        // 初始化 lateinit 字段
+        Initializes.initFields(this::class.java)
+
+        // 初始化其他插件兼容
         HookerManager.init()
 
-        Initializes.initFields(this::class.java)
+        // 调用脚本内的onEnable方法
+        // @Awake(LifeCycle.ENALBE) 会在插件onEnable之前执行
+        // 这时脚本内访问的诸多变量均未初始化 所以手动触发onEnable
+        ScriptsComponent.enable()
     }
 
     // 无法理解为什么不让在其它类中直接获取 isInitialized
-    fun isInitAttributeHooker() = this::attributeHooker.isInitialized
+    fun isInitAttributeHooker() = kotlin.runCatching { this::attributeHooker.isInitialized }.getOrNull() ?: false
 
+    // 给js用
+    fun getInitializedAttributeHooker(): AttributePluginHooker<*, *>? {
+        return if (isInitAttributeHooker()) attributeHooker else null
+    }
 }

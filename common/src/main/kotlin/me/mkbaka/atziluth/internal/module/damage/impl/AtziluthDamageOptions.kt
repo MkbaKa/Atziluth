@@ -54,7 +54,7 @@ class AtziluthDamageOptions(
         fun addAttributes(map: Map<String, DoubleArray>) {
             map.forEach { (name, values) ->
                 options.attributes.compute(name) { _, oldValue ->
-                    (oldValue ?: doubleArrayOf()).append(values)
+                    (oldValue ?: doubleArrayOf(0.0, 0.0)).append(values)
                 }
             }
         }
