@@ -1,9 +1,9 @@
 package me.mkbaka.atziluth.internal.module.attributes.impl.attributeplus.v3
 
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
+import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
 import me.mkbaka.atziluth.internal.module.attributes.AttributePluginHooker
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
 import org.serverct.ersha.AttributePlus
 import org.serverct.ersha.api.event.AttrUpdateAttributeEvent
 import org.serverct.ersha.script.AttrScriptUtils

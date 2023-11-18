@@ -2,8 +2,8 @@ package me.mkbaka.atziluth.internal.module.tempdatamanager.data
 
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
-import me.mkbaka.atziluth.utils.AttributeUtil.append
-import me.mkbaka.atziluth.utils.AttributeUtil.getOrDef
+import me.mkbaka.atziluth.utils.Util.append
+import me.mkbaka.atziluth.utils.Util.getOrDef
 import java.util.*
 
 open class TempAttributeDataImpl(

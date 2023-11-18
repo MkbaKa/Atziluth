@@ -5,7 +5,7 @@ import me.mkbaka.atziluth.api.AttributeAPI.addAttribute
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
 import me.mkbaka.atziluth.api.AttributeAPI.takeAttribute
 import me.mkbaka.atziluth.internal.configuration.ConfigurationManager
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.internal.module.tempdatamanager.data.TempAttributeDataImpl
 import org.bukkit.entity.LivingEntity

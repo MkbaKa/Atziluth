@@ -1,6 +1,6 @@
 package me.mkbaka.atziluth.internal.module.damage.impl
 
-import me.mkbaka.atziluth.utils.AttributeUtil.append
+import me.mkbaka.atziluth.utils.Util.append
 
 class AtziluthDamageOptions(
     damageValue: Double = 1.0,

@@ -1,5 +1,6 @@
 package me.mkbaka.atziluth
 
+import me.mkbaka.atziluth.api.AttributeAPI
 import me.mkbaka.atziluth.internal.configuration.impl.ScriptsComponent
 import me.mkbaka.atziluth.internal.module.attributes.AttributePluginHooker
 import me.mkbaka.atziluth.internal.module.attributes.AttributePlugins
@@ -35,6 +36,9 @@ object Atziluth : Plugin() {
     val number_pattern by lazy { Pattern.compile("(-*\\d+)((-)(-*\\d+))*") }
 
     val namespaces by lazy { listOf("Atziluth") }
+
+    @InitBy("me.mkbaka.atziluth.api.AttributeAPI")
+    lateinit var attributeAPI: AttributeAPI
 
     @InitBy("me.mkbaka.atziluth.internal.module.script.javascript.impl.factory.JavaScriptFactoryImpl")
     lateinit var javaScriptFactory: AbstractScriptFactory

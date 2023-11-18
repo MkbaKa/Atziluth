@@ -4,9 +4,11 @@ import me.clip.placeholderapi.PlaceholderAPI
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
+import me.mkbaka.atziluth.utils.Util.getOrDef
 import me.mkbaka.atziluth.utils.enumOf
 import org.bukkit.entity.Player
+import taboolib.common5.eqic
 
 class PlaceholderAPIHooker {
 
@@ -36,10 +38,10 @@ class PlaceholderAPIHooker {
                 val str = args.getOrNull(0) ?: return "格式错误."
 
                 val attr = AttributeManagerComponent.attributes.values.firstOrNull { attr ->
-                    attr.attributeName == str || attr.placeholder == str
-                } ?: return "无法根据 $str 获取属性值."
+                    attr.attributeName == str || attr.placeholder.eqic(str)
+                } ?: return "无法根据 $str 获取属性."
 
-                val valueType = enumOf<AttributeValueType>(args.getOrNull(1) ?: "RANDOM") ?: AttributeValueType.RANDOM
+                val valueType = enumOf<AttributeValueType>(args.getOrDef(1, "RANDOM"), def = AttributeValueType.RANDOM)
                 return player.getAttrValue(attr.attributeName, valueType).toString()
             }
         }

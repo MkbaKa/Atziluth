@@ -2,8 +2,8 @@ package me.mkbaka.atziluth.internal.module.attributes.impl.sxattribute.v3
 
 import github.saukiya.sxattribute.SXAttribute
 import github.saukiya.sxattribute.data.attribute.SXAttributeData
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
+import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.utils.EntityUtil.getLivingEntity
 import org.bukkit.entity.LivingEntity

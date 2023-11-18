@@ -6,9 +6,9 @@ import github.saukiya.sxattribute.data.eventdata.EventData
 import github.saukiya.sxattribute.event.SXLoadAttributeEvent
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
+import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
 import me.mkbaka.atziluth.internal.module.attributes.AttributePluginHooker
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
 import org.bukkit.entity.Player
 import taboolib.common5.eqic
 

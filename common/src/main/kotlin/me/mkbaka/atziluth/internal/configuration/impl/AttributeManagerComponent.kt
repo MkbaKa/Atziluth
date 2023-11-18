@@ -3,11 +3,13 @@ package me.mkbaka.atziluth.internal.configuration.impl
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.configuration.AbstractConfigComponent
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
+import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute.Companion.buildAttribute
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttributeType
 import me.mkbaka.atziluth.internal.module.script.AbstractScriptFactory
 import me.mkbaka.atziluth.utils.FileUtil.executeSubFiles
 import me.mkbaka.atziluth.utils.enumOf
 import me.mkbaka.atziluth.utils.map.PriorityMap
+import org.bukkit.Bukkit
 import taboolib.common.io.newFolder
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.getDataFolder
@@ -37,15 +39,20 @@ object AttributeManagerComponent : AbstractConfigComponent(10) {
         priorityMap.clear()
 
         folder.executeSubFiles { file ->
-            registerAttribute(buildAttribute(file))
+            try {
+                registerAttribute(buildAttribute(file))
+            } catch (e: Throwable) {
+                Bukkit.getConsoleSender().sendMessage("§4脚本加载时出现错误: §f${e.localizedMessage}")
+                e.printStackTrace()
+            }
         }
 
-        priorityMap.forEach { (index, attr) ->
+        priorityMap.forEach { (priority, attr) ->
             console().sendLang(
                 "register-attribute",
                 Atziluth.prefix,
                 attr.attributeName,
-                index,
+                priority,
                 attr.combatPower,
                 attr.placeholder,
                 attr.attributeType.name
@@ -58,11 +65,17 @@ object AttributeManagerComponent : AbstractConfigComponent(10) {
         if (!release) error("属性模块未启用, 无法注册属性.")
         attributes.computeIfAbsent(attribute.attributeName) {
             attribute.apply {
-                priorityMap[priority] = this
+                if (attributeType != CustomAttributeType.OTHER) priorityMap[this.priority] = this
                 Atziluth.attributeHooker.registerOtherAttribute(attributeName, combatPower, placeholder)
                 onLoad()
             }
         }
+    }
+
+    fun registerOtherAttribute(attributeName: String, combatPower: Double, placeholder: String) {
+        registerAttribute(buildAttribute(attributeName, CustomAttributeType.OTHER, placeholder) {
+            this.combatPower = combatPower
+        })
     }
 
     fun buildAttribute(file: File): CustomAttribute {
@@ -77,7 +90,7 @@ object AttributeManagerComponent : AbstractConfigComponent(10) {
         val placeholder =
             script.getTopLevel<String>("placeholder") ?: error("${file.path} | 无法获取到顶级变量 placeholder")
 
-        return CustomAttribute.buildAttribute(attributeName, attributeType, placeholder) {
+        return buildAttribute(attributeName, attributeType, placeholder) {
             this.isBefore = script.getTopLevel("isBefore", false)
             this.priority = script.getTopLevel("priority", -1)
             this.combatPower = script.getTopLevel("combatPower", 1.0)

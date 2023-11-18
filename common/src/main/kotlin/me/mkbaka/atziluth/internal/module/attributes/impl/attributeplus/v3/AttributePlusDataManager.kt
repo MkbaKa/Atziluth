@@ -1,7 +1,7 @@
 package me.mkbaka.atziluth.internal.module.attributes.impl.attributeplus.v3
 
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
+import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import org.bukkit.entity.LivingEntity
 import org.serverct.ersha.AttributePlus

@@ -5,8 +5,11 @@ import io.lumine.xikage.mythicmobs.io.MythicLineConfig
 import io.lumine.xikage.mythicmobs.skills.SkillMetadata
 import me.mkbaka.atziluth.internal.module.damage.impl.AtziluthDamageMeta
 import me.mkbaka.atziluth.internal.module.damage.impl.AtziluthDamageOptions
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.MythicAnnotations
 import me.mkbaka.atziluth.utils.EntityUtil.isAlive
+import me.mkbaka.atziluth.utils.EntityUtil.removeMetadataEZ
+import me.mkbaka.atziluth.utils.EntityUtil.setMetadataEZ
 import org.bukkit.entity.LivingEntity
 import taboolib.common5.cbool
 import taboolib.common5.cdouble
@@ -28,7 +31,11 @@ class AttributeDamageMechanic(mlc: MythicLineConfig) : CustomMechanic(mlc) {
         val caster = meta.caster.entity.bukkitEntity as? LivingEntity ?: return false
         val entity = ae.bukkitEntity as? LivingEntity ?: return false
 
+        if (caster.hasMetadata(AbstractMythicMobsHooker.attrDamage_metadata)) return false
+
         if (caster.isAlive && entity.isAlive) {
+            meta.caster.isUsingDamageSkill = true
+            caster.setMetadataEZ(AbstractMythicMobsHooker.attrDamage_metadata, true)
             AtziluthDamageMeta(caster, listOf(entity), AtziluthDamageOptions.new {
                 damageValue = this@AttributeDamageMechanic.basicDamageValue.get(meta).cdouble
                 preventKnockback = this@AttributeDamageMechanic.preventKnockback.get(meta).cbool
@@ -37,6 +44,8 @@ class AttributeDamageMechanic(mlc: MythicLineConfig) : CustomMechanic(mlc) {
                 isClear = this@AttributeDamageMechanic.isClear.get(meta).cbool
                 setAttributes(parseToAttribute(meta))
             }).doDamage()
+            caster.removeMetadataEZ(AbstractMythicMobsHooker.attrDamage_metadata)
+            meta.caster.isUsingDamageSkill = false
         }
 
         return true

@@ -2,7 +2,7 @@ package me.mkbaka.atziluth.internal.module.hook.mythicmobs
 
 import me.mkbaka.atziluth.Atziluth.prefix
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyEntityTargeter
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyLocationTargeter
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyScriptCondition
@@ -128,6 +128,8 @@ abstract class AbstractMythicMobsHooker {
     }
 
     companion object {
+
+        val attrDamage_metadata by lazy { "Atziluth:doing_damage" }
 
         /**
          * 脚本注册的技能

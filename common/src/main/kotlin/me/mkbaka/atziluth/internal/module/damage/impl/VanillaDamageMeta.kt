@@ -1,11 +1,14 @@
 package me.mkbaka.atziluth.internal.module.damage.impl
 
+import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.module.damage.DamageMeta
 import me.mkbaka.atziluth.internal.module.damage.DamageOptions
 import me.mkbaka.atziluth.utils.SchedulerUtil.callSync
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
+import org.bukkit.metadata.FixedMetadataValue
+import taboolib.platform.util.removeMeta
 import java.util.*
 
 open class VanillaDamageMeta(
@@ -15,6 +18,7 @@ open class VanillaDamageMeta(
 ) : DamageMeta {
 
     override fun doDamage() {
+        damager.setMetadata("Atziluth:Vanilla_Damaging", FixedMetadataValue(Atziluth.plugin, true))
         this.entities.forEach { entity ->
             if (this.options.ignoreImmunity) entity.noDamageTicks = 0
 
@@ -38,6 +42,7 @@ open class VanillaDamageMeta(
             }
 
         }
+        damager.removeMeta("Atziluth:Vanilla_Damaging")
     }
 
 }

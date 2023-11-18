@@ -1,7 +1,7 @@
 package me.mkbaka.atziluth.internal.module.attributes.impl.attributeplus.v2
 
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
+import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.utils.EntityUtil.getLivingEntity
 import org.bukkit.entity.LivingEntity

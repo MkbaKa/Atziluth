@@ -1,9 +1,9 @@
 package me.mkbaka.atziluth.internal.module.attributes.impl.attributeplus.v2
 
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
+import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
 import me.mkbaka.atziluth.internal.module.attributes.AttributePluginHooker
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
 import org.bukkit.entity.LivingEntity
 import org.serverct.ersha.jd.Main
 import org.serverct.ersha.jd.api.AttributeType

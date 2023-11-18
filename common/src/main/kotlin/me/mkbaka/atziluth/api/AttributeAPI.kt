@@ -1,7 +1,7 @@
 package me.mkbaka.atziluth.api
 
 import me.mkbaka.atziluth.Atziluth
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import org.bukkit.entity.LivingEntity
 import java.util.*

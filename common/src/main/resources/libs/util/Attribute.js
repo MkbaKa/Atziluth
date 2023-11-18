@@ -1,6 +1,6 @@
-const AttributeValueType = Packages.me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeValueType
+const AttributeValueType = Packages.me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 const AttributeAPI = Packages.me.mkbaka.atziluth.api.AttributeAPI.INSTANCE
-const AttributeHooker = Atziluth.getInitializedAttributeHooker()
+const AttributeManager = Packages.me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 const TempAttributeData = Packages.me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData.Companion
 
 /**
@@ -82,7 +82,7 @@ const getAttrValue = function (entity, attrName) {
  * @param placeholder 变量
  */
 const regOtherAttr = function (name, combatPower, placeholder) {
-    AttributeHooker.registerOtherAttribute(name, combatPower, placeholder)
+    AttributeManager.registerOtherAttribute(name, combatPower, placeholder)
 }
 
 /**

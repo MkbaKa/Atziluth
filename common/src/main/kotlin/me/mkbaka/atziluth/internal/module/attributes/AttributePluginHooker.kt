@@ -5,7 +5,6 @@ import me.mkbaka.atziluth.internal.configuration.ConfigurationManager
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttribute
 import me.mkbaka.atziluth.internal.module.attributes.attribute.CustomAttributeType
-import me.mkbaka.atziluth.internal.module.attributes.datamanager.AttributeDataManager
 import me.mkbaka.atziluth.internal.module.fightdata.impl.FightDataImpl
 import org.bukkit.Bukkit
 import org.bukkit.event.Event
@@ -58,7 +57,7 @@ abstract class AttributePluginHooker<BeforeUpdateEvent : Event, AfterUpdateEvent
         event.damage = FightDataImpl(event).also {
             it.attributes.addAll(attrs)
             it.handle()
-        }.damageValue
+        }.damageValue.coerceAtLeast(0.0)
     }
 
     override fun handlePost(event: EntityDamageByEntityEvent, attrs: Collection<CustomAttribute>) {
