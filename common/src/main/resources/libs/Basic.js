@@ -2,10 +2,12 @@ const Bukkit = Packages.org.bukkit.Bukkit
 const ItemStack = Packages.org.bukkit.inventory.ItemStack
 const Material = Packages.org.bukkit.Material
 const EntityType = Packages.org.bukkit.entity.EntityType
+const Location = Packages.org.bukkit.Location
 
 const Atziluth = Packages.me.mkbaka.atziluth.Atziluth.INSTANCE
 const UUID = java.util.UUID
 const HashMap = java.util.HashMap
+const HashSet = java.util.HashSet
 const logger = Bukkit.getLogger()
 
 /**

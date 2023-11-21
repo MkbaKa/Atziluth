@@ -46,6 +46,7 @@ abstract class AttributeListener<BeforeUpdateEvent : Event, AfterUpdateEvent : E
 
         // 伤害处理
         registerBukkitListener(EntityDamageByEntityEvent::class.java, EventPriority.HIGH) { event ->
+            // 如果正在使用DamageMeta 则不触发属性 防止递归
             if (event.damager.hasMetadata("Atziluth:Vanilla_Damaging")) return@registerBukkitListener
             // 防止攻击展示框之类奇奇怪怪的玩意时触发属性
             if (event.entity !is LivingEntity) return@registerBukkitListener

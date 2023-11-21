@@ -54,10 +54,12 @@ abstract class AttributePluginHooker<BeforeUpdateEvent : Event, AfterUpdateEvent
     abstract fun reload()
 
     override fun handlePre(event: EntityDamageByEntityEvent, attrs: Collection<CustomAttribute>) {
-        event.damage = FightDataImpl(event).also {
+        val fightData = FightDataImpl(event).also {
             it.attributes.addAll(attrs)
             it.handle()
-        }.damageValue.coerceAtLeast(0.0)
+        }
+        if (fightData.isCancelled) return
+        event.damage = fightData.damageValue.coerceAtLeast(0.0)
     }
 
     override fun handlePost(event: EntityDamageByEntityEvent, attrs: Collection<CustomAttribute>) {

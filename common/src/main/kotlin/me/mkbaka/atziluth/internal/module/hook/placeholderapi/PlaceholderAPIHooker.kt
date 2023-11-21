@@ -2,15 +2,25 @@ package me.mkbaka.atziluth.internal.module.hook.placeholderapi
 
 import me.clip.placeholderapi.PlaceholderAPI
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
+import me.mkbaka.atziluth.Atziluth
+import me.mkbaka.atziluth.Atziluth.prefix
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
+import me.mkbaka.atziluth.api.event.AtziluthReloadEvent
+import me.mkbaka.atziluth.api.event.ReloadStatus
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.utils.Util.getOrDef
 import me.mkbaka.atziluth.utils.enumOf
 import org.bukkit.entity.Player
+import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.console
 import taboolib.common5.eqic
+import taboolib.module.lang.sendLang
+import java.util.concurrent.ConcurrentHashMap
 
 class PlaceholderAPIHooker {
+
+    val placeholders = ConcurrentHashMap<String, PlaceholderExpansion>()
 
     /**
      * Atziluth 本体注册的 PAPI 扩展
@@ -66,6 +76,20 @@ class PlaceholderAPIHooker {
      */
     fun parse(player: Player, strs: Collection<String>): Collection<String> {
         return strs.map { str -> parse(player, str) }
+    }
+
+    companion object {
+
+        @SubscribeEvent
+        fun reload(e: AtziluthReloadEvent) {
+            if (e.status == ReloadStatus.PRE) {
+                Atziluth.hookerManager.placeholderAPIHooker.placeholders.forEach { (identifier, exp) ->
+                    exp.unregister()
+                    console().sendLang("unregister-expansion", prefix, identifier)
+                }
+            }
+        }
+
     }
 
 }

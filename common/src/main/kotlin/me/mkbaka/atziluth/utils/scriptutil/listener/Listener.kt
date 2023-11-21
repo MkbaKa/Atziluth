@@ -3,12 +3,12 @@ package me.mkbaka.atziluth.utils.scriptutil.listener
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.Atziluth.prefix
 import me.mkbaka.atziluth.utils.ClassUtil.toBukkitEvent
+import me.mkbaka.atziluth.utils.enumOf
 import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.plugin.Plugin
 import taboolib.common.platform.function.console
-import taboolib.common5.eqic
 import taboolib.module.lang.sendLang
 
 class Listener(
@@ -41,7 +41,7 @@ class Listener(
     }
 
     fun setPriority(priority: String): Listener {
-        this.eventPriority = EventPriority.values().firstOrNull { it.name.eqic(priority) } ?: error("错误的事件优先级 $priority")
+        this.eventPriority = enumOf<EventPriority>(priority) ?: error("错误的事件优先级 $priority")
         return this
     }
 

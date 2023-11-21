@@ -14,14 +14,14 @@ class ScriptCondition(
 
     override fun check(ae: AbstractEntity): Boolean {
         val entity = ae.bukkitEntity as? LivingEntity ?: return false
-        return script.castEntityCallback(ae, hashMapOf(
-            "entity" to entity
+        return script.castEntityCallback(entity, hashMapOf(
+            "abstractEntity" to ae
         ))
     }
 
     override fun check(al: AbstractLocation): Boolean {
-        return script.castLocationCallback(al, hashMapOf(
-            "location" to BukkitAdapter.adapt(al)
+        return script.castLocationCallback(BukkitAdapter.adapt(al), hashMapOf(
+            "abstractLocation" to al
         ))
     }
 

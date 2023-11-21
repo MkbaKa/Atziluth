@@ -14,6 +14,7 @@ class ScriptEntityTargeter(
 ) : CustomEntityTargeter(ct, mlc) {
 
     override fun getEntities(meta: SkillMetadata): HashSet<AbstractEntity> {
+        meta.caster.entity.bukkitEntity.type
         return script.castEntityCallback(hashMapOf(
             "meta" to meta
         )).map { BukkitAdapter.adapt(it) }.toHashSet()

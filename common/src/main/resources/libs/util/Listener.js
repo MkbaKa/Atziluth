@@ -1,5 +1,6 @@
 const Listener = Packages.me.mkbaka.atziluth.utils.scriptutil.listener.Listener
 const ListenerManager = Packages.me.mkbaka.atziluth.utils.scriptutil.listener.ListenerManager.INSTANCE
+const EventPriority = org.bukkit.event.EventPriority
 
 /**
  * 创建一个有源监听器
