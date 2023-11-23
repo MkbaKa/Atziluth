@@ -1,6 +1,7 @@
 package me.mkbaka.atziluth.internal.module.script.javascript
 
 import me.mkbaka.atziluth.internal.module.script.Script
+import me.mkbaka.atziluth.internal.module.script.javascript.AbstractNashornHooker.Companion.globalEngine
 import me.mkbaka.atziluth.internal.module.script.javascript.AbstractNashornHooker.Companion.hooker
 import java.io.Reader
 import javax.script.CompiledScript
@@ -10,8 +11,7 @@ import javax.script.ScriptEngine
 abstract class AbstractCompiledJavaScript : Script {
 
     constructor(string: String) {
-        this.scriptEngine = hooker.getScriptEngine()
-        loadLibs()
+        this.scriptEngine = globalEngine
         this.compiledScript = hooker.compile(scriptEngine, string)
         mirrorScriptObject()
     }

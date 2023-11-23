@@ -13,11 +13,29 @@ class CompiledJavaScript : AbstractCompiledJavaScript {
 
     override fun loadLibs() {
         val builder = StringBuilder()
-        ScriptLibsComponent.scriptLibFiles.forEach { file ->
-            builder.append("load(\"${file.path.replace("\\", "/")}\")\n")
+        ScriptLibsComponent.stringLibs.forEach { str ->
+            builder.append("$str\n")
         }
         this.scriptEngine.eval(builder.toString())
     }
+
+//    override fun loadLibs() {
+//        val start = System.currentTimeMillis()
+//        val builder = StringBuilder()
+//        ScriptLibsComponent.scriptLibFiles.forEach { file ->
+//            builder.append("load(\"${file.path.replace("\\", "/")}\")\n")
+//        }
+//        this.scriptEngine.eval(builder.toString())
+//        info("eval used ${System.currentTimeMillis() - start}")
+//    }
+
+//    override fun loadLibs() {
+//        val start = System.currentTimeMillis()
+//        ScriptLibsComponent.scriptLibFiles.forEach { file ->
+//            file.reader().use { this.scriptEngine.eval(it) }
+//        }
+//        info("eval used ${System.currentTimeMillis() - start}")
+//    }
 
     override fun evalScript(args: Map<String, Any>): Any? {
         return hooker.eval(super.compiledScript, args)

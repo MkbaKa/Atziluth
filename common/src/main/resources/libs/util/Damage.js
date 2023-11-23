@@ -49,6 +49,19 @@ const doAttrDamage = function (attacker, entity, options) {
  * 造成属性伤害
  * @param attacker 攻击方
  * @param entity 受击方
+ * @param damageValue 伤害值
+ */
+const doClearAttrDamage = function (attacker, entity, damageValue) {
+    new AtziluthDamageMeta(attacker, listOf(entity), AtziluthDamageOptions.new(function (builder) {
+        builder.isClear = true
+        builder.setDamageValue(damageValue)
+    })).doDamage()
+}
+
+/**
+ * 造成属性伤害
+ * @param attacker 攻击方
+ * @param entity 受击方
  * @param attrs 属性Map 格式为 Map<String, Array<Double>>
  * @param isClear 是否清除玩家身上的属性
  */

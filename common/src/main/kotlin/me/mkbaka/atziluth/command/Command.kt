@@ -7,9 +7,10 @@ import me.mkbaka.atziluth.internal.configuration.AbstractConfigComponent
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.configuration.impl.ScriptLibsComponent
 import me.mkbaka.atziluth.internal.configuration.impl.ScriptsComponent
-import me.mkbaka.atziluth.utils.enumOf
+import me.mkbaka.atziluth.utils.SchedulerUtil.callAsync
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.*
+import taboolib.common5.eqic
 import taboolib.expansion.createHelper
 import taboolib.module.lang.sendLang
 
@@ -22,14 +23,17 @@ object Command {
     }
 
     @CommandBody
+    val script = ScriptCommand
+
+    @CommandBody
     val reload = subCommand {
         dynamic("module") {
-            suggestion<ProxyCommandSender> { sender, context ->
-                listOf("attribute", "script", "all")
+            suggestionUncheck<ProxyCommandSender> { sender, context ->
+                ReloadType.values().map { it.name }
             }
 
             execute<ProxyCommandSender> { sender, context, argument ->
-                val type = enumOf<ReloadType>(context["module"]) ?: return@execute
+                val type = ReloadType.of(context["module"]) ?: ReloadType.ALL
                 callReload(sender, type)
             }
         }
@@ -39,37 +43,51 @@ object Command {
     }
 
     private fun callReload(sender: ProxyCommandSender, type: ReloadType) {
-        when (type) {
-            ReloadType.ATTRIBUTE -> {
-                // 清理编译缓存
-                AbstractConfigComponent.reload(1)
-                // 重载属性
-                AttributeManagerComponent.reload()
-                sender.sendLang("reload-attribute", prefix)
-            }
+        callAsync {
+            when (type) {
+                ReloadType.ATTRIBUTE -> {
+                    // 清理编译缓存
+                    AbstractConfigComponent.reload(1)
+                    // 重载属性
+                    AttributeManagerComponent.reload()
+                    sender.sendLang("reload-attribute", prefix)
+                }
 
-            ReloadType.SCRIPT -> {
-                // 清理编译缓存
-                AbstractConfigComponent.reload(1)
-                // 注销脚本注册的各种扩展
-                AtziluthReloadEvent(ReloadStatus.PRE).call()
-                // 重载脚本模块
-                ScriptLibsComponent.reload()
-                ScriptsComponent.reload()
-                sender.sendLang("reload-script", prefix)
-            }
+                ReloadType.SCRIPT -> {
+                    // 清理编译缓存
+                    AbstractConfigComponent.reload(1)
+                    // 注销脚本注册的各种扩展
+                    AtziluthReloadEvent(ReloadStatus.PRE).call()
+                    // 重载脚本模块
+                    ScriptLibsComponent.reload()
+                    ScriptsComponent.reload()
+                    sender.sendLang("reload-script", prefix)
+                }
 
-            else -> {
-                AtziluthReloadEvent(ReloadStatus.PRE).call()
-                AbstractConfigComponent.reloadAll()
-                AtziluthReloadEvent(ReloadStatus.POST).call()
-                sender.sendLang("reload-all", prefix)
+                else -> {
+                    AtziluthReloadEvent(ReloadStatus.PRE).call()
+                    AbstractConfigComponent.reloadAll()
+                    AtziluthReloadEvent(ReloadStatus.POST).call()
+                    sender.sendLang("reload-all", prefix)
+                }
             }
         }
     }
 
-    enum class ReloadType {
-        ATTRIBUTE, SCRIPT, ALL;
+    enum class ReloadType(val aliases: Array<String> = emptyArray()) {
+        ATTRIBUTE(arrayOf("attr", "attrs", "attribute")),
+        SCRIPT(arrayOf("sc", "script")),
+        ALL(arrayOf("all"));
+
+        companion object {
+
+            fun of(str: String): ReloadType? {
+                return ReloadType.values()
+                    .firstOrNull { type -> type.name.eqic(str) || type.aliases.any { it.eqic(str) } }
+            }
+
+        }
+
     }
 
 }

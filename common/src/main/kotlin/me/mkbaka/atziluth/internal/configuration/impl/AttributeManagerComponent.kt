@@ -42,7 +42,7 @@ object AttributeManagerComponent : AbstractConfigComponent(10) {
             try {
                 registerAttribute(buildAttribute(file))
             } catch (e: Throwable) {
-                Bukkit.getConsoleSender().sendMessage("§4脚本加载时出现错误: §f${e.localizedMessage}")
+                Bukkit.getConsoleSender().sendMessage("§4脚本加载时出现错误! §f${file.path}: ${e.localizedMessage}")
                 e.printStackTrace()
             }
         }
@@ -58,17 +58,15 @@ object AttributeManagerComponent : AbstractConfigComponent(10) {
                 attr.attributeType.name
             )
         }
-
     }
 
     fun registerAttribute(attribute: CustomAttribute) {
         if (!release) error("属性模块未启用, 无法注册属性.")
-        attributes.computeIfAbsent(attribute.attributeName) {
-            attribute.apply {
-                if (attributeType != CustomAttributeType.OTHER) priorityMap[this.priority] = this
-                Atziluth.attributeHooker.registerOtherAttribute(attributeName, combatPower, placeholder)
-                onLoad()
-            }
+        if (attributes.containsKey(attribute.attributeName)) error("${attribute.attributeName} 已被注册, 请尝试修改为其他名称.")
+        attributes[attribute.attributeName] = attribute.apply {
+            if (attributeType != CustomAttributeType.OTHER) priorityMap[this.priority] = this
+            Atziluth.attributeHooker.registerOtherAttribute(attributeName, combatPower, placeholder)
+            onLoad()
         }
     }
 

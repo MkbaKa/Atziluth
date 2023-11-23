@@ -1,5 +1,5 @@
 name: Atziluth
-main: me.mkbaka.atziluth.libs.taboolib.platform.BukkitPlugin
+main: mkbaka.atziluth.libs.taboolib.platform.BukkitPlugin
 version: ${version}
 
 authors:

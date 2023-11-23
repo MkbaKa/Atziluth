@@ -29,3 +29,9 @@ reload-all:
   - ' '
   - '{0} &f已重载&b所有&f模块.'
   - ' '
+
+undefined-script: "{0} &f未获取到文件路径为 &e{1} &f的脚本."
+undefined-function: "{0} &f脚本内未获取到名为 &e{1} &f的函数."
+
+script-executed: "{0} &f已执行脚本 &e{1} &f返回值为: &e{2}"
+undefined-script-type: "{0} &f无法根据脚本内容的前缀获取编译类型."

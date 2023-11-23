@@ -4,3 +4,5 @@
 
 "System": "java.lang.System"
 "ArrayList": "java.util.ArrayList"
+"PotionEffect": "org.bukkit.potion.PotionEffect"
+"PotionEffectType": "org.bukkit.potion.PotionEffectType"

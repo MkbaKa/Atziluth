@@ -35,3 +35,12 @@ const isLiving = function (entity) {
 const entityIsAlive = function (entity) {
     return EntityUtil.isAlive(entity)
 }
+
+/**
+ * 恢复实体血量
+ * @param entity 实体
+ * @param value 恢复值
+ */
+const heal = function (entity, value) {
+    entity.health = Math.min(entity.health + value, entity.maxHealth)
+}
