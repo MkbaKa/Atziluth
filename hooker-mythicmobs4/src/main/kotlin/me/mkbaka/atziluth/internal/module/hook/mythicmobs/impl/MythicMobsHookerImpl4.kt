@@ -5,7 +5,9 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicConditionLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicTargeterLoadEvent
-import io.lumine.xikage.mythicmobs.skills.*
+import io.lumine.xikage.mythicmobs.skills.SkillCondition
+import io.lumine.xikage.mythicmobs.skills.SkillMechanic
+import io.lumine.xikage.mythicmobs.skills.SkillTargeter
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.condition4x.ScriptCondition
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.mechanic4x.ScriptMechanic
@@ -15,14 +17,6 @@ import taboolib.common.platform.function.registerBukkitListener
 import taboolib.library.reflex.Reflex.Companion.invokeConstructor
 
 abstract class MythicMobsHookerImpl4 : AbstractMythicMobsHooker() {
-
-    init {
-        registerBukkitListener(TriggeredSkill::class.java) { event ->
-            if (event.data.cause == SkillTrigger.ATTACK && event.data.caster.isUsingDamageSkill) {
-                event.setCancelled()
-            }
-        }
-    }
 
     override val instance: MythicMobs
         get() = MythicMobs.inst()

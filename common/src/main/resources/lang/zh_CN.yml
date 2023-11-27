@@ -12,10 +12,10 @@ register-targeters: '{0} &f已注册目标选择器 &e{1}&f.'
 
 register-expansion: '{0} &f已&a注册 &fPlaceholderAPI 扩展 &e{1}&f.'
 unregister-expansion: '{0} &f已&c注销 &fPlaceholderAPI 扩展 &e{1}&f.'
-register-command: '{0} &f已&a注册 &f命令 &e{1}&f.'
-unregister-command: '{0} &f已&c注销 &f命令 &e{1}&f.'
-register-listener: '{0} &f已&a注册 &f监听器 &e{1} &f- &e{2}&f.'
-unregister-listener: '{0} &f已&c注销 &f监听器 &e{1} &f- &e{2}&f.'
+register-command: '{0} &f已&a注册&f命令 &e{1}&f.'
+unregister-command: '{0} &f已&c注销&f命令 &e{1}&f.'
+register-listener: '{0} &f已&a注册&f监听器 &e{1} &f- &e{2}&f.'
+unregister-listener: '{0} &f已&c注销&f监听器 &e{1} &f- &e{2}&f.'
 
 reload-attribute:
   - ' '

@@ -46,32 +46,29 @@ object HookerManager {
         val subVersion = version[2].cint
         val packageName = "me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl"
 
-        kotlin.runCatching {
-            // 真死妈啊 三天两头改他那个傻逼包名
-            mythicMobsHooker = when (version[0]) {
-                // 4.x
-                '4' -> {
-                    when {
-                        // 4.10+
-                        subVersion == 1 && version[3] != '.' -> Class.forName("$packageName.MythicMobsHookerImpl411")
-                        else -> Class.forName("$packageName.MythicMobsHookerImpl472")
-                    }
+        mythicMobsHooker = when (version[0]) {
+            // 4.x
+            '4' -> {
+                when {
+                    // 4.10+
+                    subVersion == 1 && version[3] != '.' -> Class.forName("$packageName.MythicMobsHookerImpl411")
+                    else -> Class.forName("$packageName.MythicMobsHookerImpl472")
                 }
-                // 5.x
-                '5' -> {
+            }
+            // 5.x
+            '5' -> {
 //                    when {
 //                        // 5.4.x
 //                        subVersion >= 4 -> Class.forName("$packageName.MythicMobsHookerImpl544")
 //                        else -> null
 //                    }
-                    // 先用着544看看有没有问题
-                    Class.forName("$packageName.MythicMobsHookerImpl544")
-                }
-                else -> null
-            }?.newInstance() as? AbstractMythicMobsHooker ?: error("未支持的 MythicMobs 版本.")
+                // 先用着544看看有没有问题
+                Class.forName("$packageName.MythicMobsHookerImpl544")
+            }
+            else -> null
+        }?.newInstance() as? AbstractMythicMobsHooker ?: error("未支持的 MythicMobs 版本.")
 
-            console().sendLang("find-plugin", Atziluth.prefix, plugin.name, version)
-        }
+        console().sendLang("find-plugin", Atziluth.prefix, plugin.name, version)
     }
 
 }

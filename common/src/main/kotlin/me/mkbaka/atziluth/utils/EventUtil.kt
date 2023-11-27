@@ -27,7 +27,8 @@ object EventUtil {
 
         val damager = this.damager as? LivingEntity ?: return 1.0
         return damager.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.value?.let { value ->
-            this.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE) / value
+            val force = this.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE) / value
+            if (force.isNaN()) 1.0 else force
         }?.format(2) ?: 1.0
     }
 
