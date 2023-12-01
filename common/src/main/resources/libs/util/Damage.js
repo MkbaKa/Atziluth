@@ -52,7 +52,7 @@ const doAttrDamage = function (attacker, entity, options) {
  * @param damageValue 伤害值
  */
 const doClearAttrDamage = function (attacker, entity, damageValue) {
-    new AtziluthDamageMeta(attacker, listOf(entity), AtziluthDamageOptions.new(function (builder) {
+    new AtziluthDamageMeta(attacker, listOf(entity), AtziluthDamageOptions.Companion.new(function (builder) {
         builder.isClear = true
         builder.setDamageValue(damageValue)
     })).doDamage()
@@ -66,7 +66,7 @@ const doClearAttrDamage = function (attacker, entity, damageValue) {
  * @param isClear 是否清除玩家身上的属性
  */
 const doAttDamage = function (attacker, entity, attrs, isClear) {
-    new AtziluthDamageMeta(attacker, listOf(entity), AtziluthDamageOptions.new(function (builder) {
+    new AtziluthDamageMeta(attacker, listOf(entity), AtziluthDamageOptions.Companion.new(function (builder) {
         builder.setAttributes(attrs)
         builder.isClear = isClear
     })).doDamage()
@@ -81,10 +81,9 @@ const doAttDamage = function (attacker, entity, attrs, isClear) {
  * @param isClear 是否清除玩家身上的属性
  */
 const doAttributeDamage = function (attacker, entity, attrs, whiteListAttrs, isClear) {
-    new AtziluthDamageMeta(attacker, listOf(entity), AtziluthDamageOptions.new(function (builder) {
+    new AtziluthDamageMeta(attacker, listOf(entity), AtziluthDamageOptions.Companion.new(function (builder) {
         builder.setAttributes(attrs)
         builder.setWhitelistAttributeNames(whiteListAttrs)
         builder.isClear = isClear
     })).doDamage()
 }
-

@@ -5,6 +5,7 @@ import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueTyp
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.utils.EntityUtil.getLivingEntity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.ItemStack
 import org.serverct.ersha.jd.Main
 import org.serverct.ersha.jd.api.EntityAttributeAPI
 import org.serverct.ersha.jd.attribute.AttributeData
@@ -48,6 +49,15 @@ object AttributePlusDataManager : AttributeDataManager<AttributeData> {
             AttributeValueType.MAX -> values[1]
             AttributeValueType.RANDOM -> random(values[0].cdouble, values[1].cdouble)
         }.cdouble
+    }
+
+    override fun getItemAttribute(
+        entity: LivingEntity,
+        item: ItemStack,
+        attribute: String,
+        valueType: AttributeValueType
+    ): Double {
+        throw NotImplementedError("全是混淆谁爱写谁写")
     }
 
     override fun getData(entity: LivingEntity): AttributeData? {

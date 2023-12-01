@@ -2,9 +2,15 @@
 val taboolib_version: String by rootProject
 
 dependencies {
+    // nashorn
     compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
     implementation(fileTree("libs/RelocatedNashorn-15.4.jar"))
+    // reflections
     implementation("org.reflections:reflections:0.10.2")
+    // javassist
+    implementation("org.javassist:javassist:3.20.0-GA")
+
+    // taboolib
     implementation("io.izzel.taboolib:common:$taboolib_version")
     implementation("io.izzel.taboolib:common-5:$taboolib_version")
     implementation("io.izzel.taboolib:module-chat:$taboolib_version")

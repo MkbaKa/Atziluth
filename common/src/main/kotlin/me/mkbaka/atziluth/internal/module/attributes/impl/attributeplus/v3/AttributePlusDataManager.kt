@@ -4,6 +4,7 @@ import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.ItemStack
 import org.serverct.ersha.AttributePlus
 import org.serverct.ersha.api.AttributeAPI
 import org.serverct.ersha.attribute.data.AttributeData
@@ -41,7 +42,11 @@ object AttributePlusDataManager : AttributeDataManager<AttributeData> {
     }
 
     override fun getAttributeValue(entity: LivingEntity, attribute: String, valueType: AttributeValueType): Double {
-        val values = getData(entity)?.getAttributeValue(attribute) ?: return 0.0
+        return getAttributeValue(entity.uniqueId, attribute, valueType)
+    }
+
+    override fun getAttributeValue(uuid: UUID, attribute: String, valueType: AttributeValueType): Double {
+        val values = getData(uuid)?.getAttributeValue(attribute) ?: return 0.0
         return when (valueType) {
             AttributeValueType.MIN -> values[0]
             AttributeValueType.MAX -> values[1]
@@ -49,8 +54,13 @@ object AttributePlusDataManager : AttributeDataManager<AttributeData> {
         }.cdouble
     }
 
-    override fun getAttributeValue(uuid: UUID, attribute: String, valueType: AttributeValueType): Double {
-        val values = getData(uuid)?.getAttributeValue(attribute) ?: return 0.0
+    override fun getItemAttribute(
+        entity: LivingEntity,
+        item: ItemStack,
+        attribute: String,
+        valueType: AttributeValueType
+    ): Double {
+        val values = api.getAttributeSource(item).attributeValue[attribute] ?: return 0.0
         return when (valueType) {
             AttributeValueType.MIN -> values[0]
             AttributeValueType.MAX -> values[1]

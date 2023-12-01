@@ -2,6 +2,7 @@ package me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl
 
 import io.lumine.xikage.mythicmobs.MythicMobs
 import io.lumine.xikage.mythicmobs.skills.placeholders.Placeholder
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyPlaceholder
 import org.bukkit.entity.LivingEntity
 
 class MythicMobsHookerImpl472 : MythicMobsHookerImpl4() {
@@ -24,6 +25,25 @@ class MythicMobsHookerImpl472 : MythicMobsHookerImpl4() {
             })
             register("trigger.attr", Placeholder.meta { meta, args ->
                 return@meta handlePlaceholder(meta.trigger.bukkitEntity as LivingEntity, args)
+            })
+            scriptPlaceholders.forEach { (placeholder, proxy) ->
+                register(placeholder, Placeholder.meta { meta, args ->
+                    return@meta proxy.callback(hashMapOf(
+                        "meta" to meta,
+                        "args" to args
+                    ))
+                })
+            }
+        }
+    }
+
+    override fun registerPlaceholder(placeholder: ProxyPlaceholder) {
+        placeholder.names.forEach { name ->
+            MythicMobs.inst().placeholderManager.register(name, Placeholder.meta { meta, args ->
+                return@meta placeholder.callback(hashMapOf(
+                    "meta" to meta,
+                    "args" to args
+                ))
             })
         }
     }

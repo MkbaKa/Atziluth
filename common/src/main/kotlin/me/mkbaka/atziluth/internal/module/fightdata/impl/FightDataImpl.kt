@@ -283,7 +283,7 @@ class FightDataImpl : FightData {
         if (attr.skipFilter || values.getOrDef(1, values.getOrDef(0, 0.0)) > 0.0) {
             attr.callback(this, hashMapOf(
                 "event" to event,
-                "force" to event.getAttackCooldown())
+                "force" to force)
             )
         }
     }

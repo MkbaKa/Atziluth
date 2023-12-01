@@ -3,6 +3,18 @@ const ProxyScriptMechanic = Packages.me.mkbaka.atziluth.internal.module.hook.myt
 const ProxyScriptCondition = Packages.me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyScriptCondition
 const ProxyLocationTargeter = Packages.me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyLocationTargeter
 const ProxyEntityTargeter = Packages.me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyEntityTargeter
+const ProxyPlaceholder = Packages.me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyPlaceholder
+
+/**
+ * 创建一个 ProxyPlaceholder 对象
+ * 用于注册 MythicMobs 占位符
+ * 不要忘记在最后调用 register() 方法
+ * @param {...any} 任意数量的字符串
+ * @return Packages.me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyPlaceholder
+ */
+const createMythicPlaceholder = function () {
+    return new ProxyPlaceholder(toList(arguments))
+}
 
 /**
  * 创建一个 ProxyScriptMechanic 对象
@@ -11,7 +23,7 @@ const ProxyEntityTargeter = Packages.me.mkbaka.atziluth.internal.module.hook.myt
  * @param {...any} 任意数量的字符串
  * @returns me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyScriptMechanic
  */
-function createMythicMechanic() {
+const createMythicMechanic = function () {
     return new ProxyScriptMechanic(toList(arguments))
 }
 

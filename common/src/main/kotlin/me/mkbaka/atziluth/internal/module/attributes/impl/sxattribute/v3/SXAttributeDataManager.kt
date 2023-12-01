@@ -1,12 +1,14 @@
 package me.mkbaka.atziluth.internal.module.attributes.impl.sxattribute.v3
 
 import github.saukiya.sxattribute.SXAttribute
+import github.saukiya.sxattribute.data.PreLoadItem
 import github.saukiya.sxattribute.data.attribute.SXAttributeData
 import me.mkbaka.atziluth.internal.module.attributes.AttributeDataManager
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import me.mkbaka.atziluth.utils.EntityUtil.getLivingEntity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.ItemStack
 import taboolib.common.util.random
 import taboolib.common5.cdouble
 import java.util.*
@@ -67,6 +69,20 @@ object SXAttributeDataManager : AttributeDataManager<SXAttributeData> {
 
     override fun getAttributeValue(uuid: UUID, attribute: String, valueType: AttributeValueType): Double {
         val values = getData(uuid)?.getValues(attribute) ?: return 0.0
+        return when (valueType) {
+            AttributeValueType.MIN -> values[0]
+            AttributeValueType.MAX -> values[1]
+            AttributeValueType.RANDOM -> random(values[0].cdouble, values[1].cdouble)
+        }.cdouble
+    }
+
+    override fun getItemAttribute(
+        entity: LivingEntity,
+        item: ItemStack,
+        attribute: String,
+        valueType: AttributeValueType
+    ): Double {
+        val values = api.loadItemData(entity, PreLoadItem(item)).getValues(attribute) ?: return 0.0
         return when (valueType) {
             AttributeValueType.MIN -> values[0]
             AttributeValueType.MAX -> values[1]

@@ -3,6 +3,7 @@ package me.mkbaka.atziluth.internal.module.hook.placeholderapi
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.Atziluth.prefix
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.console
 import taboolib.module.lang.sendLang
@@ -27,6 +28,11 @@ class ProxyExpansion(val identifier: String) {
      */
     var onRequest: (Player, String) -> String = { _, _ -> "" }
 
+    /**
+     * 通过 离线玩家 转换变量
+     */
+    var onRequestOfflinePlayer: (OfflinePlayer?, String) -> String = { _, _ -> "" }
+
     fun setAuthor(author: String): ProxyExpansion {
         this.author = author
         return this
@@ -39,6 +45,11 @@ class ProxyExpansion(val identifier: String) {
 
     fun onRequest(callback: (Player, String) -> String): ProxyExpansion {
         this.onRequest = callback
+        return this
+    }
+
+    fun onRequestOfflinePlayer(callback: (OfflinePlayer?, String) -> String): ProxyExpansion {
+        this.onRequestOfflinePlayer = callback
         return this
     }
 
@@ -77,6 +88,23 @@ class ProxyExpansion(val identifier: String) {
                     } else {
                         e.printStackTrace()
                         "§c执行时遇到异常, 详细日志已输出到后台 : §f${e.localizedMessage}"
+                    }
+                }
+            }
+
+            override fun onRequest(player: OfflinePlayer?, params: String): String {
+                return if (player != null && player.isOnline && player.player != null) {
+                    onPlaceholderRequest(player.player!!, params)
+                } else {
+                    try {
+                        this@ProxyExpansion.onRequestOfflinePlayer(player, params)
+                    } catch (e: Throwable) {
+                        if (e.localizedMessage.startsWith("class org.openjdk.nashorn.internal.runtime.Undefined cannot be cast to class java.lang.String")) {
+                            "§fonRequest 函数§c无返回值."
+                        } else {
+                            e.printStackTrace()
+                            "§c执行时遇到异常, 详细日志已输出到后台 : §f${e.localizedMessage}"
+                        }
                     }
                 }
             }

@@ -24,6 +24,7 @@ object ScriptsComponent : AbstractConfigComponent(8) {
 
     override fun reload() {
         AbstractMythicMobsHooker.apply {
+            scriptPlaceholders.clear()
             scriptMechanics.clear()
             scriptConditions.clear()
             scriptLocationTargeters.clear()

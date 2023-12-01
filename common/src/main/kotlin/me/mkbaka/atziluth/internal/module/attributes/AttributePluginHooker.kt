@@ -58,7 +58,10 @@ abstract class AttributePluginHooker<BeforeUpdateEvent : Event, AfterUpdateEvent
             it.attributes.addAll(attrs)
             it.handle()
         }
-        if (fightData.isCancelled) return
+        if (fightData.isCancelled) {
+            event.isCancelled = true
+            return
+        }
         event.damage = fightData.damageValue.coerceAtLeast(0.0)
     }
 

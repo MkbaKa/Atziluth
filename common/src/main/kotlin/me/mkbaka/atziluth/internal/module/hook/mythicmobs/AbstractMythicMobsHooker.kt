@@ -3,10 +3,7 @@ package me.mkbaka.atziluth.internal.module.hook.mythicmobs
 import me.mkbaka.atziluth.Atziluth.prefix
 import me.mkbaka.atziluth.api.AttributeAPI.getAttrValue
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
-import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyEntityTargeter
-import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyLocationTargeter
-import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyScriptCondition
-import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyScriptMechanic
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.*
 import me.mkbaka.atziluth.utils.EntityUtil.isAlive
 import me.mkbaka.atziluth.utils.enumOf
 import org.bukkit.entity.Entity
@@ -81,6 +78,11 @@ abstract class AbstractMythicMobsHooker {
      */
     abstract fun registerPlaceholder()
 
+    /**
+     * 注册占位符
+     */
+    abstract fun registerPlaceholder(placeholder: ProxyPlaceholder)
+
 
     /**
      * 处理占位符
@@ -130,6 +132,11 @@ abstract class AbstractMythicMobsHooker {
     companion object {
 
         val attrDamage_metadata by lazy { "Atziluth:doing_damage" }
+
+        /**
+         * 脚本注册的占位符
+         */
+        val scriptPlaceholders = ConcurrentHashMap<String, ProxyPlaceholder>()
 
         /**
          * 脚本注册的技能

@@ -4,6 +4,7 @@ import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.ItemStack
 import java.util.*
 
 object AttributeAPI {
@@ -73,6 +74,21 @@ object AttributeAPI {
     }
 
     /**
+     * 获取物品上的属性值
+     * @param [item] 物品
+     * @param [attribute] 属性名
+     * @param [valueType] 数值类型
+     * @return [Double]
+     */
+    fun LivingEntity.getItemAttributeValue(
+        item: ItemStack,
+        attribute: String,
+        valueType: AttributeValueType = AttributeValueType.RANDOM
+    ): Double {
+        return dataManager.getItemAttribute(this, item, attribute, valueType)
+    }
+
+    /**
      * 增加临时属性
      * @param [tempAttributeData] 临时属性数据
      */
@@ -95,7 +111,7 @@ object AttributeAPI {
     fun UUID.takeAttribute(source: String) {
         tempAttributeDataManager.takeAttribute(this, source)
     }
-    
+
     /**
      * 删除已增加的临时属性
      * @param [source] 临时属性数据源

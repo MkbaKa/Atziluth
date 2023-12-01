@@ -14,6 +14,7 @@ import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.condition544.Scri
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.mechainc544.ScriptMechanic
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.targeter544.ScriptEntityTargeter
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.targeter544.ScriptLocationTargeter
+import me.mkbaka.atziluth.internal.module.hook.mythicmobs.script.ProxyPlaceholder
 import org.bukkit.entity.LivingEntity
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.library.reflex.Reflex.Companion.invokeConstructor
@@ -46,6 +47,25 @@ class MythicMobsHookerImpl544 : AbstractMythicMobsHooker() {
             })
             register("parent.attr", Placeholder.parent { parent, args ->
                 return@parent handlePlaceholder(parent.bukkitEntity, args)
+            })
+            scriptPlaceholders.forEach { (placeholder, proxy) ->
+                register(placeholder, Placeholder.meta { meta, args ->
+                    return@meta proxy.callback(hashMapOf(
+                        "meta" to meta,
+                        "args" to args
+                    ))
+                })
+            }
+        }
+    }
+
+    override fun registerPlaceholder(placeholder: ProxyPlaceholder) {
+        placeholder.names.forEach { name ->
+            MythicBukkit.inst().placeholderManager.register(name, Placeholder.meta { meta, args ->
+                return@meta placeholder.callback(hashMapOf(
+                    "meta" to meta,
+                    "args" to args
+                ))
             })
         }
     }

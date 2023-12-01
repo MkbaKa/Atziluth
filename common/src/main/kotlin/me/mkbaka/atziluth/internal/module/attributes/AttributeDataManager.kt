@@ -3,6 +3,7 @@ package me.mkbaka.atziluth.internal.module.attributes
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.ItemStack
 import java.util.*
 
 /**
@@ -53,6 +54,8 @@ interface AttributeDataManager<D> {
      * @param [valueType] 数值类型
      */
     fun getAttributeValue(uuid: UUID, attribute: String, valueType: AttributeValueType = AttributeValueType.RANDOM): Double
+
+    fun getItemAttribute(entity: LivingEntity, item: ItemStack, attribute: String, valueType: AttributeValueType = AttributeValueType.RANDOM): Double
 
     /**
      * 获取实体数据

@@ -1,5 +1,6 @@
 package me.mkbaka.atziluth.internal.module.tempdatamanager
 
+import me.mkbaka.atziluth.internal.module.tempdatamanager.data.EntityData
 import java.util.*
 
 /**
@@ -13,6 +14,6 @@ interface TempDataManager {
      * @param [uuid] uuid
      * @return [TempData<*>?]
      */
-    fun getData(uuid: UUID): TempData<*>?
+    fun getData(uuid: UUID): EntityData?
 
 }

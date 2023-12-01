@@ -77,7 +77,6 @@ object Atziluth : Plugin() {
         ScriptsComponent.enable()
     }
 
-    // 无法理解为什么不让在其它类中直接获取 isInitialized
     fun isInitAttributeHooker() = kotlin.runCatching { this::attributeHooker.isInitialized }.getOrNull() ?: false
 
     // 给js用
