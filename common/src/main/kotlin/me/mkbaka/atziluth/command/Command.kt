@@ -11,7 +11,6 @@ import me.mkbaka.atziluth.utils.SchedulerUtil.callAsync
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.*
 import taboolib.common5.eqic
-import taboolib.expansion.createHelper
 import taboolib.module.lang.sendLang
 
 @CommandHeader("atziluth", aliases = ["atl", "atz"], permissionDefault = PermissionDefault.OP)
@@ -19,7 +18,7 @@ object Command {
 
     @CommandBody
     val main = mainCommand {
-        createHelper()
+        sendCommandHelper()
     }
 
     @CommandBody

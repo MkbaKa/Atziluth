@@ -72,7 +72,7 @@ const hasData = function (uuid, key) {
  * @returns boolean
  */
 const entityHasData = function (entity, key) {
-    const data = getTempData(player.uniqueId)
+    const data = getTempData(entity.uniqueId)
     if (data == null) return false
     return data.hasData(key)
 }

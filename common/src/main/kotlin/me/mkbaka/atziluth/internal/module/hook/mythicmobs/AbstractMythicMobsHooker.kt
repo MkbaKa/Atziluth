@@ -133,6 +133,8 @@ abstract class AbstractMythicMobsHooker {
 
         val attrDamage_metadata by lazy { "Atziluth:doing_damage" }
 
+        val attrDamage_tempdata by lazy { "MythicMobs-AttrDamageData" }
+
         /**
          * 脚本注册的占位符
          */

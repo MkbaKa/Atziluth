@@ -39,6 +39,7 @@ abstract class AbstractCompiledJavaScript : Script {
     }
 
     override fun isFunction(func: String): Boolean {
+        if (func.isEmpty()) return false
         return this.scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE).containsKey(func)
     }
 

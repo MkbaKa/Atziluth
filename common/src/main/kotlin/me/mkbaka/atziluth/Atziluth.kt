@@ -24,14 +24,16 @@ object Atziluth : Plugin() {
 
     val plugin by lazy { BukkitPlugin.getInstance() }
 
-    val prefix by lazy {
+    val showName by lazy {
         // 高于 1.16 使用 rgb 颜色
         if (MinecraftVersion.isHigherOrEqual(8)) {
-            "&8[&{#5846E2}A&{#5C4BE3}t&{#6050E4}z&{#6455E5}i&{#685AE6}l&{#6C5FE7}u&{#7064E8}t&{#7469E9}h&8]"
+            "&{#5846E2}A&{#5C4BE3}t&{#6050E4}z&{#6455E5}i&{#685AE6}l&{#6C5FE7}u&{#7064E8}t&{#7469E9}h"
         } else {
-            "&8[&9Atz&3ilu&bth&8]"
+            "&9Atz&3ilu&bth"
         }.colored()
     }
+
+    val prefix by lazy { "&8[$showName&8]".colored() }
 
     val number_pattern by lazy { Pattern.compile("(-*\\d+)((-)(-*\\d+))*") }
 

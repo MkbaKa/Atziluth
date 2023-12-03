@@ -4,6 +4,7 @@ import io.lumine.mythic.api.adapters.AbstractEntity
 import io.lumine.mythic.api.config.MythicLineConfig
 import io.lumine.mythic.api.skills.SkillMetadata
 import io.lumine.mythic.api.skills.SkillResult
+import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.module.damage.impl.AtziluthDamageMeta
 import me.mkbaka.atziluth.internal.module.damage.impl.AtziluthDamageOptions
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
@@ -37,6 +38,7 @@ class AttributeDamageMechanic(cm: io.lumine.mythic.core.skills.mechanics.CustomM
         if (caster.isAlive && entity.isAlive) {
             meta.caster.isUsingDamageSkill = true
             caster.setMetadataEZ(AbstractMythicMobsHooker.attrDamage_metadata, true)
+            Atziluth.tempDataManager.getData(caster.uniqueId)?.saveData(AbstractMythicMobsHooker.attrDamage_tempdata, parseAllEntries(meta))
             AtziluthDamageMeta(caster, listOf(entity), AtziluthDamageOptions.new {
                 damageValue = this@AttributeDamageMechanic.basicDamageValue.get(meta).cdouble
                 preventKnockback = this@AttributeDamageMechanic.preventKnockback.get(meta).cbool
@@ -45,6 +47,7 @@ class AttributeDamageMechanic(cm: io.lumine.mythic.core.skills.mechanics.CustomM
                 isClear = this@AttributeDamageMechanic.isClear.get(meta).cbool
                 setAttributes(parseToAttribute(meta))
             }).doDamage()
+            Atziluth.tempDataManager.getData(caster.uniqueId)?.removeData(AbstractMythicMobsHooker.attrDamage_tempdata)
             caster.removeMetadataEZ(AbstractMythicMobsHooker.attrDamage_metadata)
             meta.caster.isUsingDamageSkill = false
         }
