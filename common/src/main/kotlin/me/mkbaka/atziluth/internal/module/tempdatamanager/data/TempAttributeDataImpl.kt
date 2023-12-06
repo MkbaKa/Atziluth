@@ -9,33 +9,40 @@ import java.util.*
 open class TempAttributeDataImpl(
     override val owner: UUID,
     override val source: String,
-    override val attrs: MutableMap<String, DoubleArray>,
+    override val attrs: MutableMap<String, DoubleArray> = hashMapOf(),
     override var timeout: Long = -1
 ) : TempAttributeData {
 
     private val startTime = System.currentTimeMillis()
 
+    override val formattedStr = mutableListOf<String>()
+
     override val isTimeout: Boolean
         get() = System.currentTimeMillis() >= startTime + (timeout / 20) * 1000
 
     override fun merge(target: TempAttributeData) {
-        mergeAttribute(target.attrs)
-        this.timeout += target.timeout
+        callUpdate {
+            mergeAttribute(target.attrs)
+            this.formattedStr.addAll(target.formattedStr)
+            this.timeout += target.timeout
+        }
     }
 
     override fun mergeAttribute(map: Map<String, DoubleArray>) {
-        callUpdate {
-            map.forEach { (name, newArray) ->
-                this.attrs.compute(name) { _, oldArray ->
-                    (oldArray ?: doubleArrayOf(0.0, 0.0)).append(newArray)
-                }
+        map.forEach { (name, newArray) ->
+            this.attrs.compute(name) { _, oldArray ->
+                (oldArray ?: doubleArrayOf(0.0, 0.0)).append(newArray)
             }
         }
     }
 
     override fun formatAttributes(): List<String> {
-        return this.attrs.map { entry ->
-            if (entry.value.isNotEmpty()) "${entry.key}: ${entry.value.getOrDef(0, 0.0)} - ${entry.value.getOrDef(1, 0.0)}" else ""
+        return mutableListOf<String>().also {
+            if (formattedStr.isNotEmpty()) it.addAll(formattedStr)
+            attrs.forEach { (key, values) ->
+                val min = values.getOrDef(0, 0.0)
+                it.add("$key: $min - ${values.getOrDef(1, min)}")
+            }
         }
     }
 

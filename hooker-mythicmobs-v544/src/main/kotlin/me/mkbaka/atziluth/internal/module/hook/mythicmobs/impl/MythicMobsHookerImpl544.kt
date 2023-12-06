@@ -9,6 +9,7 @@ import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent
 import io.lumine.mythic.core.skills.SkillCondition
 import io.lumine.mythic.core.skills.SkillMechanic
 import io.lumine.mythic.core.skills.placeholders.Placeholder
+import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.condition544.ScriptCondition
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.impl.mechainc544.ScriptMechanic
@@ -48,12 +49,21 @@ class MythicMobsHookerImpl544 : AbstractMythicMobsHooker() {
             register("parent.attr", Placeholder.parent { parent, args ->
                 return@parent handlePlaceholder(parent.bukkitEntity, args)
             })
+            register("caster.tempdata", Placeholder.meta { meta, str ->
+                val entity = meta.caster.entity.bukkitEntity as? LivingEntity ?: return@meta "Not LivingEntity"
+                val args = str.split(":")
+                val key = args.getOrElse(0) { return@meta ("undefined") }
+                return@meta Atziluth.tempDataManager.getData(entity.uniqueId)?.getData(key)?.toString()
+                    ?: "undefined data $key"
+            })
             scriptPlaceholders.forEach { (placeholder, proxy) ->
                 register(placeholder, Placeholder.meta { meta, args ->
-                    return@meta proxy.callback(hashMapOf(
-                        "meta" to meta,
-                        "args" to args
-                    ))
+                    return@meta proxy.callback(
+                        hashMapOf(
+                            "meta" to meta,
+                            "args" to args
+                        )
+                    )
                 })
             }
         }

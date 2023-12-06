@@ -49,7 +49,7 @@ object TempAttributeDataManagerImpl : TempAttributeDataManager {
         val map = this.tempAttributeData.getOrPut(uuid) { hashMapOf() }
         map.compute(tempAttributeData.source) { _, oldData ->
             if (merge && map.containsKey(tempAttributeData.source)) {
-                oldData!!.also { it.mergeAttribute(tempAttributeData.attrs) }
+                oldData!!.also { it.merge(tempAttributeData) }
             } else {
                 oldData?.let { attributeDataManager.takeAttribute(uuid, oldData.source) }
                 tempAttributeData.apply { attributeDataManager.addAttribute(uuid, this) }

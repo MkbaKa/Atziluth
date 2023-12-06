@@ -24,6 +24,11 @@ interface TempAttributeData {
     val attrs: MutableMap<String, DoubleArray>
 
     /**
+     * 格式化后的字符串
+     */
+    val formattedStr: MutableList<String>
+
+    /**
      * 超时时间(不存在则为-1)
      */
     var timeout: Long
@@ -50,8 +55,25 @@ interface TempAttributeData {
 
     companion object {
 
-        fun new(owner: UUID, source: String, attrs: MutableMap<String, DoubleArray>, constructor: TempAttributeData.() -> Unit = {}): TempAttributeData {
+        fun new(
+            owner: UUID,
+            source: String,
+            attrs: MutableMap<String, DoubleArray>,
+            constructor: TempAttributeData.() -> Unit = {}
+        ): TempAttributeData {
             return TempAttributeDataImpl(owner, source, attrs).also(constructor)
+        }
+
+        fun new(
+            owner: UUID,
+            source: String,
+            attrs: MutableList<String>,
+            constructor: TempAttributeData.() -> Unit = {}
+        ): TempAttributeData {
+            return TempAttributeDataImpl(owner, source).also {
+                it.formattedStr.addAll(attrs)
+                constructor(it)
+            }
         }
 
     }

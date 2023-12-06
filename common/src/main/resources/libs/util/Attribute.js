@@ -1,6 +1,6 @@
 const AttributeValueType = Packages.me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 const AttributeAPI = Packages.me.mkbaka.atziluth.api.AttributeAPI.INSTANCE
-const AttributeManager = Packages.me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
+const AttributeManager = Packages.me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent.INSTANCE
 const TempAttributeData = Packages.me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData.Companion
 
 /**
@@ -11,7 +11,20 @@ const TempAttributeData = Packages.me.mkbaka.atziluth.internal.module.tempdatama
  * @param merge 若同源已存在是否堆叠属性值 否则将替换
  */
 const addAttributes = function (entity, source, attrs, merge) {
-    addTempAttribute(entity, newTempAttributeData(entity.uniqueId, source, attrs, function (data) {}), merge)
+    addTempAttribute(entity, newTempAttributeData(entity.uniqueId, source, attrs, function (data) {
+    }), merge)
+}
+
+/**
+ * 增加属性
+ * @param entity 实体
+ * @param source 属性源
+ * @param attrs 属性列表 List<String>
+ * @param merge 若同源已存在是否堆叠属性值 否则将替换
+ */
+const addAttributesByList = function (entity, source, attrs, merge) {
+    addTempAttribute(entity, newTempAttributeDataByList(entity.uniqueId, source, attrs, function (data) {
+    }), merge)
 }
 
 /**
@@ -42,6 +55,18 @@ const takeSourceAttribute = function (entity, source) {
  * @return me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
  */
 const newTempAttributeData = function (owner, source, attrs, callback) {
+    return TempAttributeData.new(owner, source, attrs, callback)
+}
+
+/**
+ * 创建一个临时属性数据
+ * @param owner 数据归属者的uuid
+ * @param source 属性源
+ * @param attrs List<String>
+ * @param callback 回调函数
+ * @return me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
+ */
+const newTempAttributeDataByList = function (owner, source, attrs, callback) {
     return TempAttributeData.new(owner, source, attrs, callback)
 }
 

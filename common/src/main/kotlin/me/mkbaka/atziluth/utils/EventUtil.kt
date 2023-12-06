@@ -11,11 +11,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.reflections.Reflections
 import taboolib.common5.format
+import taboolib.module.nms.MinecraftVersion
 
 object EventUtil {
 
     val whiteListProjectiles by lazy {
-        hashSetOf(EntityType.ARROW, EntityType.SPECTRAL_ARROW, EntityType.TRIDENT)
+        hashSetOf(EntityType.ARROW, EntityType.SPECTRAL_ARROW).apply {
+            if (MinecraftVersion.isHigherOrEqual(5)) {
+                add(EntityType.TRIDENT)
+            }
+        }
     }
 
     fun Event.call() {

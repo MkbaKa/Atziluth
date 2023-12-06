@@ -35,7 +35,7 @@ object Atziluth : Plugin() {
 
     val prefix by lazy { "&8[$showName&8]".colored() }
 
-    val number_pattern by lazy { Pattern.compile("(-*\\d+)((-)(-*\\d+))*") }
+    val number_pattern by lazy { Pattern.compile("\\b(\\d+.\\d+)\\b") }
 
     val namespaces by lazy { listOf("Atziluth") }
 
