@@ -3,6 +3,7 @@ package me.mkbaka.atziluth.internal.module.hook.placeholderapi
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import me.mkbaka.atziluth.Atziluth
 import me.mkbaka.atziluth.Atziluth.prefix
+import me.mkbaka.atziluth.utils.SchedulerUtil.callSync
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.console
@@ -55,11 +56,13 @@ class ProxyExpansion(val identifier: String) {
 
     fun register(): PlaceholderExpansion {
         return build().apply {
-            Atziluth.hookerManager.placeholderAPIHooker.placeholders.compute(this.identifier) { _, oldExp ->
-                oldExp?.unregister()
-                this.register()
-                console().sendLang("register-expansion", prefix, identifier)
-                this
+            callSync {
+                Atziluth.hookerManager.placeholderAPIHooker.placeholders.compute(this.identifier) { _, oldExp ->
+                    oldExp?.unregister()
+                    this.register()
+                    console().sendLang("register-expansion", prefix, identifier)
+                    this
+                }
             }
         }
     }

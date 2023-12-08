@@ -9,6 +9,7 @@ import me.mkbaka.atziluth.api.event.AtziluthReloadEvent
 import me.mkbaka.atziluth.api.event.ReloadStatus
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
+import me.mkbaka.atziluth.utils.SchedulerUtil.callSync
 import me.mkbaka.atziluth.utils.Util.getOrDef
 import me.mkbaka.atziluth.utils.enumOf
 import org.bukkit.entity.Player
@@ -83,9 +84,11 @@ class PlaceholderAPIHooker {
         @SubscribeEvent
         fun reload(e: AtziluthReloadEvent) {
             if (e.status == ReloadStatus.PRE) {
-                Atziluth.hookerManager.placeholderAPIHooker.placeholders.forEach { (identifier, exp) ->
-                    exp.unregister()
-                    console().sendLang("unregister-expansion", prefix, identifier)
+                callSync {
+                    Atziluth.hookerManager.placeholderAPIHooker.placeholders.forEach { (identifier, exp) ->
+                        exp.unregister()
+                        console().sendLang("unregister-expansion", prefix, identifier)
+                    }
                 }
             }
         }
