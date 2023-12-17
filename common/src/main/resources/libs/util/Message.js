@@ -18,3 +18,12 @@ const buildJson = function () {
     return MessageUtil.buildJson()
 }
 
+/**
+ * 将 bukkit 的 CommandSender 转为 taboolib ProxyCommandSender
+ * 若为 Player 则转换为 ProxyPlayer
+ * @param commandSender CommandSender
+ * @return taboolib.common.platform.ProxyCommandSender
+ */
+const adaptCommandSender = function (commandSender) {
+    return MessageUtil.adapt(commandSender)
+}

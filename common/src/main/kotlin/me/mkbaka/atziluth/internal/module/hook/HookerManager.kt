@@ -1,6 +1,7 @@
 package me.mkbaka.atziluth.internal.module.hook
 
 import me.mkbaka.atziluth.Atziluth
+import me.mkbaka.atziluth.internal.module.hook.crackshot.CrackShotHooker
 import me.mkbaka.atziluth.internal.module.hook.mythicmobs.AbstractMythicMobsHooker
 import me.mkbaka.atziluth.internal.module.hook.placeholderapi.PlaceholderAPIHooker
 import org.bukkit.Bukkit
@@ -14,7 +15,7 @@ import taboolib.module.lang.sendLang
 object HookerManager {
 
     /**
-     * MythicMobs 各大版本兼容
+     * MythicMobs 兼容
      */
     lateinit var mythicMobsHooker: AbstractMythicMobsHooker
 
@@ -24,11 +25,23 @@ object HookerManager {
     lateinit var placeholderAPIHooker: PlaceholderAPIHooker
 
     /**
+     * CrackShot 兼容
+     */
+    lateinit var crackShotHooker: CrackShotHooker
+
+    /**
      * 初始化插件兼容
      */
     fun init() {
-        initMythicMobsHooker()
+        initCrackShot()
         initPlaceholderAPIHooker()
+        initMythicMobsHooker()
+    }
+
+    private fun initCrackShot() {
+        val plugin = Bukkit.getPluginManager().getPlugin("CrackShot") ?: return
+        crackShotHooker = CrackShotHooker()
+        console().sendLang("find-plugin", Atziluth.prefix, plugin.name, plugin.description.version)
     }
 
     private fun initPlaceholderAPIHooker() {

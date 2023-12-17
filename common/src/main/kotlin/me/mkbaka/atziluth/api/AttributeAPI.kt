@@ -1,11 +1,13 @@
 package me.mkbaka.atziluth.api
 
 import me.mkbaka.atziluth.Atziluth
+import me.mkbaka.atziluth.internal.configuration.ConfigurationManager
 import me.mkbaka.atziluth.internal.module.attributes.attribute.AttributeValueType
 import me.mkbaka.atziluth.internal.module.tempdatamanager.TempAttributeData
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import java.util.*
+import kotlin.math.abs
 
 object AttributeAPI {
 
@@ -118,6 +120,52 @@ object AttributeAPI {
      */
     fun LivingEntity.takeAttribute(source: String) {
         tempAttributeDataManager.takeAttribute(this, source)
+    }
+
+    /**
+     * 清除实体身上的属性
+     * @param [whitelist] 属性名白名单
+     * @param [source] 属性数据源
+     */
+    fun LivingEntity.clearAttribute(whitelist: List<String>, source: String = UUID.randomUUID().toString()) {
+        this.addAttribute(TempAttributeData.new(uniqueId, source, reverseAttributes(this, whitelist)))
+    }
+
+    /**
+     * 清除实体身上的属性再执行callback
+     * @param [whitelist] 属性名白名单
+     * @param [callback] 回调函数
+     */
+    fun LivingEntity.clearAttribute(whitelist: List<String>, callback: () -> Unit) {
+        val source = UUID.randomUUID().toString()
+        clearAttribute(whitelist, source)
+        callback()
+        this.takeAttribute(source)
+    }
+
+
+    /**
+     * 反转实体的属性值
+     * 即每个属性对应的相反数
+     * @param [entity] 实体
+     * @param [whitelist] 属性名白名单
+     * @return [MutableMap<String, DoubleArray>]
+     */
+    fun reverseAttributes(entity: LivingEntity, whitelist: List<String>): MutableMap<String, DoubleArray> {
+        val map = hashMapOf<String, DoubleArray>()
+        Atziluth.attributeHooker.getAllAttributes(whitelist).forEach { key ->
+            if (key in whitelist || key in ConfigurationManager.clearAttributeWhiteList) return@forEach
+            val minValue = entity.getAttrValue(key, AttributeValueType.MIN)
+            if (minValue == 0.0) return@forEach
+
+            val maxValue = entity.getAttrValue(key, AttributeValueType.MAX)
+
+            when {
+                maxValue > 0.0 -> map[key] = doubleArrayOf(-minValue, -maxValue)
+                else -> map[key] = doubleArrayOf(abs(minValue), abs(maxValue))
+            }
+        }
+        return map
     }
 
 }

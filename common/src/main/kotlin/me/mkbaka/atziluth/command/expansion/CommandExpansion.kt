@@ -1,4 +1,4 @@
-package me.mkbaka.atziluth.command
+package me.mkbaka.atziluth.command.expansion
 
 import me.mkbaka.atziluth.Atziluth
 import taboolib.common.platform.ProxyCommandSender

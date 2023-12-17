@@ -3,6 +3,7 @@ package me.mkbaka.atziluth.command
 import me.mkbaka.atziluth.Atziluth.prefix
 import me.mkbaka.atziluth.api.event.AtziluthReloadEvent
 import me.mkbaka.atziluth.api.event.ReloadStatus
+import me.mkbaka.atziluth.command.expansion.sendCommandHelper
 import me.mkbaka.atziluth.internal.configuration.AbstractConfigComponent
 import me.mkbaka.atziluth.internal.configuration.impl.AttributeManagerComponent
 import me.mkbaka.atziluth.internal.configuration.impl.ScriptLibsComponent

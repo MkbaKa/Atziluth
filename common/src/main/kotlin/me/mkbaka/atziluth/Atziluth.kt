@@ -35,7 +35,7 @@ object Atziluth : Plugin() {
 
     val prefix by lazy { "&8[$showName&8]".colored() }
 
-    val number_pattern by lazy { Pattern.compile("\\b(\\d+.\\d+)\\b") }
+    val number_pattern by lazy { Pattern.compile("-?\\d+(\\.\\d+)?") }
 
     val namespaces by lazy { listOf("Atziluth") }
 
@@ -85,4 +85,5 @@ object Atziluth : Plugin() {
     fun getInitializedAttributeHooker(): AttributePluginHooker<*, *>? {
         return if (isInitAttributeHooker()) attributeHooker else null
     }
+
 }

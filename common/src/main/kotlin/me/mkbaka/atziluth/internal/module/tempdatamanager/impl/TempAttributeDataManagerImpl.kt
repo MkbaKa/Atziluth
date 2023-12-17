@@ -84,7 +84,7 @@ object TempAttributeDataManagerImpl : TempAttributeDataManager {
      */
     @Awake(LifeCycle.ENABLE)
     fun enable() {
-        task = submitAsync(period = ConfigurationManager.tempDataChecker) {
+        task = submitAsync(period = ConfigurationManager.tempAttributeChecker) {
             // 能省一点是一点
             if (tempAttributeData.isEmpty()) return@submitAsync
             tempAttributeData.forEach { (uuid, map) ->

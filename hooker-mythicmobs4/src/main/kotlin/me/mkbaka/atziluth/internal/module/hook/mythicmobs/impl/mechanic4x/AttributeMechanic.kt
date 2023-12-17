@@ -21,7 +21,7 @@ class AttributeMechanic {
 
         override fun castToEntity(caster: LivingEntity, entity: LivingEntity, meta: SkillMetadata): Boolean {
             val attributeSource = source.get(meta)
-            val attrs = parseToAttribute(meta)
+            val attrs = parseToList(meta)
 
             Atziluth.tempAttributeDataManager.addAttribute(
                 entity, TempAttributeData.new(entity.uniqueId, attributeSource, attrs) {

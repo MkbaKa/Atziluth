@@ -23,7 +23,7 @@ object ConfigurationManager {
     var tempDataTimeout: Int = 60 * 30
 
     // tempAttribute 检测间隔 (tick)
-    var tempAttributeChecker = 20
+    var tempAttributeChecker: Long = 20
 
     @Awake(LifeCycle.ACTIVE)
     fun active() {
@@ -33,7 +33,7 @@ object ConfigurationManager {
             this.runtimeResetPeriod = config.getInt("Settings.runtimeResetPeriod", 60)
             this.tempDataChecker = config.getLong("TempData.taskPeriod", 30) * 60 * 20
             this.tempDataTimeout = config.getInt("TempData.timeout", 30) * 60 * 1000
-            this.tempAttributeChecker = config.getInt("TempData.attributeChecker", 20)
+            this.tempAttributeChecker = config.getLong("TempData.attributeChecker", 20)
         }
         reload()
     }

@@ -24,4 +24,8 @@ object Util {
         return this.getOrElse(index) { def }
     }
 
+    fun Double.ifNaN(def: () -> Double): Double {
+        return if (this.isNaN()) def() else this
+    }
+
 }

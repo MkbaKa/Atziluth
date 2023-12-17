@@ -2,6 +2,8 @@ package me.mkbaka.atziluth.utils
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import taboolib.common.platform.ProxyCommandSender
+import taboolib.common.platform.function.adaptCommandSender
 import taboolib.common.platform.function.adaptPlayer
 import taboolib.module.chat.ComponentText
 import taboolib.module.chat.Components
@@ -21,10 +23,14 @@ object MessageUtil {
 
     /**
      * 创造一个Json构建器
-     * @return [ComponentText]
+     * @return [taboolib.module.chat.ComponentText]
      */
     fun buildJson(): ComponentText {
         return Components.empty()
+    }
+
+    fun CommandSender.adapt(): ProxyCommandSender {
+        return adaptCommandSender(this)
     }
 
 }

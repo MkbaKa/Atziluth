@@ -2,6 +2,7 @@ package me.mkbaka.atziluth.utils
 
 import me.mkbaka.atziluth.internal.module.attributes.AttributeListener
 import me.mkbaka.atziluth.utils.EntityUtil.getLivingEntity
+import me.mkbaka.atziluth.utils.Util.ifNaN
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.EntityType
@@ -16,7 +17,13 @@ import taboolib.module.nms.MinecraftVersion
 object EventUtil {
 
     val whiteListProjectiles by lazy {
-        hashSetOf(EntityType.ARROW, EntityType.SPECTRAL_ARROW).apply {
+        hashSetOf(
+            EntityType.ARROW,
+            EntityType.SPECTRAL_ARROW,
+            EntityType.SNOWBALL,
+            EntityType.EGG,
+            EntityType.FIREBALL
+        ).apply {
             if (MinecraftVersion.isHigherOrEqual(5)) {
                 add(EntityType.TRIDENT)
             }
@@ -31,9 +38,13 @@ object EventUtil {
         if (this.isProjectileDamage()) return AttributeListener.arrowForce[this.damager.uniqueId]?.toDouble() ?: 1.0
 
         val damager = this.damager as? LivingEntity ?: return 1.0
+
+        val originDamage = this.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE)
+        if (originDamage <= 0.0) return 1.0
+
         return damager.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.value?.let { value ->
-            val force = this.getOriginalDamage(EntityDamageEvent.DamageModifier.BASE) / value
-            if (force.isNaN()) 1.0 else force
+            val force = originDamage / value
+            force.ifNaN { 1.0 }
         }?.format(2) ?: 1.0
     }
 
@@ -42,7 +53,10 @@ object EventUtil {
     }
 
     fun EntityDamageByEntityEvent.getAttacker(): LivingEntity? {
-        return if (this.isProjectileDamage()) AttributeListener.shooters[damager.uniqueId]!!.getLivingEntity()!! else damager as? LivingEntity
+        return when {
+            isProjectileDamage() -> AttributeListener.shooters[damager.uniqueId]?.getLivingEntity()!!
+            else -> damager as? LivingEntity
+        }
     }
 
     fun getAllEventClasses(): MutableSet<Class<out Event>> {

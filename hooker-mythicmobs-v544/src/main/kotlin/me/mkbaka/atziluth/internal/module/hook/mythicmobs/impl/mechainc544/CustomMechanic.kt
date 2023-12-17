@@ -67,7 +67,7 @@ abstract class CustomMechanic(
             ignoreImmunity = args.getOrDefault("ignoreImmunity", false).cbool
             noDamageTicks = args.getOrDefault("noDamageTicks", 20).cint
             isClear = args.getOrDefault("isClear", false).cbool
-            setAttributes(parseToAttribute(meta))
+            setAttributes(parseToMap(meta))
         }).doDamage()
 
         Atziluth.tempDataManager.getData(caster.uniqueId)?.removeData(AbstractMythicMobsHooker.attrDamage_tempdata)
@@ -84,7 +84,15 @@ abstract class CustomMechanic(
         return map
     }
 
-    fun parseToAttribute(meta: SkillMetadata): MutableMap<String, DoubleArray> {
+    fun parseToList(meta: SkillMetadata): MutableList<String> {
+        val list = mutableListOf<String>()
+        mlc.entrySet().forEach { (key, value) ->
+            list.add("${key.parse(meta)}: ${value.parse(meta)}")
+        }
+        return list
+    }
+
+    fun parseToMap(meta: SkillMetadata): MutableMap<String, DoubleArray> {
         val map = hashMapOf<String, DoubleArray>()
         mlc.entrySet().forEach { entry ->
             val matcher = Atziluth.number_pattern.matcher(entry.value.parse(meta))

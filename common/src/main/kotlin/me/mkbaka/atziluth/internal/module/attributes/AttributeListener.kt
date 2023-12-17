@@ -30,7 +30,8 @@ abstract class AttributeListener<BeforeUpdateEvent : Event, AfterUpdateEvent : E
         // 缓存箭矢的射击者
         registerBukkitListener(EntityShootBowEvent::class.java, EventPriority.MONITOR) { event ->
             // ProjectileLaunchEvent 会先于 EntityShootBowEvent 触发 若已缓存过射击者则不再缓存
-            if (!shooters.containsKey(event.projectile.uniqueId)) shooters[event.projectile.uniqueId] = event.entity.uniqueId
+            if (!shooters.containsKey(event.projectile.uniqueId)) shooters[event.projectile.uniqueId] =
+                event.entity.uniqueId
             // 缓存蓄力值
             arrowForce[event.projectile.uniqueId] = event.force
         }
@@ -51,9 +52,11 @@ abstract class AttributeListener<BeforeUpdateEvent : Event, AfterUpdateEvent : E
             // 防止喷溅药水之类的玩意触发伤害导致拿不到射击者报错
             if (!event.isProjectileDamage() && event.damager !is LivingEntity) return@registerBukkitListener
             // 处理所有 isBefore 的 attack 与 defense 属性
-            handlePre(event, AttributeManagerComponent.priorityMap.values.filter { attr -> attr.isBefore && filter(attr) {
-                 this.attributeType == CustomAttributeType.ATTACK || this.attributeType == CustomAttributeType.DEFENSE
-            } })
+            handlePre(event, AttributeManagerComponent.priorityMap.values.filter { attr ->
+                attr.isBefore && filter(attr) {
+                    this.attributeType == CustomAttributeType.ATTACK || this.attributeType == CustomAttributeType.DEFENSE
+                }
+            })
         }
 
         // 伤害处理
@@ -61,9 +64,11 @@ abstract class AttributeListener<BeforeUpdateEvent : Event, AfterUpdateEvent : E
             if (event.entity !is LivingEntity) return@registerBukkitListener
             if (!event.isProjectileDamage() && event.damager !is LivingEntity) return@registerBukkitListener
             // 处理所有非 isBefore 的 attack 与 defense 属性
-            handlePost(event, AttributeManagerComponent.priorityMap.values.filter { attr -> !attr.isBefore && filter(attr) {
-                this.attributeType == CustomAttributeType.ATTACK || this.attributeType == CustomAttributeType.DEFENSE
-            } })
+            handlePost(event, AttributeManagerComponent.priorityMap.values.filter { attr ->
+                !attr.isBefore && filter(attr) {
+                    this.attributeType == CustomAttributeType.ATTACK || this.attributeType == CustomAttributeType.DEFENSE
+                }
+            })
             // 在处理后清除抛射物的缓存
             if (event.isProjectileDamage()) {
                 shooters.remove(event.damager.uniqueId)
@@ -73,16 +78,20 @@ abstract class AttributeListener<BeforeUpdateEvent : Event, AfterUpdateEvent : E
 
         // 处理 isBefore 的 update 类属性
         registerBukkitListener(beforeUpdateEvent, EventPriority.MONITOR) { event ->
-            handleUpdateBefore(event, AttributeManagerComponent.priorityMap.values.filter { attr -> attr.isBefore && filter(attr) {
-                this.attributeType == CustomAttributeType.UPDATE
-            } })
+            handleUpdateBefore(event, AttributeManagerComponent.priorityMap.values.filter { attr ->
+                attr.isBefore && filter(attr) {
+                    this.attributeType == CustomAttributeType.UPDATE
+                }
+            })
         }
 
         // 处理非 isBefore 的 update 类属性
         registerBukkitListener(afterUpdateEvent, EventPriority.MONITOR) { event ->
-            handleUpdateAfter(event, AttributeManagerComponent.priorityMap.values.filter { attr -> !attr.isBefore && filter(attr) {
-                this.attributeType == CustomAttributeType.UPDATE
-            } })
+            handleUpdateAfter(event, AttributeManagerComponent.priorityMap.values.filter { attr ->
+                !attr.isBefore && filter(attr) {
+                    this.attributeType == CustomAttributeType.UPDATE
+                }
+            })
         }
 
     }

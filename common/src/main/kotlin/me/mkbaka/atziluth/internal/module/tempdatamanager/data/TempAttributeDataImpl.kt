@@ -18,7 +18,7 @@ open class TempAttributeDataImpl(
     override val formattedStr = mutableListOf<String>()
 
     override val isTimeout: Boolean
-        get() = System.currentTimeMillis() >= startTime + (timeout / 20) * 1000
+        get() = timeout >= 0 && System.currentTimeMillis() >= startTime + (timeout / 20) * 1000
 
     override fun merge(target: TempAttributeData) {
         callUpdate {
